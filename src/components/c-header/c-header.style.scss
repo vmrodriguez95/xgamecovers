@@ -1,0 +1,17 @@
+.c-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--grid-margin);
+  box-sizing: border-box;
+
+  &__menu {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  &__title {
+    margin: 0;
+  }
+}
