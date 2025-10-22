@@ -4,6 +4,12 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: space(1);
-  padding: 0 var(--grid-margin);
+  padding: space(2) var(--grid-margin);
   box-sizing: border-box;
+  align-items: stretch;
+
+  &__search,
+  &__filters {
+    grid-column: 1 / 4;
+  }
 }

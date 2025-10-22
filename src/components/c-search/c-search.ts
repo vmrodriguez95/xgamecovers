@@ -12,7 +12,8 @@ class CSearch extends LitElement {
   render() {
     return html`
       <div class="c-search">
-        <h1>Search</h1>
+        <e-icon class="c-search__icon" icon="search"></e-icon>
+        <input id="search" name="search" class="c-search__field" type="text" placeholder="Buscar juego" />
       </div>
     `
   }

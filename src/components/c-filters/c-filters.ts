@@ -12,7 +12,7 @@ class CFilters extends LitElement {
   render() {
     return html`
       <div class="c-filters">
-        <h1>Card</h1>
+        <h1>Aquí van a ir los filtros tío</h1>
       </div>
     `
   }

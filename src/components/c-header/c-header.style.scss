@@ -4,6 +4,7 @@
   justify-content: space-between;
   padding: var(--grid-margin);
   box-sizing: border-box;
+  box-shadow: 0 3px 10px 0 rgba(var(--color-dark), 1);
 
   &__menu {
     background: none;

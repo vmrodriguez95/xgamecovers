@@ -1,4 +1,23 @@
+@use '../../styles/tools/tools' as *;
+
 .c-search {
   display: block;
-  color: red;
+  position: relative;
+
+  &__icon {
+    --eIconColor: var(--color-dark);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: space(1);
+  }
+
+  &__field {
+    display: block;
+    width: 100%;
+    padding: space(1) space(2) space(1) space(4);
+    box-sizing: border-box;
+    border: 1px solid rgba(var(--color-dark), 1);
+    border-radius: space(1);
+  }
 }

@@ -19,12 +19,12 @@ class CCard extends LitElement {
   render() {
     return html`
       <div class="c-card">
+        <img class="c-card__background" src=${this.image} alt=${this.name} />
         <div class="c-card__platforms">
           ${map(this.platforms, (platform: string) => html`
-            <e-icon icon=${platform}></e-icon>
+            <e-icon icon=${platform} size="xs"></e-icon>
           `)}
         </div>
-        <img class="c-card__background" src=${this.image} alt=${this.name} />
         <div class="c-card__caption">
           <p class="c-card__name">${this.name}</p>
         </div>

@@ -10,32 +10,32 @@ const covers = [
   {
     name: 'Assassin\'s creed Syndicate',
     image: '/images/covers/assassins-creed-syndicate.webp',
-    platforms: ['Playstation', 'PC', 'Xbox']
+    platforms: ['playstation', 'pc', 'xbox']
   },
   {
     name: 'Burnout Paradise',
     image: '/images/covers/burnout-paradise.webp',
-    platforms: ['Playstation', 'PC', 'Xbox']
+    platforms: ['playstation', 'pc', 'xbox']
   },
   {
     name: 'Death Stranding',
     image: '/images/covers/death-stranding.webp',
-    platforms: ['Playstation', 'PC', 'Xbox']
+    platforms: ['playstation', 'pc', 'xbox']
   },
   {
     name: 'Halo',
     image: '/images/covers/halo.webp',
-    platforms: ['Xbox', 'PC']
+    platforms: ['xbox', 'pc']
   },
   {
-    name: 'Ratchet and Clan',
+    name: 'Ratchet and Clank',
     image: '/images/covers/ratchet-and-clan.webp',
-    platforms: ['Playstation', 'Xbox', 'PC']
+    platforms: ['playstation', 'xbox', 'pc']
   },
   {
     name: 'Uncharted 4',
     image: '/images/covers/uncharted-4.webp',
-    platforms: ['Playstation', 'Xbox', 'PC']
+    platforms: ['playstation', 'xbox', 'pc', 'switch']
   }
 ]
 
@@ -47,6 +47,8 @@ class VCatalogue extends ALayout(LitElement) {
   render() {
     return this.layoutGrid(html`
       <div class="v-catalogue">
+        <c-search class="v-catalogue__search"></c-search>
+        <c-filters class="v-catalogue__filters"></c-filters>
         ${map(covers, (cover) => html`
           <c-card name=${cover.name} image=${cover.image} .platforms=${cover.platforms}></c-card>
         `)}
