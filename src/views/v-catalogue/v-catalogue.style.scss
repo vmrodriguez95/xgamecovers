@@ -11,5 +11,10 @@
   &__search,
   &__filters {
     grid-column: 1 / 4;
+    margin-bottom: space(2);
+  }
+
+  &__link {
+    text-decoration: none;
   }
 }

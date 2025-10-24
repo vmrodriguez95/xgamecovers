@@ -1,9 +1,15 @@
 import { html } from 'lit'
 
+interface Route {
+  path: string
+  render?: (params?: any) => unknown
+  enter?: () => void
+}
+
 export class RouterController {
   host
 
-  routes: Object = {
+  routes: Record<string, Route> = {
     home: {
       path: '/',
       render: () => html`
@@ -17,7 +23,7 @@ export class RouterController {
       `
     },
     catalogue: {
-      path: `/catalogue`,
+      path: '/catalogue',
       render: () => html`
         <v-catalogue></v-catalogue>
       `
@@ -30,49 +36,49 @@ export class RouterController {
       // enter: () => {}
     },
     catalogueEdit: {
-      path: `/catalogue/:id`,
+      path: '/catalogue/:id',
       render: (params: Object) => html`
         <v-catalogue-edit .urlParams=${params}></v-catalogue-edit>
       `,
       // enter: () => {}
     },
     transactions: {
-      path: `/transactions`,
+      path: '/transactions',
       render: () => html`
         <v-transactions></v-transactions>
       `,
       // enter: () => {}
     },
     transactionsNew: {
-      path: `/transactions/new`,
+      path: '/transactions/new',
       render: () => html`
         <v-transactions-create></v-transactions-create>
       `,
       // enter: () => {}
     },
     transactionsEdit: {
-      path: `/transactions/:id`,
+      path: '/transactions/:id',
       render: (params: Object) => html`
         <v-transactions-edit .urlParams=${params}></v-transactions-edit>
       `,
       // enter: () => {}
     },
     orders: {
-      path: `/orders`,
+      path: '/orders',
       render: () => html`
         <v-orders></v-orders>
       `,
       // enter: () => {}
     },
     ordersNew: {
-      path: `/orders/new`,
+      path: '/orders/new',
       render: () => html`
         <v-orders-create></v-orders-create>
       `,
       // enter: () => {}
     },
     ordersEdit: {
-      path: `/orders/:id`,
+      path: '/orders/:id',
       render: (params: Object) => html`
         <v-orders-edit .urlParams=${params}></v-orders-edit>
       `,
@@ -113,4 +119,17 @@ export class RouterController {
   /**
    * Methods
    */
+  replaceParams(route: string, params: object) {
+    let routeReplaced
+
+    Object.entries(params).forEach(([key, value]) => {
+      routeReplaced = route.replace(`:${key}`, value)
+    })
+
+    return routeReplaced
+  }
+
+  getAdminRoute(key: string, params: object) {
+    return this.replaceParams(this.routes[key].path, params)
+  }
 }
