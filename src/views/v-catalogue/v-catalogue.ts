@@ -5,7 +5,7 @@ import { map } from 'lit/directives/map.js'
 import { COVERS } from '../../utils/consts.utils.ts'
 
 // Mixins
-import { ALayout } from '../../mixins/layout.mixin.ts'
+import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 
 // Controllers
 import { RouterController } from '../../controllers/router.controller.ts'
@@ -14,7 +14,7 @@ import { RouterController } from '../../controllers/router.controller.ts'
 import style from './v-catalogue.style.scss?inline'
 
 @customElement('v-catalogue')
-class VCatalogue extends ALayout(LitElement) {
+class VCatalogue extends LayoutMixin(LitElement) {
 
   routerController = new RouterController(this)
 
@@ -29,7 +29,7 @@ class VCatalogue extends ALayout(LitElement) {
           <a class="v-catalogue__link" href="${this.routerController.getAdminRoute('catalogueEdit', { id: cover.id })}">
             <c-card
               name=${cover.name}
-              image=${cover.image}
+              image=${cover.poster}
               .platforms=${cover.platforms}
             ></c-card>
           </a>

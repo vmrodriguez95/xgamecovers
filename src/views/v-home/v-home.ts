@@ -1,12 +1,12 @@
 import { LitElement, html, css, unsafeCSS } from 'lit'
 import { customElement } from 'lit/decorators.js'
-import { ALayout } from '../../mixins/layout.mixin.ts'
+import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 
 // Styles
 import style from './v-home.style.scss?inline'
 
 @customElement('v-home')
-class VHome extends ALayout(LitElement) {
+class VHome extends LayoutMixin(LitElement) {
 
   static styles = css`${unsafeCSS(style)}`
 

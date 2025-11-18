@@ -1,22 +1,83 @@
 import { LitElement, html, css, unsafeCSS } from 'lit'
-import { customElement } from 'lit/decorators.js'
-import { ALayout } from '../../mixins/layout.mixin.ts'
+import { customElement, property } from 'lit/decorators.js'
+import { map } from 'lit/directives/map.js'
+import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 
 import { COVERS } from '../../utils/consts.utils.ts'
 
 // Styles
 import style from './v-catalogue-edit.style.scss?inline'
 
+interface Design {
+  id: number,
+  name: string,
+  poster: string
+}
+
+interface Cover {
+  id: number,
+  name: string,
+  poster: string,
+  cover: string,
+  platforms: string[],
+  designs?: Design[]
+}
+
+interface URLParam {
+  id: string
+}
+
 @customElement('v-catalogue-edit')
-class VCatalogueEdit extends ALayout(LitElement) {
+class VCatalogueEdit extends LayoutMixin(LitElement) {
+
+  @property({ type: Object }) urlParams: URLParam = { id: "0" }
+
+  _gameInfo: Cover = {
+    id: 0,
+    name: '',
+    poster: '',
+    cover: '',
+    platforms: []
+  }
 
   static styles = css`${unsafeCSS(style)}`
+
+  connectedCallback(): void {
+    this._gameInfo = this.getGameInfo() || this._gameInfo
+
+    super.connectedCallback()
+  }
 
   render() {
     return this.layoutGrid(html`
       <div class="v-catalogue-edit">
-        <h1>Edición</h1>
+        <div class="v-catalogue-edit__cover">
+          <img
+            class="v-catalogue-edit__img"
+            src=${this._gameInfo.cover}
+            alt=${this._gameInfo.name}
+          />
+        </div>
+        <div class="v-catalogue-edit__design">
+          ${map(this._gameInfo.designs, (design) => html`
+            <img
+              class="v-catalogue-edit__design"
+              src=${design.poster}
+              alt=${design.name}
+            />
+          `)}
+        </div>
+        
       </div>
     `)
+  }
+
+  /*
+   Methods
+   */
+  getGameInfo(): Cover|undefined {
+    const urlID = parseInt(this.urlParams.id)
+
+    return COVERS.find((game) => game.id === urlID)
   }
 }

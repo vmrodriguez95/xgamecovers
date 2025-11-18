@@ -2,8 +2,8 @@ import { html, LitElement, TemplateResult } from 'lit'
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 
-export const ALayout = <T extends Constructor<LitElement>>(superClass: T) => {
-  class ALayoutClass extends superClass {
+export const LayoutMixin = <T extends Constructor<LitElement>>(superClass: T) => {
+  class LayoutClass extends superClass {
 
     /**
      * Methods
@@ -17,6 +17,6 @@ export const ALayout = <T extends Constructor<LitElement>>(superClass: T) => {
     }
   }
 
-  return ALayoutClass
+  return LayoutClass
 }
 

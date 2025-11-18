@@ -2,5 +2,16 @@
 
 .v-catalogue-edit {
   display: block;
-  color: red;
+  padding: space(2) var(--grid-margin);
+  box-sizing: border-box;
+
+  &__cover {
+    max-height: space(33);
+    overflow: hidden;
+    border-radius: space(1);
+  }
+
+  &__img {
+    max-width: 100%;
+  }
 }
