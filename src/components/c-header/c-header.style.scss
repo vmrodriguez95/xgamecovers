@@ -1,3 +1,5 @@
+@use '../../styles/tools/typography' as *;
+
 .c-header {
   display: flex;
   align-items: center;
@@ -13,6 +15,7 @@
   }
 
   &__title {
+    @include body--xl;
     margin: 0;
   }
 }

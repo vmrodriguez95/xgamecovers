@@ -8,9 +8,9 @@ export const LayoutMixin = <T extends Constructor<LitElement>>(superClass: T) =>
     /**
      * Methods
      */
-    layoutGrid(content: TemplateResult) {
+    layoutGrid(heading: string, content: TemplateResult) {
       return html`
-        <e-layout>
+        <e-layout heading=${heading}>
           ${ content }
         </e-layout>
       `

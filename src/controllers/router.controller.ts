@@ -43,44 +43,44 @@ export class RouterController {
       // enter: () => {}
     },
     transactions: {
-      path: '/transactions',
+      path: '/transaction',
       render: () => html`
         <v-transactions></v-transactions>
       `,
       // enter: () => {}
     },
     transactionsNew: {
-      path: '/transactions/new',
+      path: '/transaction/new',
       render: () => html`
         <v-transactions-create></v-transactions-create>
       `,
       // enter: () => {}
     },
     transactionsEdit: {
-      path: '/transactions/:id',
+      path: '/transaction/:id',
       render: (params: Object) => html`
         <v-transactions-edit .urlParams=${params}></v-transactions-edit>
       `,
       // enter: () => {}
     },
     orders: {
-      path: '/orders',
+      path: '/order',
       render: () => html`
-        <v-orders></v-orders>
+        <v-order heading="Pedidos"></v-order>
       `,
       // enter: () => {}
     },
     ordersNew: {
-      path: '/orders/new',
+      path: '/order/new',
       render: () => html`
-        <v-orders-create></v-orders-create>
+        <v-order-new heading="Nuevo Pedido"></v-order-new>
       `,
       // enter: () => {}
     },
     ordersEdit: {
-      path: '/orders/:id',
+      path: '/order/:id',
       render: (params: Object) => html`
-        <v-orders-edit .urlParams=${params}></v-orders-edit>
+        <v-order-edit .urlParams=${params}></v-order-edit>
       `,
       // enter: () => {}
     },

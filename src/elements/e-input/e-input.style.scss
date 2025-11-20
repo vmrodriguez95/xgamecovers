@@ -2,23 +2,56 @@
 @use '../../styles/tools/typography' as *;
 
 .e-input {
-  position: relative;
   display: block;
+  position: relative;
+
+  &--hidden {
+    display: none;
+  }
+
+  &__label {
+    @include body--s;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 0 0 space(0.5);
+  }
+
+  &__logo {
+    margin-left: space(1);
+  }
 
   &__icon {
     position: absolute;
-    top: 50%;
+    bottom: 50%;
     left: space(2);
-    transform: translateY(-50%);
+    transform: translateY(50%);
+  }
+
+  &__icon + &__field {
+    padding-left: space(5);
   }
 
   &__field {
     @include body--s;
     display: block;
     width: 100%;
-    padding: space(1.5) space(2) space(1.5) space(5);
+    background-color: rgba(var(--color-gray), 1);
+    padding: space(1) space(2);
     box-sizing: border-box;
-    border: 1px solid rgba(var(--color-dark), 1);
+    border: 0;
     border-radius: space(1);
+  }
+
+  &__helpmsg {
+    @include body--xs;
+    margin: space(1) 0 0;
+    color: rgba(var(--color-black), 1);
+  }
+
+  &__error {
+    @include body--xs;
+    margin: space(1) 0 0;
+    color: rgba(var(--color-red), 1);
   }
 }

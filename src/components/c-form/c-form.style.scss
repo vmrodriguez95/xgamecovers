@@ -1,0 +1,15 @@
+@use '../../styles/tools/tools' as *;
+@use '../../styles/tools/typography' as *;
+
+.c-form {
+  display: block;
+
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: space(1);
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+}

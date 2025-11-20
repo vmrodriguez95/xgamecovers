@@ -8,25 +8,6 @@ import { COVERS } from '../../utils/consts.utils.ts'
 // Styles
 import style from './v-catalogue-edit.style.scss?inline'
 
-interface Design {
-  id: number,
-  name: string,
-  poster: string
-}
-
-interface Cover {
-  id: number,
-  name: string,
-  poster: string,
-  cover: string,
-  platforms: string[],
-  designs?: Design[]
-}
-
-interface URLParam {
-  id: string
-}
-
 @customElement('v-catalogue-edit')
 class VCatalogueEdit extends LayoutMixin(LitElement) {
 
