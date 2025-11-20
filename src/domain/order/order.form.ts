@@ -1,3 +1,5 @@
+import { Option } from "../form/form.types";
+
 export const OrderFormSchema = {
   id: {
     id: 'orderId',
@@ -14,6 +16,7 @@ export const OrderFormSchema = {
     name: 'idStatus',
     label: 'Estado del pedido',
     type: 'select',
+    options: [] as Option[],
     required: true,
     readonly: false,
     autogenerateValue: false
@@ -79,7 +82,7 @@ export const OrderFormSchema = {
   finalPrice: {
     id: 'orderFinalPrice',
     name: 'finalPrice',
-    label: 'Precio final',
+    label: 'Precio total acordado',
     type: 'number',
     required: false,
     readonly: false,

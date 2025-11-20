@@ -64,6 +64,19 @@ class CForm extends LitElement {
             value=${field.value}
           ></e-textarea>
         `
+      case 'select':
+        return html`
+          <e-select
+            id=${field.id}
+            name=${field.name}
+            label=${field.label}
+            .options=${field.options}
+            ?required=${field.required}
+            ?readonly=${field.readonly}
+            helpmsg=${field.helpmsg}
+            value=${field.value}
+          ></e-select>
+        `
       default:
         return html`<p>${field.name} no es un campo disponible</p>`
     }

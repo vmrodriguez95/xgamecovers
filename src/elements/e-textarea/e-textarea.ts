@@ -46,7 +46,7 @@ class ETextarea extends LitElement {
     return html`
       <div class="e-textarea">
         ${when(this.label, () => html`
-          <label class="e-textarea__label" for=${this.id}>${this.label} ${this.required ? '*' : ''}</label>
+          <label class="e-textarea__label" for=${this.id}>${this.label}${this.required ? '*' : ''}</label>
         `)}
         <textarea
           id=${this.id}

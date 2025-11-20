@@ -21,15 +21,3 @@ export interface OrderItem {
   idPlatform: number
   price: number
 }
-
-export interface OrderStatus {
-  id: number
-  name: string
-  color: string
-}
-
-export interface OrderItemStatus {
-  id: number
-  name: string
-  color: string
-}
