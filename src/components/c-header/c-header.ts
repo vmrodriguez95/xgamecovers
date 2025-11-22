@@ -21,11 +21,11 @@ class CHeader extends LitElement {
         </button>
         <p class="c-header__title"><strong>${this.heading || 'XGameCovers'}</strong></p>
         <img src="/images/logo.png" alt="Logo" width="40" height="40" />
-        <c-menu
-          ?opened=${this.isMenuOpened}
-          @close=${this._onClose}
-        ></c-menu>
       </div>
+      <c-menu
+        ?opened=${this.isMenuOpened}
+        @close=${this._onClose}
+      ></c-menu>
     `
   }
 
