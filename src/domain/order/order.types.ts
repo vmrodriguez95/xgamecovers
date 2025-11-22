@@ -1,5 +1,5 @@
 export interface Order {
-  id: number
+  id: string
   idStatus: number
   name: string
   whatsapp: string
@@ -14,7 +14,7 @@ export interface Order {
 }
 
 export interface OrderItem {
-  id: number
+  id: string
   idOrder: number
   idDesign: number
   idStatus: number

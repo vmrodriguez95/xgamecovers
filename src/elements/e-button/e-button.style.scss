@@ -1,0 +1,15 @@
+@use '../../styles/tools/tools' as *;
+@use '../../styles/tools/typography' as *;
+
+.e-button {
+  @include body--s(600);
+  color: rgba(var(--eButtonColor, var(--color-light)), 1);
+  background-color: rgba(var(--eButtonBackground, var(--color-primary)), 1);
+  border: 0;
+  border-radius: space(1);
+  padding: space(1) space(2);
+  box-sizing: border-box;
+  cursor: pointer;
+  text-transform: uppercase;
+  width: 100%;
+}

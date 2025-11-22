@@ -17,7 +17,6 @@ class VOrder extends LayoutMixin(LitElement) {
 
   render() {
     return this.layoutGrid(
-      this.heading,
       html`
         <div class="v-order">
           <div class="v-order__head">
@@ -26,7 +25,8 @@ class VOrder extends LayoutMixin(LitElement) {
             </a>
           </div>
         </div>
-      `
+      `,
+      this.heading
     )
   }
 }

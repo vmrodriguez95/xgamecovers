@@ -1,8 +1,8 @@
 import { LitElement, html, css, unsafeCSS } from 'lit'
-import { customElement, property, state } from 'lit/decorators.js'
-import { map } from 'lit/directives/map.js'
+import { customElement, property, query, state } from 'lit/decorators.js'
 
 // BBDD
+import { orderRepository } from '../../domain/order/order.repository.ts'
 import { statusRepository } from '../../domain/status/status.repository.ts'
 
 // Domain
@@ -25,41 +25,64 @@ class VOrderNew extends LayoutMixin(LitElement) {
 
   @state() _formSchema = OrderFormSchema
 
+  @query('c-form') form!: HTMLFormElement
+
   static styles = css`${unsafeCSS(style)}`
 
   connectedCallback(): void {
     super.connectedCallback()
     
-    this.fillStatusOptions()
+    this._fillStatusOptions()
   }
 
   render() {
     return this.layoutGrid(
-      this.heading,
       html`
         <div class="v-order-new">
           <c-form
+            action="/order"
             class="v-order-new__form"
             .schema=${this._formSchema}
           ></c-form>
+          <div class="v-order-new__actions">
+            <e-button class="v-order-new__button" @click=${this._goBack}>cancelar</e-button>
+            <e-button class="v-order-new__button" @click=${this.createOrder}>Guardar</e-button>
+          </div>
         </div>
-      `
+      `,
+      this.heading
     )
   }
 
-  async fillStatusOptions() {
+  private async _fillStatusOptions() {
     const allStatus = await statusRepository.getAll()
     const newSchema = window.structuredClone(this._formSchema)
 
-    const options: Option[] = allStatus.map((status: Status) => {
-      return {
-        value: status.id.toString(),
-        name: status.name
-      }
-    })
+    const options: Option[] = allStatus
+      .toSorted((a: Status, b: Status) => a.id - b.id)
+      .map((status: Status) => {
+        return {
+          value: status.id.toString(),
+          name: status.name
+        }
+      })
 
     newSchema.idStatus.options = options
 
     this._formSchema = newSchema
+  }
+
+  private createOrder() {
+    const data = this.form.getData()
+
+    console.log(data)
+
+    if (data) {
+      orderRepository.create(data)
+    }
+  }
+
+  private _goBack() {
+    location.href = '/order'
   }
 }

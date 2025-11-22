@@ -2,6 +2,7 @@ import {
   ref,
   get,
   set,
+  push,
   update,
   remove
 } from 'firebase/database'
@@ -31,8 +32,21 @@ export class RTDBService {
       : null
   }
 
-  set<T>(path: string, id: string, data: T) {
-    return set(this.ref(`${path}/${id}`), data)
+  set<T>(path: string, data: T) {
+    const newRef = push(this.ref(path))
+    const technicalId = newRef.key
+    if (!technicalId) {
+      throw new Error('No se ha podido generar un identificador.')
+    }
+
+    return set(
+      newRef,
+      {
+        ...data,
+        id: technicalId,
+        createdAt: new Date().toLocaleDateString(),
+      }
+    )
   }
 
   update<T>(path: string, id: string, partial: Partial<T>) {

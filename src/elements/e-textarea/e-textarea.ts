@@ -1,7 +1,6 @@
-import { LitElement, html, css, unsafeCSS } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { LitElement, html, css, unsafeCSS, PropertyValues } from 'lit'
+import { customElement, property, state } from 'lit/decorators.js'
 import { when } from 'lit/directives/when.js'
-import { classMap } from 'lit/directives/class-map.js'
 
 // Styles
 import style from './e-textarea.style.scss?inline'
@@ -19,7 +18,7 @@ class ETextarea extends LitElement {
 
   @property({ type: String }) type = ''
 
-  @property({ type: String }) value = ''
+  @property({ type: String }) fillValue = ''
 
   @property({ type: String }) placeholder = ''
 
@@ -33,6 +32,8 @@ class ETextarea extends LitElement {
 
   @property({ type: Boolean }) readonly = false
 
+  @state() value = ''
+
   static styles = css`${unsafeCSS(style)}`
 
   static formAssociated = true
@@ -40,6 +41,10 @@ class ETextarea extends LitElement {
   constructor() {
     super()
     this._internals = this.attachInternals()
+  }
+
+  protected firstUpdated(_changedProperties: PropertyValues): void {
+    this.value = this.fillValue
   }
 
   render() {
@@ -55,7 +60,7 @@ class ETextarea extends LitElement {
           ?readonly=${this.readonly}
           ?required=${this.required}
           placeholder=${this.placeholder}
-          value=${this.value}
+          value=${this.fillValue}
           .minlength=${this.minlength}
           .maxlength=${this.maxlength}
           @input=${this._onInput}

@@ -1,6 +1,6 @@
 export interface Option {
   name: string
-  value: string | number
+  value: string
 }
 
 export interface FieldSchema {
@@ -16,6 +16,7 @@ export interface FieldSchema {
   helpmsg?: string
   placeholder?: string
   value: string|number
+  fillValue: string|number
 }
 
 export type FormSchema = Record<string, FieldSchema>

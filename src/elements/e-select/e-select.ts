@@ -1,5 +1,5 @@
-import { LitElement, html, css, unsafeCSS } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { LitElement, html, css, unsafeCSS, PropertyValues } from 'lit'
+import { customElement, property, state } from 'lit/decorators.js'
 import { map } from 'lit/directives/map.js'
 import { when } from 'lit/directives/when.js'
 import { classMap } from 'lit/directives/class-map.js'
@@ -23,17 +23,19 @@ class ESelect extends LitElement {
 
   @property({ type: String }) type = ''
 
-  @property({ type: String }) value = ''
+  @property({ type: String }) fillValue = ''
 
   @property({ type: String }) placeholder = ''
 
   @property({ type: String }) helpmsg = ''
 
-  @property({ type: Array }) options = []
+  @property({ type: Array }) options: Option[] = []
 
   @property({ type: Boolean }) required = false
 
   @property({ type: Boolean }) readonly = false
+
+  @state() value: string = ''
 
   static styles = css`${unsafeCSS(style)}`
 
@@ -42,6 +44,10 @@ class ESelect extends LitElement {
   constructor() {
     super()
     this._internals = this.attachInternals()
+  }
+
+  protected firstUpdated(_changedProperties: PropertyValues): void {
+    this.value = this.fillValue
   }
 
   render() {
@@ -57,22 +63,24 @@ class ESelect extends LitElement {
             ${this.label} ${when(this.required, () => html`*`)}
           </label>
         `)}
-        <e-icon class="e-select__icon" icon="arrow-down"></e-icon>
-        <select
-          id=${this.id}
-          name=${this.name}
-          class="e-select__field"
-          type=${this.type}
-          ?readonly=${this.readonly}
-          ?required=${this.required}
-          placeholder=${this.placeholder}
-          value=${this.value}
-          @change=${this._onChange}
-        >
-          ${map(this.options, (option: Option) => html`
-            <option value=${option.value}>${option.name}</option>
-          `)}
-        </select>
+        <div class="e-select__wrapper">
+          <e-icon class="e-select__icon" icon="arrow-down"></e-icon>
+          <select
+            id=${this.id}
+            name=${this.name}
+            class="e-select__field"
+            type=${this.type}
+            ?readonly=${this.readonly}
+            ?required=${this.required}
+            placeholder=${this.placeholder}
+            value=${this.fillValue}
+            @change=${this._onChange}
+          >
+            ${map(this.options, (option: Option) => html`
+              <option value=${option.value}>${option.name}</option>
+            `)}
+          </select>
+        </div>
         ${when(this._internals.validationMessage, () => html`
           <p class="e-select__error">${this._internals.validationMessage}</p>
         `)}

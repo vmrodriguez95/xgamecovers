@@ -1,5 +1,5 @@
 import { LitElement, html, css, unsafeCSS } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { customElement, property, query } from 'lit/decorators.js'
 import { map } from 'lit/directives/map.js'
 
 // Types
@@ -17,11 +17,18 @@ class CForm extends LitElement {
 
   @property({ type: Object }) schema: FormSchema = {}
 
+  @query('.c-form') form!: HTMLFormElement
+
   static styles = css`${unsafeCSS(style)}`
 
   render() {
     return html`
-      <form class="c-form" action=${this.action} method=${this.method}>
+      <form
+        class="c-form"
+        action=${this.action}
+        method=${this.method}
+        @submit=${this._onSubmit}
+      >
         <fieldset class="c-form__content">
           ${map(Object.keys(this.schema), (fieldKey: string) => {
             const field = this.schema[fieldKey] as FieldSchema
@@ -42,6 +49,7 @@ class CForm extends LitElement {
         return html`
           <e-input
             id=${field.id}
+            class="c-form__field"
             name=${field.name}
             label=${field.label}
             type=${field.type}
@@ -49,36 +57,71 @@ class CForm extends LitElement {
             ?required=${field.required}
             ?readonly=${field.readonly}
             helpmsg=${field.helpmsg}
-            value=${field.value}
+            fillVvalue=${field.value}
+            placeholder=${field.placeholder}
+            @input=${this._updateSchemaValue}
           ></e-input>
         `
       case 'textarea':
         return html`
           <e-textarea
             id=${field.id}
+            class="c-form__field"
             name=${field.name}
             label=${field.label}
             ?required=${field.required}
             ?readonly=${field.readonly}
             helpmsg=${field.helpmsg}
-            value=${field.value}
+            fillValue=${field.value}
+            placeholder=${field.placeholder}
+            @input=${this._updateSchemaValue}
           ></e-textarea>
         `
       case 'select':
         return html`
           <e-select
             id=${field.id}
+            class="c-form__field"
             name=${field.name}
             label=${field.label}
             .options=${field.options}
             ?required=${field.required}
             ?readonly=${field.readonly}
             helpmsg=${field.helpmsg}
-            value=${field.value}
+            fillValue=${field.value}
+            placeholder=${field.placeholder}
+            @input=${this._updateSchemaValue}
           ></e-select>
         `
       default:
         return html`<p>${field.name} no es un campo disponible</p>`
     }
+  }
+
+  private _updateSchemaValue(ev: Event) {
+    const input = ev.currentTarget as HTMLInputElement
+
+    this.schema[input.name].value = input.value
+  }
+
+  private _isValid(): boolean {
+    return this.form.reportValidity()
+  }
+
+  private _onSubmit(ev: Event) {
+    ev.preventDefault()
+    ev.stopPropagation()
+  }
+
+  getData() {
+    if (this._isValid()) {
+      return Object.fromEntries(
+        Object.entries(this.schema).map(([key, value]) => {
+          return [key, value.value]
+        })
+      )
+    }
+
+    return null
   }
 }

@@ -21,6 +21,10 @@
     margin-left: space(1);
   }
 
+  &__wrapper {
+    position: relative;
+  }
+
   &__icon {
     position: absolute;
     bottom: 50%;

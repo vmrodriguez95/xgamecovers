@@ -2,9 +2,9 @@ import { rtdbService } from '../../firebase/rtdb.service'
 import { OrderFactory } from './order.factory'
 import type { Order } from './order.types'
 
-const PATH = 'orders'
+const PATH = 'order'
 
-export class OrdersRepository {
+export class OrderRepository {
   async getAll(): Promise<Order[]> {
     const data = await rtdbService.getAll(PATH)
     return data.map(OrderFactory.fromApi)
@@ -15,8 +15,8 @@ export class OrdersRepository {
     return data ? OrderFactory.fromApi(data) : null
   }
 
-  async create(id: string, input: Order) {
-    await rtdbService.set(PATH, id, input)
+  async create(data: Order) {
+    await rtdbService.set(PATH, data)
   }
 
   async update(id: string, partial: Partial<Order>) {
@@ -28,4 +28,4 @@ export class OrdersRepository {
   }
 }
 
-export const ordersRepository = new OrdersRepository()
+export const orderRepository = new OrderRepository()
