@@ -44,13 +44,16 @@ export class RTDBService {
       {
         ...data,
         id: technicalId,
-        createdAt: new Date().toLocaleDateString(),
+        createdAt: new Date().toISOString(),
       }
     )
   }
 
   update<T>(path: string, id: string, partial: Partial<T>) {
-    return update(this.ref(`${path}/${id}`), partial)
+    return update(this.ref(`${path}/${id}`), {
+        ...partial,
+        updatedAt: new Date().toISOString(),
+      })
   }
 
   delete(path: string, id: string) {
