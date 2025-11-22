@@ -9,7 +9,6 @@
   min-width: 200px;
   height: 100%;
   background-color: rgba(var(--color-light), 1);
-  box-shadow: 0 3px 10px 0 rgba(var(--color-dark), 0.5);
   box-sizing: border-box;
   z-index: 2;
   transition: left 0.3s ease-in-out;
@@ -34,20 +33,9 @@
     margin: 0;
     box-sizing: border-box;
 
-    &:last-child {
+    &--last {
       --eIconColor: var(--color-light);
-      display: block;
-      background-color: rgba(var(--color-primary), 1);
-      color: rgba(var(--color-light), 1);
-      width: 100%;
       margin-top: auto;
-      border-top-left-radius: space(1);
-      border-top-right-radius: space(1);
-
-      #{$root}__link {
-        color: rgba(var(--color-light), 1);
-        justify-content: center
-      }
     }
   }
 

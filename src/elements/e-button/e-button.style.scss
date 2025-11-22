@@ -12,4 +12,11 @@
   cursor: pointer;
   text-transform: uppercase;
   width: 100%;
+
+  ::slotted(span) {
+    --eIconColor: var(--eButtonColor, var(--color-light));
+    display: flex;
+    align-items: center;
+    gap: space(1);
+  }
 }

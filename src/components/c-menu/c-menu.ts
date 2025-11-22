@@ -1,6 +1,10 @@
 import { LitElement, html, css, unsafeCSS } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
+import { when } from 'lit/directives/when.js'
 import { classMap } from 'lit/directives/class-map.js'
+
+// Auth
+import { authStore } from '../../domain/auth/auth.store'
 
 // Styles
 import style from './c-menu.style.scss?inline'
@@ -26,15 +30,23 @@ class CHeader extends LitElement {
           <li class="c-menu__item">
             <a href="/catalogue" class="c-menu__link"><e-icon icon="gamepad"></e-icon>Catálogo</a>
           </li>
-          <li class="c-menu__item">
-            <a href="/order" class="c-menu__link"><e-icon icon="storefront"></e-icon>Pedidos</a>
-          </li>
-          <li class="c-menu__item">
-            <a href="/transaction" class="c-menu__link"><e-icon icon="receipt"></e-icon>Transacciones</a>
-          </li>
-          <li class="c-menu__item">
-            <a href="/login" class="c-menu__link"><e-icon icon="person"></e-icon>Iniciar sesión</a>
-          </li>
+          ${when(authStore.user, () => html`
+            <li class="c-menu__item">
+              <a href="/order" class="c-menu__link"><e-icon icon="storefront"></e-icon>Pedidos</a>
+            </li>
+          `)}
+          ${when(authStore.user, () => html`
+            <li class="c-menu__item">
+              <a href="/transaction" class="c-menu__link"><e-icon icon="receipt"></e-icon>Transacciones</a>
+            </li>
+          `)}
+          ${when(!authStore.user, () => html`
+            <li class="c-menu__item c-menu__item--last">
+              <e-button icon="person" @click=${this._onLogin}>
+                <span><e-icon icon="person"></e-icon> Iniciar sesión</span>
+              </e-button>
+            </li>
+          `)}
         </ul>
       </nav>
       <div
@@ -47,5 +59,9 @@ class CHeader extends LitElement {
   private _onClose() {
     this.opened = false
     this.dispatchEvent(new Event('close'))
+  }
+
+  private _onLogin() {
+    authStore.login()
   }
 }
