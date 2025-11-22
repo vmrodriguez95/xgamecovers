@@ -1,0 +1,86 @@
+@use '../../styles/tools/tools' as *;
+@use '../../styles/tools/typography' as *;
+
+.c-menu {
+  $root: &;
+  position: fixed;
+  top: 0;
+  left: -100%;
+  min-width: 200px;
+  height: 100%;
+  background-color: rgba(var(--color-light), 1);
+  box-shadow: 0 3px 10px 0 rgba(var(--color-dark), 0.5);
+  box-sizing: border-box;
+  z-index: 2;
+  transition: left 0.3s ease-in-out;
+
+  &--active {
+    left: 0;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+    margin: 0;
+    padding: space(2) 0 0;
+    list-style: none;
+    box-sizing: border-box;
+  }
+
+  &__item {
+    padding: space(0.5) space(2);
+    margin: 0;
+    box-sizing: border-box;
+
+    &:last-child {
+      --eIconColor: var(--color-light);
+      display: block;
+      background-color: rgba(var(--color-primary), 1);
+      color: rgba(var(--color-light), 1);
+      width: 100%;
+      margin-top: auto;
+      border-top-left-radius: space(1);
+      border-top-right-radius: space(1);
+
+      #{$root}__link {
+        color: rgba(var(--color-light), 1);
+        justify-content: center
+      }
+    }
+  }
+
+  &__link {
+    @include body--m;
+    display: flex;
+    align-items: center;
+    gap: space(1);
+    text-decoration: none;
+    color: rgba(var(--color-dark), 1);
+  }
+
+  &__link--active {
+    color: rgba(var(--color-primary), 1);
+  }
+
+  &__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    background-color: rgba(var(--color-dark), 0.5);
+    cursor: pointer;
+    z-index: 1;
+    overflow: hidden;
+    transition: opacity 0.3s ease-in-out;
+
+    &--active {
+      width: 100%;
+      height: 100%;
+      opacity: 1;
+    }
+  }
+}
