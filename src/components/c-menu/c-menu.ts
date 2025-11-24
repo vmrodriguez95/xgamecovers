@@ -40,13 +40,17 @@ class CHeader extends LitElement {
               <a href="/transaction" class="c-menu__link"><e-icon icon="receipt"></e-icon>Transacciones</a>
             </li>
           `)}
-          ${when(!authStore.user, () => html`
-            <li class="c-menu__item c-menu__item--last">
+          <li class="c-menu__item c-menu__item--last">
+            ${when(!authStore.user, () => html`
               <e-button icon="person" @click=${this._onLogin}>
                 <span><e-icon icon="person"></e-icon> Iniciar sesión</span>
               </e-button>
-            </li>
-          `)}
+            `, () => html`
+              <e-button icon="person" @click=${this._onLogout}>
+                <span><e-icon icon="person"></e-icon> Cerrar sesión</span>
+              </e-button>
+            `)}
+          </li>
         </ul>
       </nav>
       <div
@@ -63,5 +67,9 @@ class CHeader extends LitElement {
 
   private _onLogin() {
     authStore.login()
+  }
+
+  private _onLogout() {
+    authStore.logout()
   }
 }
