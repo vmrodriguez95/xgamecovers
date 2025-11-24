@@ -1,12 +1,11 @@
+import { auth } from './index'
 import {
   User,
-  getAuth,
   signOut,
   signInWithPopup,
   GoogleAuthProvider,
   onAuthStateChanged
 } from 'firebase/auth'
-import { auth } from './index'
 
 const provider = new GoogleAuthProvider()
 

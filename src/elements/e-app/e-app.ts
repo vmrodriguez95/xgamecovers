@@ -1,6 +1,6 @@
 import { Router } from '@lit-labs/router'
 import { LitElement, html, css, unsafeCSS } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { customElement, state } from 'lit/decorators.js'
 import { URLPattern } from 'urlpattern-polyfill'
 import { RouterController } from '../../controllers/router.controller.ts'
 
@@ -16,9 +16,9 @@ if (!globalThis.URLPattern) {
 @customElement('e-app')
 class EApp extends LitElement {
 
-  routerController = new RouterController(this)
+  private routerController = new RouterController(this)
 
-  @property({ type: Object }) router: Router = new Router(this, Object.values(this.routerController.routes))
+  @state() router: Router = new Router(this, this.routerController.getRoutes())
 
   static styles = css`${unsafeCSS(style)}`
 

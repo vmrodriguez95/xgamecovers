@@ -1,5 +1,5 @@
-export interface Route {
-  path: string
-  render?: (params?: any) => unknown
-  enter?: () => void
+import { RouteConfig } from '@lit-labs/router'
+
+export type StrictRouteConfig = RouteConfig & {
+  path: string   // obligatorio
 }

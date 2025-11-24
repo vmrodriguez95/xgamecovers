@@ -1,11 +1,11 @@
 import { html } from 'lit'
-import { Route } from '../domain/router/router.types'
-import { authStore } from '../domain/auth/auth.store'
+import { StrictRouteConfig } from '../domain/router/router.types'
+import { listenAuthChanges } from '../firebase/auth.service'
 
 export class RouterController {
   host
 
-  routes: Record<string, Route> = {
+  routes: Record<string, StrictRouteConfig> = {
     home: {
       path: '/',
       render: () => html`
@@ -77,7 +77,8 @@ export class RouterController {
     error: {
       path: '(.*)',
       enter: () => {
-        return location.href = '/404'
+        location.href = '/'
+        return false
       }
     }
   }
@@ -119,13 +120,26 @@ export class RouterController {
     return routeReplaced
   }
 
-  private _middleware() {
-    if (!authStore.user) {
-      location.href = '/'
-    }
+  private async _middleware(): Promise<boolean> {
+    return new Promise((resolve) => {
+      listenAuthChanges((user) => {
+        if (!user) {
+          location.href = '/'
+          resolve(false)
+        }
+    
+        resolve(true)
+      })
+    })
+  }
+
+  getRoutes() {
+    return Object.values(this.routes)
   }
 
   getAdminRoute(key: string, params: object) {
-    return this._replaceParams(this.routes[key].path, params)
+    const { path } = this.routes[key]
+
+    return this._replaceParams(path, params)
   }
 }
