@@ -51,6 +51,7 @@
   
   &__name {
     @include body--xs();
+    line-height: 1;
     margin: 0;
   }
 }

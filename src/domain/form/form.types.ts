@@ -3,6 +3,22 @@ export interface Option {
   value: string
 }
 
+export interface ComplexOption {
+  name: string
+  value: string
+  icon: string
+  color: string
+}
+
+export interface FieldBlock {
+  blockLabel: string
+  canAdd: boolean
+  canDelete: boolean
+  messageEmpty?: string
+  fields: FormSchema[]
+  structure: FormSchema
+}
+
 export interface FieldSchema {
   id: string
   name: string
@@ -11,12 +27,15 @@ export interface FieldSchema {
   options?: Option[]
   required: boolean
   readonly: boolean
-  autogenerateValue: boolean
+  dependsOn?: string[]
   logo?: string
   helpmsg?: string
   placeholder?: string
   value: string|number
   fillValue: string|number
+  config?: any
+  excludeValue?: boolean
+  fieldSize?: string
 }
 
-export type FormSchema = Record<string, FieldSchema>
+export type FormSchema = Record<string, FieldSchema | FieldBlock>

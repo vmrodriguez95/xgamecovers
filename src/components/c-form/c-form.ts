@@ -1,9 +1,11 @@
-import { LitElement, html, css, unsafeCSS } from 'lit'
+import { LitElement, html, css, unsafeCSS, TemplateResult } from 'lit'
 import { customElement, property, query } from 'lit/decorators.js'
 import { map } from 'lit/directives/map.js'
+import { when } from 'lit/directives/when.js'
+import { classMap } from 'lit/directives/class-map.js'
 
 // Types
-import { FieldSchema, FormSchema } from '../../domain/form/form.types.ts'
+import { FieldSchema, FieldBlock, FormSchema } from '../../domain/form/form.types.ts'
 
 // Styles
 import style from './c-form.style.scss?inline'
@@ -30,14 +32,17 @@ class CForm extends LitElement {
         @submit=${this._onSubmit}
       >
         <fieldset class="c-form__content">
-          ${map(Object.keys(this.schema), (fieldKey: string) => {
-            const field = this.schema[fieldKey] as FieldSchema
-
-            return this._getFieldByType(field)
-          })}
+          ${this._printTemplate()}
         </fieldset>
       </form>
     `
+  }
+
+  private _getInputClasses(field: FieldSchema) {
+    return classMap({
+      'c-form__field': true,
+      'c-form__field--full': field.fieldSize === 'full'
+    })
   }
 
   private _getFieldByType(field: FieldSchema) {
@@ -49,7 +54,7 @@ class CForm extends LitElement {
         return html`
           <e-input
             id=${field.id}
-            class="c-form__field"
+            class=${this._getInputClasses(field)}
             name=${field.name}
             label=${field.label}
             type=${field.type}
@@ -57,16 +62,33 @@ class CForm extends LitElement {
             ?required=${field.required}
             ?readonly=${field.readonly}
             helpmsg=${field.helpmsg}
-            fillVvalue=${field.value}
+            fillValue=${field.value}
             placeholder=${field.placeholder}
-            @input=${this._updateSchemaValue}
+            @input=${this._updateSchemaValue.bind(this, field)}
+          ></e-input>
+        `
+      case 'file':
+        return html`
+          <e-input-file
+            id=${field.id}
+            class=${this._getInputClasses(field)}
+            name=${field.name}
+            label=${field.label}
+            ?required=${field.required}
+            ?readonly=${field.readonly}
+            maxSize=${field.config.maxSize}
+            accept=${field.config.accept}
+            helpmsg=${field.helpmsg}
+            fillValue=${field.value}
+            placeholder=${field.placeholder}
+            @input=${this._updateSchemaValue.bind(this, field)}
           ></e-input>
         `
       case 'textarea':
         return html`
           <e-textarea
             id=${field.id}
-            class="c-form__field"
+            class=${this._getInputClasses(field)}
             name=${field.name}
             label=${field.label}
             ?required=${field.required}
@@ -74,14 +96,14 @@ class CForm extends LitElement {
             helpmsg=${field.helpmsg}
             fillValue=${field.value}
             placeholder=${field.placeholder}
-            @input=${this._updateSchemaValue}
+            @input=${this._updateSchemaValue.bind(this, field)}
           ></e-textarea>
         `
       case 'select':
         return html`
           <e-select
             id=${field.id}
-            class="c-form__field"
+            class=${this._getInputClasses(field)}
             name=${field.name}
             label=${field.label}
             .options=${field.options}
@@ -90,7 +112,7 @@ class CForm extends LitElement {
             helpmsg=${field.helpmsg}
             fillValue=${field.value}
             placeholder=${field.placeholder}
-            @input=${this._updateSchemaValue}
+            @input=${this._updateSchemaValue.bind(this, field)}
           ></e-select>
         `
       default:
@@ -98,10 +120,58 @@ class CForm extends LitElement {
     }
   }
 
-  private _updateSchemaValue(ev: Event) {
+  private _appendFields(block: FieldBlock) {
+    block.fields.push(block.structure)
+    this.requestUpdate()
+  }
+
+  private _getFieldBlock(block: FieldBlock) {
+    return html`
+      <div class="c-form__block">
+        <p class="c-form__heading">${block.blockLabel}</p>
+        ${when(block.fields.length === 0, () => html`
+          <div class="c-form__empty">
+            <p class="c-form__empty__message">${block.messageEmpty}</p>
+          </div>
+        `, () => html`
+          ${map(block.fields, (fields: FormSchema) => html`
+            <div class="c-form__block-fields">
+              ${when(block.canDelete, () => html`
+                <button class="c-form__delete">
+                  <e-icon icon="delete"></e-icon>
+                </button>
+              `)}
+              ${map(Object.values(fields), (field: FieldSchema | FieldBlock) => {
+                return this._getFieldByType(field as FieldSchema)
+              })}
+            </div>
+          `)}
+        `)}
+        ${when(block.canAdd, () => html`
+          <button class="c-form__add" @click=${this._appendFields.bind(this, block)}>
+            <e-icon icon="add"></e-icon>
+          </button>
+        `)}
+      </div>
+    `
+  }
+
+  private _printTemplate(schema: FormSchema = this.schema): TemplateResult {
+    return html`
+      ${map(Object.values(schema), (field: FieldBlock | FieldSchema) => {
+        if ('fields' in field) {
+          return this._getFieldBlock(field)
+        } else {
+          return this._getFieldByType(field)
+        }
+      })}
+    `
+  }
+
+  private _updateSchemaValue(field: FieldSchema, ev: Event) {
     const input = ev.currentTarget as HTMLInputElement
 
-    this.schema[input.name].value = input.value
+    field.value = input.value
   }
 
   private _isValid(): boolean {
@@ -116,10 +186,24 @@ class CForm extends LitElement {
   getData() {
     if (this._isValid()) {
       return Object.fromEntries(
-        Object.entries(this.schema).map(([key, value]) => {
-          return [key, value.value]
+        Object.entries(this.schema).map(([key, field]) => {
+          if ('fields' in field) {
+            return Object.entries(field.fields).map(([key, field]) => {
+              return [key, field.value]
+            })
+          } else {
+            return [key, field.value]
+          }
         })
       )
+    }
+
+    return null
+  }
+
+  getRawData() {
+    if (this._isValid()) {
+      return this.schema
     }
 
     return null

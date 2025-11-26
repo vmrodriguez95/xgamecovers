@@ -20,8 +20,7 @@ export const OrderFormSchema = {
     fillValue: '',
     options: [] as Option[],
     required: true,
-    readonly: false,
-    autogenerateValue: false
+    readonly: false
   },
   name: {
     id: 'orderName',
@@ -31,8 +30,7 @@ export const OrderFormSchema = {
     value: '',
     fillValue: '',
     required: true,
-    readonly: false,
-    autogenerateValue: false,
+    readonly: false
   },
   whatsapp: {
     id: 'orderWhatsapp',
@@ -43,8 +41,7 @@ export const OrderFormSchema = {
     value: '',
     fillValue: '',
     required: false,
-    readonly: false,
-    autogenerateValue: false,
+    readonly: false
   },
   wallapop: {
     id: 'orderWallapop',
@@ -55,8 +52,7 @@ export const OrderFormSchema = {
     value: '',
     fillValue: '',
     required: false,
-    readonly: false,
-    autogenerateValue: false,
+    readonly: false
   },
   instagram: {
     id: 'orderInstagram',
@@ -67,8 +63,7 @@ export const OrderFormSchema = {
     value: '',
     fillValue: '',
     required: false,
-    readonly: false,
-    autogenerateValue: false,
+    readonly: false
   },
   vinted: {
     id: 'orderVinted',
@@ -79,8 +74,7 @@ export const OrderFormSchema = {
     value: '',
     fillValue: '',
     required: false,
-    readonly: false,
-    autogenerateValue: false,
+    readonly: false
   },
   discount: {
     id: 'orderDiscount',
@@ -90,8 +84,7 @@ export const OrderFormSchema = {
     value: 0,
     fillValue: 0,
     required: false,
-    readonly: false,
-    autogenerateValue: false
+    readonly: false
   },
   finalPrice: {
     id: 'orderFinalPrice',
@@ -101,8 +94,7 @@ export const OrderFormSchema = {
     value: 0,
     fillValue: 0,
     required: false,
-    readonly: false,
-    autogenerateValue: false
+    readonly: false
   },
   address: {
     id: 'orderAddress',
@@ -112,8 +104,7 @@ export const OrderFormSchema = {
     value: '',
     fillValue: '',
     required: false,
-    readonly: false,
-    autogenerateValue: false,
+    readonly: false
   },
   designs: {
     id: 'orderDesigns',
@@ -123,7 +114,6 @@ export const OrderFormSchema = {
     value: [],
     fillValue: [],
     required: false,
-    readonly: false,
-    autogenerateValue: false
+    readonly: false
   }
 }

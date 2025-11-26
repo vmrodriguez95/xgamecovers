@@ -10,14 +10,18 @@ export interface Order {
   finalPrice: number
   date: string
   address: string
-  designs: number[]
+  designs: string[]
+  createdAt: string
+  updatedAt: string
 }
 
 export interface OrderItem {
   id: string
-  idOrder: number
-  idDesign: number
-  idStatus: number
-  idPlatform: number
+  idOrder: string
+  idDesign: string
+  idStatus: string
+  idPlatform: string
   price: number
+  createdAt: string
+  updatedAt: string
 }

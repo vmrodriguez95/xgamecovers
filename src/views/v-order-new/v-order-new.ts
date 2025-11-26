@@ -8,13 +8,18 @@ import { statusRepository } from '../../domain/status/status.repository.ts'
 // Domain
 import { OrderFormSchema } from '../../domain/order/order.form.ts'
 
+// Types
+import { Option } from '../../domain/form/form.types.ts'
+import { Status } from '../../domain/status/status.types.ts'
+
 // Mixins
 import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 
+//Controllers
+import { RouterController } from '../../controllers/router.controller.ts'
+
 // Styles
 import style from './v-order-new.style.scss?inline'
-import { Status } from '../../domain/status/status.types.ts'
-import { Option } from '../../domain/form/form.types.ts'
 
 @customElement('v-order-new')
 class VOrderNew extends LayoutMixin(LitElement) {
@@ -26,6 +31,8 @@ class VOrderNew extends LayoutMixin(LitElement) {
   @state() _formSchema = OrderFormSchema
 
   @query('c-form') form!: HTMLFormElement
+
+  routerController = new RouterController(this)
 
   static styles = css`${unsafeCSS(style)}`
 
@@ -46,7 +53,7 @@ class VOrderNew extends LayoutMixin(LitElement) {
           ></c-form>
           <div class="v-order-new__actions">
             <e-button class="v-order-new__button" @click=${this._goBack}>cancelar</e-button>
-            <e-button class="v-order-new__button" @click=${this.createOrder}>Guardar</e-button>
+            <e-button class="v-order-new__button" @click=${this.createOrder}>Crear</e-button>
           </div>
         </div>
       `,
@@ -83,6 +90,6 @@ class VOrderNew extends LayoutMixin(LitElement) {
   }
 
   private _goBack() {
-    location.href = '/order'
+    location.href = this.routerController.getAdminRoute('order', {})
   }
 }

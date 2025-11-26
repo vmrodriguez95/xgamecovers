@@ -1,0 +1,61 @@
+@use '../../styles/tools/tools' as *;
+@use '../../styles/tools/typography' as *;
+
+.e-checkbox {
+  display: block;
+  position: relative;
+
+  &--hidden {
+    display: none;
+  }
+
+  &__label {
+    @include body--s;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 0 0 space(0.5);
+  }
+
+  &__logo {
+    margin-left: space(1);
+  }
+
+  &__wrapper {
+    position: relative;
+  }
+
+  &__icon {
+    position: absolute;
+    bottom: 50%;
+    left: space(1);
+    transform: translateY(50%);
+  }
+
+  &__icon + &__field {
+    padding-left: space(5);
+  }
+
+  &__field {
+    @include body--s;
+    display: block;
+    width: 100%;
+    background-color: rgba(var(--color-gray), 1);
+    padding: space(1) space(2);
+    box-sizing: border-box;
+    border: 0;
+    border-radius: space(1);
+  }
+
+  &__helpmsg {
+    @include body--xs;
+    margin: space(1) 0 0;
+    color: rgba(var(--color-black), 1);
+  }
+
+  &__error {
+    @include body--xs;
+    margin: space(1) 0 0;
+    color: rgba(var(--color-red), 1);
+  }
+}

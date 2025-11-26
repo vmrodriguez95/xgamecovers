@@ -1,13 +1,17 @@
-import { Console } from '../console/console.types'
-
 export interface Design {
-  id: number,
-  name: string,
-  poster: string
+  id: string
+  name: string
+  posterUrl: string
+  slipcoverUrl: string
+  createdAt: string
+  updatedAt: string
 }
 
 export interface Game {
-  id: number,
-  name: string,
-  consoles: Console[],
+  id: string
+  name: string
+  designs: string[]
+  consoles: string[]
+  createdAt: string
+  updatedAt: string
 }

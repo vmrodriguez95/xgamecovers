@@ -1,8 +1,12 @@
 import { LitElement, html, css, unsafeCSS } from 'lit'
 import { customElement } from 'lit/decorators.js'
 import { map } from 'lit/directives/map.js'
+import { when } from 'lit/directives/when.js'
 
 import { COVERS } from '../../utils/consts.utils.ts'
+
+// Domain
+import { authStore } from '../../domain/auth/auth.store.ts'
 
 // Mixins
 import { LayoutMixin } from '../../mixins/layout.mixin.ts'
@@ -24,7 +28,14 @@ class VCatalogue extends LayoutMixin(LitElement) {
     return this.layoutGrid(html`
       <div class="v-catalogue">
         <c-search class="v-catalogue__search"></c-search>
-        <c-filters class="v-catalogue__filters"></c-filters>
+        <div class="v-catalogue__actions">
+          <c-filters class="v-catalogue__filters"></c-filters>
+          ${when(authStore.user, () => html`
+            <a href="/catalogue/new" class="v-catalogue__create">
+              <e-icon icon="add"></e-icon>
+            </a>
+          `)}
+        </div>
         ${map(COVERS, (cover) => html`
           <a class="v-catalogue__link" href="${this.routerController.getAdminRoute('catalogueEdit', { id: cover.id })}">
             <c-card

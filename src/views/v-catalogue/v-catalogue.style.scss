@@ -9,12 +9,28 @@
   align-items: stretch;
 
   &__search,
-  &__filters {
+  &__actions {
     grid-column: 1 / 4;
     margin-bottom: space(2);
   }
 
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: space(2);
+  }
+
   &__link {
     text-decoration: none;
+  }
+
+  &__create {
+    --eIconColor: var(--color-light);
+    display: inline-flex;
+    padding: space(1);
+    border-radius: space(1);
+    background-color: rgba(var(--color-primary), 1);
+    margin-left: auto;
   }
 }
