@@ -66,10 +66,9 @@ class VOrderNew extends LayoutMixin(LitElement) {
     const newSchema = window.structuredClone(this._formSchema)
 
     const options: Option[] = allStatus
-      .toSorted((a: Status, b: Status) => a.id - b.id)
       .map((status: Status) => {
         return {
-          value: status.id.toString(),
+          value: status.id,
           name: status.name
         }
       })

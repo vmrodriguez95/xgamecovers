@@ -1,11 +1,11 @@
 export interface Status {
-  id: number
+  id: string
   name: string
   color: string
 }
 
 export interface ItemStatus {
-  id: number
+  id: string
   name: string
   color: string
 }
