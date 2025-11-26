@@ -1,14 +1,7 @@
 export interface Transaction {
-  id: number
-  idCategory: number
-  date: string
+  id: string
+  idCategory: string
   amount: number
-}
-
-export interface TransactionCategory {
-  id: number
-  name: string
-  icon: string
-  type: string // 'expense' | 'income'
-  color: string
+  createdAt: string
+  updatedAt: string
 }
