@@ -32,24 +32,24 @@ export class RouterController {
       `,
       enter: this._middleware
     },
-    transactions: {
+    transaction: {
       path: '/transaction',
       render: () => html`
-        <v-transactions></v-transactions>
+        <v-transaction></v-transaction>
       `,
       enter: this._middleware
     },
-    transactionsNew: {
+    transactionNew: {
       path: '/transaction/new',
       render: () => html`
-        <v-transactions-create></v-transactions-create>
+        <v-transaction-new></v-transaction-new>
       `,
       enter: this._middleware
     },
-    transactionsEdit: {
+    transactionEdit: {
       path: '/transaction/:id',
       render: (params: Object) => html`
-        <v-transactions-edit .urlParams=${params}></v-transactions-edit>
+        <v-transaction-edit .urlParams=${params}></v-transaction-edit>
       `,
       enter: this._middleware
     },
