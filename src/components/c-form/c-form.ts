@@ -81,7 +81,7 @@ class CForm extends LitElement {
             helpmsg=${field.helpmsg}
             fillValue=${field.value}
             placeholder=${field.placeholder}
-            @input=${this._updateSchemaValue.bind(this, field)}
+            @change=${this._updateSchemaValue.bind(this, field)}
           ></e-input>
         `
       case 'textarea':

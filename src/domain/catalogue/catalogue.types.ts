@@ -1,8 +1,10 @@
 export interface Design {
   id: string
   name: string
-  posterUrl: string
-  slipcoverUrl: string
+  poster: string
+  slipcover: string
+  material: string
+  isFavorite: boolean
   createdAt: string
   updatedAt: string
 }

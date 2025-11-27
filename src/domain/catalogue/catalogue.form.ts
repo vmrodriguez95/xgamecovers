@@ -50,9 +50,9 @@ export const CatalogueFormSchema = {
         readonly: true,
         excludeValue: true
       },
-      posterUrl: {
-        id: 'designPosterUrl',
-        name: 'posterUrl',
+      poster: {
+        id: 'designPoster',
+        name: 'poster',
         label: 'Portada',
         type: 'file',
         value: '',
@@ -65,10 +65,25 @@ export const CatalogueFormSchema = {
         readonly: false,
         excludeValue: true
       },
-      slipcoverUrl: {
-        id: 'designSlipcoverUrl',
-        name: 'slipcoverUrl',
-        label: 'Portada',
+      slipcover: {
+        id: 'designSlipcover',
+        name: 'slipcover',
+        label: 'Diseño',
+        type: 'file',
+        value: '',
+        fillValue: '',
+        config: {
+          accept: 'image/png, image/jpg, image/jpeg, image/webp',
+          maxSize: 1 * 1024 * 1024 // 1MB
+        },
+        required: false,
+        readonly: false,
+        excludeValue: true
+      },
+      material: {
+        id: 'designMaterial',
+        name: 'material',
+        label: 'Físico',
         type: 'file',
         value: '',
         fillValue: '',
