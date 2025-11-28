@@ -48,8 +48,8 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
     const data = this.form.getFinalData()
     const rawData = this.form.getRawData()
 
-    console.log(data)
-    console.log(rawData)
+    console.log('Final data', data)
+    console.log('Raw Data', rawData)
 
     if (data) {
       // orderRepository.create(data)

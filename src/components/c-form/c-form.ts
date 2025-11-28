@@ -2,6 +2,7 @@ import { LitElement, html, css, unsafeCSS, TemplateResult } from 'lit'
 import { customElement, property, query } from 'lit/decorators.js'
 import { map } from 'lit/directives/map.js'
 import { when } from 'lit/directives/when.js'
+import { repeat } from 'lit/directives/repeat.js'
 import { classMap } from 'lit/directives/class-map.js'
 
 // Types
@@ -53,10 +54,10 @@ class CForm extends LitElement {
 
   private _getFieldByType(field: FieldSchema, index: number = 0) {
     if (field.concatValue) {
-      field.concatValue = field.concatValue.replace('${index}', `${index}`)
+      field.concatValue = field.concatValue.replace('${index}', `${index + 1}`)
     }
 
-    if (field.dependsOn) {
+    if (field.dependsOn && !field.dependencyActivated) {
       this.dependencies.push({
         field,
         dependencies: field.dependsOn
@@ -156,16 +157,20 @@ class CForm extends LitElement {
             <p class="c-form__empty__message">${block.messageEmpty}</p>
           </div>
         `, () => html`
-          ${map(block.fields, (fields: FormSchema) => html`
+          ${map(block.fields, (fields: FormSchema, index: number) => html`
             <div class="c-form__block-fields">
               ${when(block.canDelete, () => html`
                 <button class="c-form__delete">
                   <e-icon icon="delete"></e-icon>
                 </button>
               `)}
-              ${map(Object.values(fields), (field: FieldSchema | FieldBlock, index: number) => {
-                return this._getFieldByType(field as FieldSchema, index)
-              })}
+              ${repeat(
+                Object.values(fields),
+                (field: FieldSchema | FieldBlock) => field.id,
+                (field: FieldSchema | FieldBlock) => {
+                  return this._getFieldByType(field as FieldSchema, index)
+                }
+              )}
             </div>
           `)}
         `)}
@@ -184,9 +189,6 @@ class CForm extends LitElement {
         if ('fields' in field) {
           return this._getFieldBlock(field)
         } else {
-          if (field.concatValue) {
-            field.concatValue = field.concatValue.replace('${index}', `${index}`)
-          }
           return this._getFieldByType(field)
         }
       })}
@@ -212,34 +214,34 @@ class CForm extends LitElement {
     return field.value && concatValue ? `${field.value}${concatValue}` : field.value
   }
 
-  private _dependencyActionTextToText(mainField: HTMLInputElement, field: HTMLInputElement, concatValue: string = '') {
-    mainField.value = this.concatValueDynamically(field, concatValue)
+  private _dependencyActionTextToText(mainField: HTMLInputElement, input: HTMLInputElement, concatValue: string = '') {
+    mainField.value = this.concatValueDynamically(input, concatValue)
   }
 
-  private _attachDependencyActionTextToText(mainField: HTMLInputElement, field: HTMLInputElement, concatValue: string = '') {
-    field.addEventListener('input', () => {
-      mainField.value = this.concatValueDynamically(field, concatValue)
+  private _attachDependencyActionTextToText(mainField: HTMLInputElement, input: HTMLInputElement, concatValue: string = '') {
+    input.addEventListener('input', () => {
+      mainField.value = this.concatValueDynamically(input, concatValue)
       mainField.dispatchEvent(new Event('input'))
     })
   }
 
   private _associateDependency(dependency: Dependency) {
-    const mainField = this.shadowRoot?.querySelector(`#${dependency.field.id}`) as HTMLInputElement
+    const mainField = this.shadowRoot?.querySelector(`#${dependency.field.id}:not([dependencyActivated])`) as HTMLInputElement
+    const dependencyFields = this.shadowRoot?.querySelectorAll(`#${dependency.dependencies.join(', #')}`)
 
-    dependency.dependencies.forEach((dependencyId) => {
-      const field = this.shadowRoot?.querySelector(`#${dependencyId}`) as HTMLInputElement
+    if (!mainField || !dependencyFields) return
+    
+    dependencyFields.forEach((field) => {
+      const input = field as HTMLInputElement
 
-      if (!mainField || !field) {
-        return
-      }
-
-      if (mainField.type === 'text' && field.type === 'text') {
-        this._dependencyActionTextToText(mainField, field, dependency.field.concatValue)
-        this._attachDependencyActionTextToText(mainField, field, dependency.field.concatValue)
+      if (mainField.type === 'text' && input.type === 'text') {
+        this._dependencyActionTextToText(mainField, input, dependency.field.concatValue)
+        this._attachDependencyActionTextToText(mainField, input, dependency.field.concatValue)
       }
     })
 
     dependency.field.dependencyActivated = true
+    mainField.setAttribute('dependencyActivated', 'true')
   }
 
   private _activateDependencies() {
@@ -258,17 +260,13 @@ class CForm extends LitElement {
             return this._mountFinalData(deepSchema)
           })
         } else {
-          if (field.concatValue) {
-            field.fillValue = `${field.fillValue} ${field.concatValue}`
-          }
-
           return [key, field.fillValue]
         }
       })
     )
   }
 
-  getData() {
+  getFinalData() {
     if (this._isValid()) {
       this._mountFinalData(this.schema)
     }

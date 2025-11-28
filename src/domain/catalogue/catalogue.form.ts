@@ -11,9 +11,9 @@ export const CatalogueFormSchema = {
     required: false,
     readonly: true
   },
-  gameName: {
-    id: 'catalogueGameName',
-    name: 'gameName',
+  name: {
+    id: 'catalogueName',
+    name: 'name',
     label: 'Nombre del juego',
     type: 'text',
     fillValue: '',
@@ -35,9 +35,9 @@ export const CatalogueFormSchema = {
         required: false,
         readonly: true
       },
-      designName: {
-        id: 'designDesignName',
-        name: 'designName',
+      name: {
+        id: 'designName',
+        name: 'name',
         label: 'Nombre',
         type: 'text',
         dependsOn: ['catalogueName'],

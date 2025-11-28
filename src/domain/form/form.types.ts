@@ -16,6 +16,7 @@ export interface Dependency {
 }
 
 export interface FieldBlock {
+  id: string
   blockLabel: string
   canAdd: boolean
   canDelete: boolean
@@ -29,6 +30,7 @@ export interface FieldSchema {
   name: string
   label: string
   type: string
+  autocomplete?: string
   options?: Option[]
   required: boolean
   readonly: boolean

@@ -1,6 +1,7 @@
 import { LitElement, html, css, unsafeCSS, PropertyValues } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { when } from 'lit/directives/when.js'
+import { live } from 'lit/directives/live.js'
 import { classMap } from 'lit/directives/class-map.js'
 
 // Styles
@@ -22,6 +23,8 @@ class EInput extends LitElement {
   @property({ type: String }) icon = ''
 
   @property({ type: String }) type = ''
+
+  @property({ type: String }) autocomplete = 'off'
 
   @property({ type: String, reflect: true }) value = ''
 
@@ -77,12 +80,13 @@ class EInput extends LitElement {
             name=${this.name}
             class="e-input__field"
             type=${this.type}
+            autocomplete=${this.autocomplete}
             ?readonly=${this.readonly}
             ?required=${this.required}
             placeholder=${this.placeholder}
             .minlength=${this.minlength}
             .maxlength=${this.maxlength}
-            value=${this.value}
+            .value=${live(this.value)}
             @input=${this._onInput}
             @blur=${this._onBlur}
           />
