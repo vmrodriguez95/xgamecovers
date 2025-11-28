@@ -23,7 +23,7 @@ class ESelect extends LitElement {
 
   @property({ type: String }) type = ''
 
-  @property({ type: String }) fillValue = ''
+  @property({ type: String }) value = ''
 
   @property({ type: String }) placeholder = ''
 
@@ -35,8 +35,6 @@ class ESelect extends LitElement {
 
   @property({ type: Boolean }) readonly = false
 
-  @state() value: string = ''
-
   static styles = css`${unsafeCSS(style)}`
 
   static formAssociated = true
@@ -44,10 +42,6 @@ class ESelect extends LitElement {
   constructor() {
     super()
     this._internals = this.attachInternals()
-  }
-
-  protected firstUpdated(_changedProperties: PropertyValues): void {
-    this.value = this.fillValue
   }
 
   render() {
@@ -73,7 +67,7 @@ class ESelect extends LitElement {
             ?readonly=${this.readonly}
             ?required=${this.required}
             placeholder=${this.placeholder}
-            value=${this.fillValue}
+            value=${this.value}
             @change=${this._onChange}
           >
             ${map(this.options, (option: Option) => html`

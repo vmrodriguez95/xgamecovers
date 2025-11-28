@@ -79,7 +79,7 @@ class VOrderNew extends LayoutMixin(LitElement) {
   }
 
   private createOrder() {
-    const data = this.form.getData()
+    const data = this.form.getFinalData()
 
     console.log(data)
 

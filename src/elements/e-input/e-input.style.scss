@@ -6,7 +6,9 @@
   position: relative;
 
   &--hidden {
-    display: none;
+    position: absolute;
+    top: -100%;
+    opacity: 0;
   }
 
   &__label {

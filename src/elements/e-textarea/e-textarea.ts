@@ -18,7 +18,7 @@ class ETextarea extends LitElement {
 
   @property({ type: String }) type = ''
 
-  @property({ type: String }) fillValue = ''
+  @property({ type: String }) value = ''
 
   @property({ type: String }) placeholder = ''
 
@@ -32,8 +32,6 @@ class ETextarea extends LitElement {
 
   @property({ type: Boolean }) readonly = false
 
-  @state() value = ''
-
   static styles = css`${unsafeCSS(style)}`
 
   static formAssociated = true
@@ -41,10 +39,6 @@ class ETextarea extends LitElement {
   constructor() {
     super()
     this._internals = this.attachInternals()
-  }
-
-  protected firstUpdated(_changedProperties: PropertyValues): void {
-    this.value = this.fillValue
   }
 
   render() {
@@ -60,7 +54,7 @@ class ETextarea extends LitElement {
           ?readonly=${this.readonly}
           ?required=${this.required}
           placeholder=${this.placeholder}
-          value=${this.fillValue}
+          value=${this.value}
           .minlength=${this.minlength}
           .maxlength=${this.maxlength}
           @input=${this._onInput}

@@ -1,6 +1,6 @@
 export interface Design {
   id: string
-  name: string
+  designName: string
   poster: string
   slipcover: string
   material: string
@@ -11,7 +11,7 @@ export interface Design {
 
 export interface Game {
   id: string
-  name: string
+  gameName: string
   designs: string[]
   consoles: string[]
   createdAt: string

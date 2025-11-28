@@ -23,7 +23,7 @@ class EInput extends LitElement {
 
   @property({ type: String }) type = ''
 
-  @property({ type: String }) fillValue = ''
+  @property({ type: String, reflect: true }) value = ''
 
   @property({ type: String }) placeholder = ''
 
@@ -37,8 +37,6 @@ class EInput extends LitElement {
 
   @property({ type: Boolean }) readonly = false
 
-  @state() value = ''
-
   static styles = css`${unsafeCSS(style)}`
 
   static formAssociated = true
@@ -51,12 +49,7 @@ class EInput extends LitElement {
   connectedCallback(): void {
     super.connectedCallback()
 
-    this.value = this.fillValue
     this._validate()
-  }
-
-  protected firstUpdated(_changedProperties: PropertyValues): void {
-    this.value = this.fillValue
   }
 
   render() {
@@ -89,7 +82,7 @@ class EInput extends LitElement {
             placeholder=${this.placeholder}
             .minlength=${this.minlength}
             .maxlength=${this.maxlength}
-            value=${this.fillValue}
+            value=${this.value}
             @input=${this._onInput}
             @blur=${this._onBlur}
           />

@@ -72,7 +72,7 @@ class VTransactionNew extends LayoutMixin(LitElement) {
   }
 
   private createtransaction() {
-    const data = this.form.getData()
+    const data = this.form.getFinalData()
 
     console.log(data)
 

@@ -45,7 +45,7 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
   }
   
   private createGame() {
-    const data = this.form.getData()
+    const data = this.form.getFinalData()
     const rawData = this.form.getRawData()
 
     console.log(data)

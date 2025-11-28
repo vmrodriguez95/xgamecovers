@@ -10,6 +10,11 @@ export interface ComplexOption {
   color: string
 }
 
+export interface Dependency {
+  field: FieldSchema
+  dependencies: string[]
+}
+
 export interface FieldBlock {
   blockLabel: string
   canAdd: boolean
@@ -31,11 +36,12 @@ export interface FieldSchema {
   logo?: string
   helpmsg?: string
   placeholder?: string
-  value: string|number
   fillValue: string|number
+  concatValue?: string
   config?: any
   excludeValue?: boolean
   fieldSize?: string
+  dependencyActivated?: boolean // Uso exclusivo para las dependencias que se maneja desde el código
 }
 
 export type FormSchema = Record<string, FieldSchema | FieldBlock>

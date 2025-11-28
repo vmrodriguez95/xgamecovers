@@ -11,12 +11,11 @@ export const CatalogueFormSchema = {
     required: false,
     readonly: true
   },
-  name: {
-    id: 'catalogueName',
-    name: 'name',
+  gameName: {
+    id: 'catalogueGameName',
+    name: 'gameName',
     label: 'Nombre del juego',
     type: 'text',
-    value: '',
     fillValue: '',
     required: true,
     readonly: false
@@ -32,19 +31,18 @@ export const CatalogueFormSchema = {
         name: 'id',
         label: 'Identificador',
         type: 'hidden',
-        value: '',
         fillValue: '',
         required: false,
         readonly: true
       },
-      name: {
-        id: 'designName',
-        name: 'name',
+      designName: {
+        id: 'designDesignName',
+        name: 'designName',
         label: 'Nombre',
         type: 'text',
         dependsOn: ['catalogueName'],
-        value: '',
         fieldSize: 'full',
+        concatValue: ' - v${index}',
         fillValue: '',
         required: false,
         readonly: true,
@@ -55,7 +53,6 @@ export const CatalogueFormSchema = {
         name: 'poster',
         label: 'Portada',
         type: 'file',
-        value: '',
         fillValue: '',
         config: {
           accept: 'image/png, image/jpg, image/jpeg, image/webp',
@@ -70,7 +67,6 @@ export const CatalogueFormSchema = {
         name: 'slipcover',
         label: 'Diseño',
         type: 'file',
-        value: '',
         fillValue: '',
         config: {
           accept: 'image/png, image/jpg, image/jpeg, image/webp',
@@ -85,7 +81,6 @@ export const CatalogueFormSchema = {
         name: 'material',
         label: 'Físico',
         type: 'file',
-        value: '',
         fillValue: '',
         config: {
           accept: 'image/png, image/jpg, image/jpeg, image/webp',
@@ -100,14 +95,13 @@ export const CatalogueFormSchema = {
         name: 'favorite',
         label: '',
         type: 'checkbox',
-        value: false,
         fillValue: false,
         required: false,
         readonly: false,
         excludeValue: true
       }
     },
-    fields: [],
+    fields: [], // Está vacío a posta subnormal
     platforms: {
       id: 'cataloguePlatforms',
       name: 'platforms',

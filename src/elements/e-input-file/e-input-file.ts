@@ -16,7 +16,7 @@ class EInputFile extends LitElement {
 
   @property({ type: String }) label = ''
 
-  @property({ type: String }) fillValue = ''
+  @property({ type: String }) value = ''
 
   @property({ type: String }) accept = ''
 
@@ -27,8 +27,6 @@ class EInputFile extends LitElement {
   @property({ type: Boolean }) required = false
 
   @property({ type: Boolean }) readonly = false
-
-  @state() value = ''
 
   @query('.e-input-file__field') field!: HTMLInputElement
 
@@ -48,12 +46,7 @@ class EInputFile extends LitElement {
   connectedCallback(): void {
     super.connectedCallback()
 
-    this.value = this.fillValue
     this._validate()
-  }
-
-  protected firstUpdated(_changedProperties: PropertyValues): void {
-    this.value = this.fillValue
   }
 
   render() {
@@ -77,7 +70,7 @@ class EInputFile extends LitElement {
               accept=${this.accept}
               ?readonly=${this.readonly}
               ?required=${this.required}
-              value=${this.fillValue}
+              value=${this.value}
               @change=${this._onChange}
             />
           `, () => html`
