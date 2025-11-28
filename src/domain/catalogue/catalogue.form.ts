@@ -21,7 +21,7 @@ export const CatalogueFormSchema = {
     readonly: false
   },
   designs: {
-    blockLabel: 'Diseños',
+    blockLabel: 'Diseño',
     canAdd: true,
     canDelete: true,
     messageEmpty: 'Aún no has añadido ningún diseño',
@@ -41,11 +41,24 @@ export const CatalogueFormSchema = {
         label: 'Nombre',
         type: 'text',
         dependsOn: ['catalogueName'],
-        fieldSize: 'full',
+        fieldSize: 'max',
         concatValue: ' - v${index}',
         fillValue: '',
         required: false,
         readonly: true,
+        excludeValue: true
+      },
+      isFavorite: {
+        id: 'designIsFavorite',
+        name: 'isFavorite',
+        label: '',
+        type: 'checkbox',
+        icon: 'star-border',
+        iconChecked: 'star',
+        fieldSize: 'min',
+        fillValue: false,
+        required: false,
+        readonly: false,
         excludeValue: true
       },
       poster: {
@@ -54,6 +67,7 @@ export const CatalogueFormSchema = {
         label: 'Portada',
         type: 'file',
         fillValue: '',
+        fieldSize: 'min',
         config: {
           accept: 'image/png, image/jpg, image/jpeg, image/webp',
           maxSize: 1 * 1024 * 1024 // 1MB
@@ -68,6 +82,7 @@ export const CatalogueFormSchema = {
         label: 'Diseño',
         type: 'file',
         fillValue: '',
+        fieldSize: 'min',
         config: {
           accept: 'image/png, image/jpg, image/jpeg, image/webp',
           maxSize: 1 * 1024 * 1024 // 1MB
@@ -82,20 +97,11 @@ export const CatalogueFormSchema = {
         label: 'Físico',
         type: 'file',
         fillValue: '',
+        fieldSize: 'min',
         config: {
           accept: 'image/png, image/jpg, image/jpeg, image/webp',
           maxSize: 1 * 1024 * 1024 // 1MB
         },
-        required: false,
-        readonly: false,
-        excludeValue: true
-      },
-      favorite: {
-        id: 'designFavorite',
-        name: 'favorite',
-        label: '',
-        type: 'checkbox',
-        fillValue: false,
         required: false,
         readonly: false,
         excludeValue: true

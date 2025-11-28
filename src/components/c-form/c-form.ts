@@ -48,7 +48,7 @@ class CForm extends LitElement {
   private _getInputClasses(field: FieldSchema) {
     return classMap({
       'c-form__field': true,
-      'c-form__field--full': field.fieldSize === 'full'
+      [`c-form__field--${field.fieldSize}`]: field.fieldSize !== '' && field.fieldSize !== undefined
     })
   }
 
@@ -137,6 +137,23 @@ class CForm extends LitElement {
             @input=${this._updateSchemaValue.bind(this, field)}
           ></e-select>
         `
+      case 'checkbox':
+        return html`
+          <e-checkbox
+            id=${field.id}
+            class=${this._getInputClasses(field)}
+            name=${field.name}
+            label=${field.label}
+            icon=${field.icon}
+            iconChecked=${field.iconChecked}
+            ?checked=${field.fillValue}
+            ?required=${field.required}
+            ?readonly=${field.readonly}
+            helpmsg=${field.helpmsg}
+            tabindex="0"
+            @change=${this._updateSchemaValue.bind(this, field)}
+          ></e-checkbox>
+        `
       default:
         return html`<p>${field.name} no es un campo disponible</p>`
     }
@@ -151,7 +168,6 @@ class CForm extends LitElement {
   private _getFieldBlock(block: FieldBlock) {
     return html`
       <div class="c-form__block">
-        <p class="c-form__heading">${block.blockLabel}</p>
         ${when(block.fields.length === 0, () => html`
           <div class="c-form__empty">
             <p class="c-form__empty__message">${block.messageEmpty}</p>
@@ -159,6 +175,7 @@ class CForm extends LitElement {
         `, () => html`
           ${map(block.fields, (fields: FormSchema, index: number) => html`
             <div class="c-form__block-fields">
+              <p class="c-form__heading">${block.blockLabel} ${index + 1}</p>
               ${when(block.canDelete, () => html`
                 <button class="c-form__delete">
                   <e-icon icon="delete"></e-icon>
@@ -260,7 +277,7 @@ class CForm extends LitElement {
             return this._mountFinalData(deepSchema)
           })
         } else {
-          return [key, field.fillValue]
+          return [key, field.type === 'checkbox' ? field.checked : field.fillValue]
         }
       })
     )

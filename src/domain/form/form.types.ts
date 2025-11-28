@@ -30,6 +30,7 @@ export interface FieldSchema {
   name: string
   label: string
   type: string
+  checked?: boolean
   autocomplete?: string
   options?: Option[]
   required: boolean
@@ -38,12 +39,14 @@ export interface FieldSchema {
   logo?: string
   helpmsg?: string
   placeholder?: string
-  fillValue: string|number
+  fillValue: string|number|boolean
   concatValue?: string
   config?: any
   excludeValue?: boolean
-  fieldSize?: string
+  fieldSize?: string // 'min' | 'half' | 'max' | 'full'
   dependencyActivated?: boolean // Uso exclusivo para las dependencias que se maneja desde el código
+  icon?: string
+  iconChecked?: string
 }
 
 export type FormSchema = Record<string, FieldSchema | FieldBlock>

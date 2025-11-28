@@ -13,12 +13,44 @@
     border: 0;
   }
 
+  &__heading {
+    @include body--l();
+    color: rgba(var(--color-dark), 1);
+    margin: 0 0 space(1);
+    flex: 1 0 100%;
+  }
+
+  e-checkbox {
+    padding: 0 space(2);
+    align-self: center;
+    box-sizing: border-box;
+  }
+
   &__field {
     flex: 1 0 auto;
+
+    &--min {
+      width: 20%;
+      flex: 1 0 20%;
+    }
+    
+    &--half {
+      width: 50%;
+      flex: 1 0 50%;
+    }
+
+    &--max {
+      width: 80%;
+      flex: 1 0 80%;
+    }
 
     &--full {
       width: 100%;
       flex: 1 0 100%;
+    }
+
+    &[type="hidden"] {
+      display: none;
     }
   }
 
@@ -39,12 +71,16 @@
   &__block {
     display: flex;
     flex-direction: column;
-
+    
     &-fields {
       display: flex;
       flex-wrap: wrap;
       position: relative;
       padding-right: space(5);
+      padding-bottom: space(2);
+      margin-bottom: space(2);
+      border-bottom: 2px solid rgba(var(--color-dark), 1);
+      box-sizing: border-box;
     }
   }
 
@@ -62,7 +98,7 @@
   &__delete {
     --eIconColor: var(--color-dark);
     display: inline-flex;
-    padding: space(1);
+    padding: 0;
     border: 0;
     background-color: transparent;
     cursor: pointer;
