@@ -81,6 +81,7 @@ class CForm extends LitElement {
             helpmsg=${field.helpmsg}
             value=${field.fillValue}
             placeholder=${field.placeholder}
+            tabindex="0"
             @input=${this._updateSchemaValue.bind(this, field)}
           ></e-input>
         `
@@ -98,6 +99,7 @@ class CForm extends LitElement {
             helpmsg=${field.helpmsg}
             value=${field.fillValue}
             placeholder=${field.placeholder}
+            tabindex="0"
             @change=${this._updateSchemaValue.bind(this, field)}
           ></e-input>
         `
@@ -113,6 +115,7 @@ class CForm extends LitElement {
             helpmsg=${field.helpmsg}
             value=${field.fillValue}
             placeholder=${field.placeholder}
+            tabindex="0"
             @input=${this._updateSchemaValue.bind(this, field)}
           ></e-textarea>
         `
@@ -129,6 +132,7 @@ class CForm extends LitElement {
             helpmsg=${field.helpmsg}
             value=${field.fillValue}
             placeholder=${field.placeholder}
+            tabindex="0"
             @input=${this._updateSchemaValue.bind(this, field)}
           ></e-select>
         `
