@@ -6,7 +6,7 @@ export interface Option {
 export interface ComplexOption {
   name: string
   value: string
-  icon: string
+  logo: string
   color: string
 }
 

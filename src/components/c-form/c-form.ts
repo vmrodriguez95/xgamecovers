@@ -137,6 +137,22 @@ class CForm extends LitElement {
             @input=${this._updateSchemaValue.bind(this, field)}
           ></e-select>
         `
+      case 'select-multiple':
+        return html`
+          <e-select-multiple
+            id=${field.id}
+            class=${this._getInputClasses(field)}
+            name=${field.name}
+            label=${field.label}
+            .options=${field.options}
+            ?required=${field.required}
+            ?readonly=${field.readonly}
+            helpmsg=${field.helpmsg}
+            value=${field.fillValue}
+            tabindex="0"
+            @change=${this._updateSchemaValue.bind(this, field)}
+          ></e-select-multiple>
+        `
       case 'checkbox':
         return html`
           <e-checkbox

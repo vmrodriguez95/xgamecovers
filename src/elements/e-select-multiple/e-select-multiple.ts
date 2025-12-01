@@ -1,7 +1,10 @@
-import { LitElement, html, css, unsafeCSS, PropertyValues } from 'lit'
+import { LitElement, html, css, unsafeCSS } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
+import { map } from 'lit/directives/map.js'
 import { when } from 'lit/directives/when.js'
-import { classMap } from 'lit/directives/class-map.js'
+
+// Types
+import { ComplexOption } from '../../domain/form/form.types'
 
 // Styles
 import style from './e-select-multiple.style.scss?inline'
@@ -17,27 +20,17 @@ class ESelectMultiple extends LitElement {
 
   @property({ type: String }) label = ''
 
-  @property({ type: String }) logo = ''
-
-  @property({ type: String }) icon = ''
-
-  @property({ type: String }) type = ''
-
-  @property({ type: String }) fillValue = ''
+  @property({ type: Array }) value = []
 
   @property({ type: String }) placeholder = ''
 
   @property({ type: String }) helpmsg = ''
 
-  @property({ type: Number }) minlength = 0
-
-  @property({ type: Number }) maxlength = 255
+  @property({ type: Array }) options: ComplexOption[] = []
 
   @property({ type: Boolean, reflect: true }) required = false
 
   @property({ type: Boolean }) readonly = false
-
-  @state() value = ''
 
   static styles = css`${unsafeCSS(style)}`
 
@@ -51,48 +44,34 @@ class ESelectMultiple extends LitElement {
   connectedCallback(): void {
     super.connectedCallback()
 
-    this.value = this.fillValue
+    console.log('options', this.options)
+
     this._validate()
   }
 
-  protected firstUpdated(_changedProperties: PropertyValues): void {
-    this.value = this.fillValue
-  }
-
   render() {
-    const inputClasses = classMap({
-      'e-select-multiple': true,
-      'e-select-multiple--hidden': this.type === 'hidden'
-    })
-
     return html`
-      <div class=${inputClasses}>
+      <div class="e-select-multiple">
         ${when(this.label, () => html`
-          <label class="e-select-multiple__label" for=${this.id}>
+          <p class="e-select-multiple__heading">
             ${this.label} ${when(this.required, () => html`*`)}
-            ${when(this.logo, () => html`
-              <img class="e-select-multiple__logo" src="/images/logos/${this.logo}.png" width="16" height="16" alt="Logo ${this.name}" />
-            `) }
-          </label>
+          </p>
         `)}
         <div class="e-select-multiple__wrapper">
-          ${when(this.icon, () => html`
-            <e-icon class="e-select-multiple__icon" icon=${this.icon}></e-icon>
+          ${map(this.options, (option, index) => html`
+            <label class="e-select-multiple__fake-field e-select-multiple__fake-field--${option.color}" for="${this.id}-${index}">
+              <input
+                id="${this.id}-${index}"
+                name=${this.name}
+                class="e-select-multiple__field"
+                type="checkbox"
+                ?readonly=${this.readonly}
+                ?required=${this.required}
+                value=${option.value}
+              />
+              <e-icon class="e-select-multiple__icon" icon="${option.logo}"></e-icon>
+            </label>
           `)}
-          <input
-            id=${this.id}
-            name=${this.name}
-            class="e-select-multiple__field"
-            type=${this.type}
-            ?readonly=${this.readonly}
-            ?required=${this.required}
-            placeholder=${this.placeholder}
-            .minlength=${this.minlength}
-            .maxlength=${this.maxlength}
-            value=${this.fillValue}
-            @input=${this._onInput}
-            @blur=${this._onBlur}
-          />
         </div>
         ${when(this._internals.validationMessage, () => html`
           <p class="e-select-multiple__error">${this._internals.validationMessage}</p>
@@ -104,13 +83,13 @@ class ESelectMultiple extends LitElement {
     `
   }
 
-  private _onInput(e: Event) {
-    const target = e.target as HTMLInputElement
-    this.value = target.value
+  // private _onInput(e: Event) {
+  //   const target = e.target as HTMLInputElement
+  //   this.value = target.value
 
-    this._validate()
-    this._internals.setFormValue(this.value)
-  }
+  //   this._validate()
+  //   this._internals.setFormValue(this.value)
+  // }
 
   private _onBlur() {
     this._validate()
@@ -143,34 +122,10 @@ class ESelectMultiple extends LitElement {
     }
   }
 
-  private _getMinLengthValidy() {
-    return {
-      valid: false,
-      message: `Debe tener mínimo ${this.minlength} caracteres`,
-      state: { tooShort: true }
-    }
-  }
-
-  private _getMaxLengthValidy() {
-    return {
-      valid: false,
-      message: `No puede tener más de ${this.maxlength} caracteres`,
-      state: { tooLong: true }
-    }
-  }
-
   private _calculateValidity() {
     // required
     if (this.required && !this.value) {
       return this._getRequiredValidy()
-    }
-    
-    if (this.minlength && this.value.length < this.minlength) {
-      return this._getMinLengthValidy()
-    }
-    
-    if (this.maxlength && this.value.length > this.maxlength) {
-      return this._getMaxLengthValidy()
     }
 
     return this._getDefaultValidy() 

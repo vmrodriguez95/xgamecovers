@@ -5,7 +5,7 @@ import type { Game, Design } from './catalogue.types'
 const PATH_GAMES = 'game'
 const PATH_DESIGNS = 'design'
 
-export class CatalogueGameRepository {
+class CatalogueGameRepository {
   async getAll(): Promise<Game[]> {
     const data = await rtdbService.getAll(PATH_GAMES)
     return data.map(CatalogueFactory.gameFromApi)
@@ -29,7 +29,7 @@ export class CatalogueGameRepository {
   }
 }
 
-export class CatalogueDesignRepository {
+class CatalogueDesignRepository {
   async getAll(): Promise<Design[]> {
     const data = await rtdbService.getAll(PATH_DESIGNS)
     return data.map(CatalogueFactory.designFromApi)

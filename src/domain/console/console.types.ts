@@ -1,12 +1,12 @@
 export interface Console {
-  id: number
+  id: string
   name: string
   logo: string
   color: string
 }
 
 export interface Version {
-  id: number
-  idPlatform: number
+  id: string
+  idPlatform: string
   name: string
 }

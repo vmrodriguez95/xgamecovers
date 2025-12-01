@@ -10,6 +10,13 @@ import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 // Controllers
 import { RouterController } from '../../controllers/router.controller.ts'
 
+// Repositories
+import { consoleRepository } from '../../domain/console/console.repository.ts'
+
+// Types
+import { ComplexOption } from '../../domain/form/form.types.ts'
+import type { Console } from '../../domain/console/console.types.ts'
+
 // Styles
 import style from './v-catalogue-new.style.scss?inline'
 
@@ -28,6 +35,12 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
 
   static styles = css`${unsafeCSS(style)}`
 
+  connectedCallback(): void {
+    super.connectedCallback()
+
+    this._fillConsolesOptions()
+  }
+
   render() {
     return this.layoutGrid(html`
       <div class="v-catalogue-new">
@@ -38,13 +51,32 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
         ></c-form>
         <div class="v-catalogue-new__actions">
           <e-button class="v-catalogue-new__button" @click=${this._goBack}>Cancelar</e-button>
-          <e-button class="v-catalogue-new__button" @click=${this.createGame}>Crear</e-button>
+          <e-button class="v-catalogue-new__button" @click=${this._createGame}>Crear</e-button>
         </div>
       </div>
     `)
   }
+
+  private async _fillConsolesOptions() {
+    const allConsole = await consoleRepository.getAll()
+    const newSchema = window.structuredClone(this._formSchema)
+
+    const options: ComplexOption[] = allConsole
+      .map((console: Console) => {
+        return {
+          value: console.id,
+          name: console.name,
+          logo: console.logo,
+          color: console.color
+        }
+      })
+
+    newSchema.platforms.options = options
+
+    this._formSchema = newSchema
+  }
   
-  private createGame() {
+  private _createGame() {
     const data = this.form.getFinalData()
     const rawData = this.form.getRawData()
 

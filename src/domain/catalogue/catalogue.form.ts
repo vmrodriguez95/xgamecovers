@@ -108,16 +108,16 @@ export const CatalogueFormSchema = {
       }
     },
     fields: [], // Está vacío a posta subnormal
-    platforms: {
-      id: 'cataloguePlatforms',
-      name: 'platforms',
-      label: 'Plataformas',
-      type: 'selectMultiple',
-      options: [] as Option[],
-      value: [],
-      fillValue: [],
-      required: true,
-      readonly: false
-    }
+  },
+  platforms: {
+    id: 'cataloguePlatforms',
+    name: 'platforms',
+    label: 'Plataformas',
+    type: 'select-multiple',
+    options: [] as Option[],
+    value: [],
+    fillValue: [],
+    required: true,
+    readonly: false
   }
 }
