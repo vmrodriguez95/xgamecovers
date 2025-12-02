@@ -1,11 +1,6 @@
 import { AuthUser } from './auth.types'
 import type { User } from 'firebase/auth'
-import {
-  logout,
-  getCurrentUser,
-  loginWithGoogle,
-  listenAuthChanges
-} from '../../firebase/auth.service'
+import { authService } from '../../firebase/auth.service'
 
 function mapFirebaseUser(user: User | null): AuthUser | null {
   if (!user) return null
@@ -19,11 +14,11 @@ function mapFirebaseUser(user: User | null): AuthUser | null {
 
 export const authRepository = {
   getCurrentUser(): AuthUser | null {
-    return mapFirebaseUser(getCurrentUser())
+    return mapFirebaseUser(authService.getCurrentUser())
   },
 
   login(): Promise<AuthUser> {
-    return loginWithGoogle().then(user => {
+    return authService.loginWithGoogle().then((user) => {
       const mapped = mapFirebaseUser(user)
       if (!mapped) {
         throw new Error('Login failed: no user returned')
@@ -33,10 +28,10 @@ export const authRepository = {
   },
 
   logout(): Promise<void> {
-    return logout()
+    return authService.logout()
   },
 
   onAuthChange(callback: (user: AuthUser | null) => void) {
-    return listenAuthChanges(user => callback(mapFirebaseUser(user)))
+    return authService.listenAuthChanges((user) => callback(mapFirebaseUser(user)))
   }
 }

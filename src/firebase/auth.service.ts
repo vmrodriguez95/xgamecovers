@@ -7,20 +7,26 @@ import {
   onAuthStateChanged
 } from 'firebase/auth'
 
-const provider = new GoogleAuthProvider()
+class AuthService {
+  provider = new GoogleAuthProvider()
 
-export function loginWithGoogle(): Promise<User> {
-  return signInWithPopup(auth, provider).then(result => result.user)
+  loginWithGoogle(): Promise<User> {
+    return signInWithPopup(auth, this.provider).then(result => result.user)
+  }
+
+  logout(): Promise<void> {
+    return signOut(auth)
+  }
+
+  listenAuthChanges(callback: (user: User | null) => void) {
+    return onAuthStateChanged(auth, callback)
+  }
+
+  getCurrentUser(): User | null {
+    return auth.currentUser
+  }
 }
 
-export function logout(): Promise<void> {
-  return signOut(auth)
-}
+export const authService = new AuthService()
 
-export function listenAuthChanges(callback: (user: User | null) => void) {
-  return onAuthStateChanged(auth, callback)
-}
 
-export function getCurrentUser(): User | null {
-  return auth.currentUser
-}

@@ -1,6 +1,6 @@
 import { html } from 'lit'
 import { StrictRouteConfig } from '../domain/router/router.types'
-import { listenAuthChanges } from '../firebase/auth.service'
+import { authService } from '../firebase/auth.service'
 
 export class RouterController {
   host
@@ -122,7 +122,7 @@ export class RouterController {
 
   private async _middleware(): Promise<boolean> {
     return new Promise((resolve) => {
-      listenAuthChanges((user) => {
+      authService.listenAuthChanges((user) => {
         if (!user) {
           location.href = '/'
           resolve(false)

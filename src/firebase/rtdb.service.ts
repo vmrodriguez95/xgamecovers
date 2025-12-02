@@ -11,7 +11,7 @@ import {
 } from 'firebase/database'
 import { rtdb } from './index'
 
-export class RTDBService {
+class RTDBService {
   ref(path: string) {
     return ref(rtdb, path)
   }
