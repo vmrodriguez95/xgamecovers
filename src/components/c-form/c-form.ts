@@ -148,7 +148,7 @@ class CForm extends LitElement {
             ?required=${field.required}
             ?readonly=${field.readonly}
             helpmsg=${field.helpmsg}
-            value=${field.fillValue}
+            .value=${field.fillValue}
             tabindex="0"
             @change=${this._updateSchemaValue.bind(this, field)}
           ></e-select-multiple>

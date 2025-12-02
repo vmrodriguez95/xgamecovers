@@ -20,7 +20,7 @@ class ESelectMultiple extends LitElement {
 
   @property({ type: String }) label = ''
 
-  @property({ type: Array }) value = []
+  @property({ type: Array }) value: String[] = []
 
   @property({ type: String }) placeholder = ''
 
@@ -44,8 +44,6 @@ class ESelectMultiple extends LitElement {
   connectedCallback(): void {
     super.connectedCallback()
 
-    console.log('options', this.options)
-
     this._validate()
   }
 
@@ -68,6 +66,8 @@ class ESelectMultiple extends LitElement {
                 ?readonly=${this.readonly}
                 ?required=${this.required}
                 value=${option.value}
+                ?checked=${this.value.includes(option.value)}
+                @change=${this._onChange}
               />
               <e-icon class="e-select-multiple__icon" icon="${option.logo}"></e-icon>
             </label>
@@ -83,16 +83,22 @@ class ESelectMultiple extends LitElement {
     `
   }
 
-  // private _onInput(e: Event) {
-  //   const target = e.target as HTMLInputElement
-  //   this.value = target.value
+  private _valueExists(value: string) {
+    return this.value.includes(value)
+  }
 
-  //   this._validate()
-  //   this._internals.setFormValue(this.value)
-  // }
+  private _filterByValue(value: string) {
+    return this.value.filter(item => item !== value)
+  }
 
-  private _onBlur() {
+  private _onChange(e: Event) {
+    const target = e.target as HTMLInputElement
+    const newValue = target.value
+
+    this.value = this._valueExists(newValue) ? this._filterByValue(newValue) : [...this.value, newValue]
+
     this._validate()
+    this.dispatchEvent(new Event('change', { bubbles: true, composed: true }))
   }
 
   private _validate() {
