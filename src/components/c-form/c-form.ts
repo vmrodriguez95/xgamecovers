@@ -6,7 +6,7 @@ import { repeat } from 'lit/directives/repeat.js'
 import { classMap } from 'lit/directives/class-map.js'
 
 // Types
-import { FieldSchema, FieldBlock, FormSchema, Dependency } from '../../domain/form/form.types.ts'
+import { Fieldscheme, FieldBlock, Formscheme, Dependency } from '../../domain/form/form.types.ts'
 
 // Styles
 import style from './c-form.style.scss?inline'
@@ -18,7 +18,7 @@ class CForm extends LitElement {
 
   @property({ type: String }) action = ''
 
-  @property({ type: Object }) schema: FormSchema = {}
+  @property({ type: Object }) scheme: Formscheme = {}
 
   @query('.c-form') form!: HTMLFormElement
 
@@ -45,14 +45,14 @@ class CForm extends LitElement {
     this._activateDependencies()
   }
 
-  private _getInputClasses(field: FieldSchema) {
+  private _getInputClasses(field: Fieldscheme) {
     return classMap({
       'c-form__field': true,
       [`c-form__field--${field.fieldSize}`]: field.fieldSize !== '' && field.fieldSize !== undefined
     })
   }
 
-  private _getFieldByType(field: FieldSchema, index: number = 0) {
+  private _getFieldByType(field: Fieldscheme, index: number = 0) {
     if (field.concatValue) {
       field.concatValue = field.concatValue.replace('${index}', `${index + 1}`)
     }
@@ -83,7 +83,7 @@ class CForm extends LitElement {
             value=${field.fillValue}
             placeholder=${field.placeholder}
             tabindex="0"
-            @input=${this._updateSchemaValue.bind(this, field)}
+            @input=${this._updateschemeValue.bind(this, field)}
           ></e-input>
         `
       case 'file':
@@ -101,7 +101,7 @@ class CForm extends LitElement {
             value=${field.fillValue}
             placeholder=${field.placeholder}
             tabindex="0"
-            @change=${this._updateSchemaValue.bind(this, field)}
+            @change=${this._updateschemeValue.bind(this, field)}
           ></e-input>
         `
       case 'textarea':
@@ -117,7 +117,7 @@ class CForm extends LitElement {
             value=${field.fillValue}
             placeholder=${field.placeholder}
             tabindex="0"
-            @input=${this._updateSchemaValue.bind(this, field)}
+            @input=${this._updateschemeValue.bind(this, field)}
           ></e-textarea>
         `
       case 'select':
@@ -134,7 +134,7 @@ class CForm extends LitElement {
             value=${field.fillValue}
             placeholder=${field.placeholder}
             tabindex="0"
-            @input=${this._updateSchemaValue.bind(this, field)}
+            @input=${this._updateschemeValue.bind(this, field)}
           ></e-select>
         `
       case 'select-multiple':
@@ -150,7 +150,7 @@ class CForm extends LitElement {
             helpmsg=${field.helpmsg}
             .value=${field.fillValue}
             tabindex="0"
-            @change=${this._updateSchemaValue.bind(this, field)}
+            @change=${this._updateschemeValue.bind(this, field)}
           ></e-select-multiple>
         `
       case 'checkbox':
@@ -167,7 +167,7 @@ class CForm extends LitElement {
             ?readonly=${field.readonly}
             helpmsg=${field.helpmsg}
             tabindex="0"
-            @change=${this._updateSchemaValue.bind(this, field)}
+            @change=${this._updateschemeValue.bind(this, field)}
           ></e-checkbox>
         `
       default:
@@ -189,7 +189,7 @@ class CForm extends LitElement {
             <p class="c-form__empty__message">${block.messageEmpty}</p>
           </div>
         `, () => html`
-          ${map(block.fields, (fields: FormSchema, index: number) => html`
+          ${map(block.fields, (fields: Formscheme, index: number) => html`
             <div class="c-form__block-fields">
               <p class="c-form__heading">${block.blockLabel} ${index + 1}</p>
               ${when(block.canDelete, () => html`
@@ -199,9 +199,9 @@ class CForm extends LitElement {
               `)}
               ${repeat(
                 Object.values(fields),
-                (field: FieldSchema | FieldBlock) => field.id,
-                (field: FieldSchema | FieldBlock) => {
-                  return this._getFieldByType(field as FieldSchema, index)
+                (field: Fieldscheme | FieldBlock) => field.id,
+                (field: Fieldscheme | FieldBlock) => {
+                  return this._getFieldByType(field as Fieldscheme, index)
                 }
               )}
             </div>
@@ -216,9 +216,9 @@ class CForm extends LitElement {
     `
   }
 
-  private _printTemplate(schema: FormSchema = this.schema): TemplateResult {
+  private _printTemplate(scheme: Formscheme = this.scheme): TemplateResult {
     return html`
-      ${map(Object.values(schema), (field: FieldBlock | FieldSchema, index: number) => {
+      ${map(Object.values(scheme), (field: FieldBlock | Fieldscheme, index: number) => {
         if ('fields' in field) {
           return this._getFieldBlock(field)
         } else {
@@ -228,10 +228,10 @@ class CForm extends LitElement {
     `
   }
 
-  private _updateSchemaValue(field: FieldSchema, ev: Event) {
+  private _updateschemeValue(field: Fieldscheme, ev: Event) {
     const input = ev.currentTarget as HTMLInputElement
 
-    field.fillValue = input.value
+    field.fillValue = field.type === 'checkbox' ? input.checked : input.value
   }
 
   private _isValid(): boolean {
@@ -249,6 +249,7 @@ class CForm extends LitElement {
 
   private _dependencyActionTextToText(mainField: HTMLInputElement, input: HTMLInputElement, concatValue: string = '') {
     mainField.value = this.concatValueDynamically(input, concatValue)
+    mainField.dispatchEvent(new Event('input'))
   }
 
   private _attachDependencyActionTextToText(mainField: HTMLInputElement, input: HTMLInputElement, concatValue: string = '') {
@@ -285,23 +286,47 @@ class CForm extends LitElement {
     })
   }
 
-  private _mountFinalData(schema: FormSchema) {
-    return Object.fromEntries(
-      Object.entries(schema).map(([key, field]) => {
-        if ('fields' in field) {
-          return field.fields.map((deepSchema: FormSchema): [string, any] => {
-            return this._mountFinalData(deepSchema)
-          })
-        } else {
-          return [key, field.type === 'checkbox' ? field.checked : field.fillValue]
-        }
-      })
-    )
+  private _mountFinalData(scheme: Formscheme, newScheme: Record<string, any> = {}, applyExcludes: boolean = true) {
+    Object.keys(scheme).forEach((key: string) => {
+      const field = scheme[key]
+      const isBlockField = 'excludeBlock' in field
+
+      if (applyExcludes && isBlockField && field.excludeBlock) return
+
+      // Si es un bloque y no se excluye entramos
+      if ('fields' in field) {
+        newScheme[key] = []
+
+        field.fields.forEach((deepScheme: Formscheme, index: number) => {
+          newScheme[key][index] = this._mountFinalData(deepScheme, {}, applyExcludes)
+        })
+      }
+      // Si es un campo normal y corriente pasamos por aquí
+      else{
+        newScheme[key] = field.fillValue
+      }
+    })
+
+    return newScheme
+  }
+
+  private _getFinalScheme(applyExcludes: boolean = true) {
+    const scheme = window.structuredClone(this.scheme)
+
+    return this._mountFinalData(scheme, {}, applyExcludes)
   }
 
   getFinalData() {
     if (this._isValid()) {
-      this._mountFinalData(this.schema)
+      return this._getFinalScheme(true)
+    }
+
+    return null
+  }
+
+  getFullData() {
+    if (this._isValid()) {
+      return this._getFinalScheme(false)
     }
 
     return null
@@ -309,7 +334,7 @@ class CForm extends LitElement {
 
   getRawData() {
     if (this._isValid()) {
-      return this.schema
+      return this.scheme
     }
 
     return null

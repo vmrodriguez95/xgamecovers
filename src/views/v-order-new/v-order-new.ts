@@ -6,7 +6,7 @@ import { orderRepository } from '../../domain/order/order.repository.ts'
 import { statusRepository } from '../../domain/status/status.repository.ts'
 
 // Domain
-import { OrderFormSchema } from '../../domain/order/order.form.ts'
+import { OrderFormscheme } from '../../domain/order/order.form.ts'
 
 // Types
 import { Option } from '../../domain/form/form.types.ts'
@@ -28,7 +28,7 @@ class VOrderNew extends LayoutMixin(LitElement) {
 
   @property({ type: String }) entity = ''
 
-  @state() _formSchema = OrderFormSchema
+  @state() _formscheme = OrderFormscheme
 
   @query('c-form') form!: HTMLFormElement
 
@@ -49,7 +49,7 @@ class VOrderNew extends LayoutMixin(LitElement) {
           <c-form
             action="/order"
             class="v-order-new__form"
-            .schema=${this._formSchema}
+            .scheme=${this._formscheme}
           ></c-form>
           <div class="v-order-new__actions">
             <e-button class="v-order-new__button" @click=${this._goBack}>cancelar</e-button>
@@ -63,7 +63,7 @@ class VOrderNew extends LayoutMixin(LitElement) {
 
   private async _fillStatusOptions() {
     const allStatus = await statusRepository.getAll()
-    const newSchema = window.structuredClone(this._formSchema)
+    const newscheme = window.structuredClone(this._formscheme)
 
     const options: Option[] = allStatus
       .map((status: Status) => {
@@ -73,9 +73,9 @@ class VOrderNew extends LayoutMixin(LitElement) {
         }
       })
 
-    newSchema.idStatus.options = options
+    newscheme.idStatus.options = options
 
-    this._formSchema = newSchema
+    this._formscheme = newscheme
   }
 
   private createOrder() {

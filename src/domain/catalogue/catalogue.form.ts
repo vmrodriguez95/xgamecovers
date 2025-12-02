@@ -1,12 +1,11 @@
-import { Option } from "../form/form.types";
+import { Formscheme, Option } from "../form/form.types";
 
-export const CatalogueFormSchema = {
+export const CatalogueFormscheme: Formscheme = {
   id: {
     id: 'catalogueId',
     name: 'id',
     label: 'Identificador',
     type: 'hidden',
-    value: '',
     fillValue: '',
     required: false,
     readonly: true
@@ -21,15 +20,26 @@ export const CatalogueFormSchema = {
     readonly: false
   },
   designs: {
+    id: 'catalogueDesigns',
     blockLabel: 'Diseño',
     canAdd: true,
     canDelete: true,
+    excludeBlock: true,
     messageEmpty: 'Aún no has añadido ningún diseño',
     structure: {
       id: {
         id: 'designId',
         name: 'id',
         label: 'Identificador',
+        type: 'hidden',
+        fillValue: '',
+        required: false,
+        readonly: true
+      },
+      idGame: {
+        id: 'designIdGame',
+        name: 'idGame',
+        label: 'Identificador del juego',
         type: 'hidden',
         fillValue: '',
         required: false,
@@ -45,8 +55,7 @@ export const CatalogueFormSchema = {
         concatValue: ' - v${index}',
         fillValue: '',
         required: false,
-        readonly: true,
-        excludeValue: true
+        readonly: true
       },
       isFavorite: {
         id: 'designIsFavorite',
@@ -58,8 +67,7 @@ export const CatalogueFormSchema = {
         fieldSize: 'min',
         fillValue: false,
         required: false,
-        readonly: false,
-        excludeValue: true
+        readonly: false
       },
       poster: {
         id: 'designPoster',
@@ -73,8 +81,7 @@ export const CatalogueFormSchema = {
           maxSize: 1 * 1024 * 1024 // 1MB
         },
         required: false,
-        readonly: false,
-        excludeValue: true
+        readonly: false
       },
       slipcover: {
         id: 'designSlipcover',
@@ -88,8 +95,7 @@ export const CatalogueFormSchema = {
           maxSize: 1 * 1024 * 1024 // 1MB
         },
         required: false,
-        readonly: false,
-        excludeValue: true
+        readonly: false
       },
       material: {
         id: 'designMaterial',
@@ -103,8 +109,7 @@ export const CatalogueFormSchema = {
           maxSize: 1 * 1024 * 1024 // 1MB
         },
         required: false,
-        readonly: false,
-        excludeValue: true
+        readonly: false
       }
     },
     fields: [], // Está vacío a posta subnormal
@@ -115,7 +120,6 @@ export const CatalogueFormSchema = {
     label: 'Plataformas',
     type: 'select-multiple',
     options: [] as Option[],
-    value: [],
     fillValue: [],
     required: true,
     readonly: false

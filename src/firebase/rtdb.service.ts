@@ -3,8 +3,11 @@ import {
   get,
   set,
   push,
+  query,
   update,
-  remove
+  remove,
+  equalTo,
+  orderByChild
 } from 'firebase/database'
 import { rtdb } from './index'
 
@@ -32,14 +35,29 @@ export class RTDBService {
       : null
   }
 
-  set<T>(path: string, data: T) {
+  async filterByChild<T>(path: string, child: string, id: string): Promise<T[]> {
+    const ref = this.ref(path)
+
+    const snapshot = await get(
+      query(
+        ref,
+        orderByChild(child),
+        equalTo(id)
+      )
+    )
+
+    if (!snapshot.exists()) return []
+
+    return Object.values(snapshot.val())
+  }
+
+  async set<T>(path: string, data: T) {
     const newRef = push(this.ref(path))
     const technicalId = newRef.key
-    if (!technicalId) {
-      throw new Error('No se ha podido generar un identificador.')
-    }
 
-    return set(
+    if (!technicalId) return null
+
+    await set(
       newRef,
       {
         ...data,
@@ -47,13 +65,15 @@ export class RTDBService {
         createdAt: new Date().toISOString(),
       }
     )
+
+    return technicalId
   }
 
   update<T>(path: string, id: string, partial: Partial<T>) {
     return update(this.ref(`${path}/${id}`), {
-        ...partial,
-        updatedAt: new Date().toISOString(),
-      })
+      ...partial,
+      updatedAt: new Date().toISOString(),
+    })
   }
 
   delete(path: string, id: string) {

@@ -23,7 +23,7 @@ class ECheckbox extends LitElement {
 
   @property({ type: String }) type = ''
 
-  @property({ type: Boolean }) checked = false
+  @property({ type: Boolean, reflect: true }) checked = false
 
   @property({ type: String }) helpmsg = ''
 
@@ -71,6 +71,8 @@ class ECheckbox extends LitElement {
   }
 
   private _onChange(e: Event) {
-    this.checked = (e.target as HTMLInputElement).checked
+    this.checked = (e.currentTarget as HTMLInputElement).checked
+
+    this.dispatchEvent(new Event('change'))
   }
 }

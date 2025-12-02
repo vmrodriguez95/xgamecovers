@@ -6,7 +6,7 @@ import { transactionRepository } from '../../domain/transaction/transaction.repo
 import { transactionCategoryRepository } from '../../domain/transaction-category/transaction-category.repository.ts'
 
 // Domain
-import { TransactionFormSchema } from '../../domain/transaction/transaction.form.ts'
+import { TransactionFormscheme } from '../../domain/transaction/transaction.form.ts'
 
 // Mixins
 import { LayoutMixin } from '../../mixins/layout.mixin.ts'
@@ -23,7 +23,7 @@ class VTransactionNew extends LayoutMixin(LitElement) {
 
   @property({ type: String }) heading = ''
 
-  @state() _formSchema = TransactionFormSchema
+  @state() _formscheme = TransactionFormscheme
 
   @query('c-form') form!: HTMLFormElement
 
@@ -41,7 +41,7 @@ class VTransactionNew extends LayoutMixin(LitElement) {
         <div class="v-transaction-new">
           <c-form
             class="v-transaction-new__form"
-            .schema=${this._formSchema}
+            .scheme=${this._formscheme}
           ></c-form>
           <div class="v-transaction-new__actions">
             <e-button class="v-transaction-new__button" @click=${this._goBack}>cancelar</e-button>
@@ -55,7 +55,7 @@ class VTransactionNew extends LayoutMixin(LitElement) {
 
   private async _fillCategoryOptions() {
     const allCategory = await transactionCategoryRepository.getAll()
-    const newSchema = window.structuredClone(this._formSchema)
+    const newscheme = window.structuredClone(this._formscheme)
 
     const options: Option[] = allCategory
       .filter((category: TransactionCategory) => category.type === 'expense')
@@ -66,9 +66,9 @@ class VTransactionNew extends LayoutMixin(LitElement) {
         }
       })
 
-    newSchema.idCategory.options = options
+    newscheme.idCategory.options = options
 
-    this._formSchema = newSchema
+    this._formscheme = newscheme
   }
 
   private createtransaction() {

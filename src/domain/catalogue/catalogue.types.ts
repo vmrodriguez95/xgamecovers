@@ -1,5 +1,6 @@
 export interface Design {
   id: string
+  idGame: string
   name: string
   poster: string
   slipcover: string

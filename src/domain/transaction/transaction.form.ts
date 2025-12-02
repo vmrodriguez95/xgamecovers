@@ -1,12 +1,11 @@
-import { Option } from "../form/form.types";
+import { Formscheme, Option } from "../form/form.types";
 
-export const TransactionFormSchema = {
+export const TransactionFormscheme: Formscheme = {
   id: {
     id: 'orderId',
     name: 'id',
     label: 'Identificador',
     type: 'hidden',
-    value: '',
     fillValue: '',
     required: false,
     readonly: true
@@ -16,7 +15,6 @@ export const TransactionFormSchema = {
     name: 'idCategory',
     label: 'Categoría',
     type: 'select',
-    value: '',
     fillValue: '',
     options: [] as Option[],
     required: true,
@@ -27,7 +25,6 @@ export const TransactionFormSchema = {
     name: 'amount',
     label: 'La viruji',
     type: 'number',
-    value: 0,
     fillValue: 0,
     required: true,
     readonly: false

@@ -1,12 +1,11 @@
-import { Option } from "../form/form.types";
+import { Formscheme, Option } from "../form/form.types";
 
-export const OrderFormSchema = {
+export const OrderFormscheme: Formscheme = {
   id: {
     id: 'orderId',
     name: 'id',
     label: 'Identificador',
     type: 'hidden',
-    value: '',
     fillValue: '',
     required: false,
     readonly: true
@@ -16,7 +15,6 @@ export const OrderFormSchema = {
     name: 'idStatus',
     label: 'Estado del pedido',
     type: 'select',
-    value: '',
     fillValue: '',
     options: [] as Option[],
     required: true,
@@ -27,7 +25,6 @@ export const OrderFormSchema = {
     name: 'name',
     label: 'Nombre',
     type: 'text',
-    value: '',
     fillValue: '',
     required: true,
     readonly: false
@@ -38,7 +35,6 @@ export const OrderFormSchema = {
     label: 'Nombre Whatsapp',
     type: 'text',
     logo: 'whatsapp', // El logo va al lado del label y se saca de los pngs de las imágenes.
-    value: '',
     fillValue: '',
     required: false,
     readonly: false
@@ -49,7 +45,6 @@ export const OrderFormSchema = {
     label: 'Nombre Wallapop',
     type: 'text',
     logo: 'wallapop', // El logo va al lado del label y se saca de los pngs de las imágenes.
-    value: '',
     fillValue: '',
     required: false,
     readonly: false
@@ -60,7 +55,6 @@ export const OrderFormSchema = {
     label: 'Nombre Instagram',
     type: 'text',
     logo: 'instagram', // El logo va al lado del label y se saca de los pngs de las imágenes.
-    value: '',
     fillValue: '',
     required: false,
     readonly: false
@@ -71,7 +65,6 @@ export const OrderFormSchema = {
     label: 'Nombre Vinted',
     type: 'text',
     logo: 'vinted', // El logo va al lado del label y se saca de los pngs de las imágenes.
-    value: '',
     fillValue: '',
     required: false,
     readonly: false
@@ -81,7 +74,6 @@ export const OrderFormSchema = {
     name: 'discount',
     label: 'Descuento aplicado',
     type: 'hidden',
-    value: 0,
     fillValue: 0,
     required: false,
     readonly: false
@@ -91,7 +83,6 @@ export const OrderFormSchema = {
     name: 'finalPrice',
     label: 'Precio total acordado',
     type: 'number',
-    value: 0,
     fillValue: 0,
     required: false,
     readonly: false
@@ -101,7 +92,6 @@ export const OrderFormSchema = {
     name: 'address',
     label: 'Dirección',
     type: 'textarea',
-    value: '',
     fillValue: '',
     required: false,
     readonly: false
@@ -111,7 +101,6 @@ export const OrderFormSchema = {
     name: 'designs',
     label: 'Diseños',
     type: 'hidden',
-    value: [],
     fillValue: [],
     required: false,
     readonly: false

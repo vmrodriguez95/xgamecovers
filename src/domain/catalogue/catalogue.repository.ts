@@ -17,7 +17,7 @@ class CatalogueGameRepository {
   }
 
   async create(data: Game) {
-    await rtdbService.set(PATH_GAMES, data)
+    return await rtdbService.set(PATH_GAMES, data)
   }
 
   async update(id: string, partial: Partial<Game>) {
@@ -40,16 +40,22 @@ class CatalogueDesignRepository {
     return data ? CatalogueFactory.designFromApi(data) : null
   }
 
+  async getDesignsByGame(idGame: string): Promise<Design[]> {
+    const data = await rtdbService.filterByChild(PATH_DESIGNS, 'idGame', idGame)
+
+    return data.map(CatalogueFactory.designFromApi)
+  }
+
   async create(data: Design) {
-    await rtdbService.set(PATH_DESIGNS, data)
+    return await rtdbService.set(PATH_DESIGNS, data)
   }
 
   async update(id: string, partial: Partial<Design>) {
-    await rtdbService.update(PATH_DESIGNS, id, partial)
+    return await rtdbService.update(PATH_DESIGNS, id, partial)
   }
 
   async delete(id: string) {
-    await rtdbService.delete(PATH_DESIGNS, id)
+    return await rtdbService.delete(PATH_DESIGNS, id)
   }
 }
 

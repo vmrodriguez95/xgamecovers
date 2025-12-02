@@ -11,7 +11,7 @@ export interface ComplexOption {
 }
 
 export interface Dependency {
-  field: FieldSchema
+  field: Fieldscheme
   dependencies: string[]
 }
 
@@ -20,12 +20,13 @@ export interface FieldBlock {
   blockLabel: string
   canAdd: boolean
   canDelete: boolean
+  excludeBlock: boolean
   messageEmpty?: string
-  fields: FormSchema[]
-  structure: FormSchema
+  fields: Formscheme[]
+  structure: Formscheme
 }
 
-export interface FieldSchema {
+export interface Fieldscheme {
   id: string
   name: string
   label: string
@@ -39,7 +40,7 @@ export interface FieldSchema {
   logo?: string
   helpmsg?: string
   placeholder?: string
-  fillValue: string|number|boolean
+  fillValue: string|number|boolean|string[]
   concatValue?: string
   config?: any
   excludeValue?: boolean
@@ -49,4 +50,4 @@ export interface FieldSchema {
   iconChecked?: string
 }
 
-export type FormSchema = Record<string, FieldSchema | FieldBlock>
+export type Formscheme = Record<string, Fieldscheme | FieldBlock>
