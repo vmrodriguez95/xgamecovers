@@ -51,7 +51,7 @@ export const CatalogueFormscheme: Formscheme = {
         label: 'Nombre',
         type: 'text',
         dependsOn: ['catalogueName'],
-        fieldSize: 'max',
+        fieldSize: 'big',
         concatValue: ' - v${index}',
         fillValue: '',
         required: false,
@@ -64,7 +64,7 @@ export const CatalogueFormscheme: Formscheme = {
         type: 'checkbox',
         icon: 'star-border',
         iconChecked: 'star',
-        fieldSize: 'min',
+        fieldSize: 'small',
         fillValue: false,
         required: false,
         readonly: false
