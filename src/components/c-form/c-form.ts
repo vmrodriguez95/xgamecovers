@@ -181,6 +181,11 @@ class CForm extends LitElement {
     this.requestUpdate()
   }
 
+  private _removeFields(block: FieldBlock, index: number) {
+    block.fields.splice(index, 1)
+    this.requestUpdate()
+  }
+
   private _getFieldBlock(block: FieldBlock) {
     return html`
       <div class="c-form__block">
@@ -193,7 +198,7 @@ class CForm extends LitElement {
             <div class="c-form__block-fields">
               <p class="c-form__heading">${block.blockLabel} ${index + 1}</p>
               ${when(block.canDelete, () => html`
-                <button class="c-form__delete">
+                <button class="c-form__delete" @click=${this._removeFields.bind(this, block, index)}>
                   <e-icon icon="delete"></e-icon>
                 </button>
               `)}
