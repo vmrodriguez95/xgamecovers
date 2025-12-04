@@ -40,7 +40,7 @@ export interface Fieldscheme {
   logo?: string
   helpmsg?: string
   placeholder?: string
-  fillValue: string|number|boolean|string[]
+  fillValue: string | number | boolean | string[]
   concatValue?: string
   config?: any
   excludeValue?: boolean
@@ -48,6 +48,7 @@ export interface Fieldscheme {
   dependencyActivated?: boolean // Uso exclusivo para las dependencias que se maneja desde el código
   icon?: string
   iconChecked?: string
+  files?: FileList | null
 }
 
 export type Formscheme = Record<string, Fieldscheme | FieldBlock>

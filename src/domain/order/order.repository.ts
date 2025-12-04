@@ -16,7 +16,7 @@ export class OrderRepository {
   }
 
   async create(data: Order) {
-    await rtdbService.set(PATH, data)
+    return await rtdbService.set(PATH, data)
   }
 
   async update(id: string, partial: Partial<Order>) {

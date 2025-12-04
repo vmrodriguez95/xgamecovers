@@ -11,6 +11,7 @@ import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 import { RouterController } from '../../controllers/router.controller.ts'
 
 // Repositories
+import { storageRepository } from '../../domain/storage/storage.repository.ts'
 import { consoleRepository } from '../../domain/console/console.repository.ts'
 import { catalogueDesignRepository, catalogueGameRepository } from '../../domain/catalogue/catalogue.repository.ts'
 
@@ -85,25 +86,62 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
   private async _insertDesign(data: Design): Promise<string | null> {
     return await catalogueDesignRepository.create(data)
   }
+
+  private async _uploadImage(file: File, path: string): Promise<string | null> {
+    return await storageRepository.uploadImage(file, path)
+  }
+
+  private async _handleUploadImage(field: Fieldscheme, idGame: string, idDesign: string, designName: string) {
+    const imagesPath = `catalogue/${idGame}/${idDesign}`
+
+    if (field.files && field.files.length > 0) {
+      const file = field.files[0]
+      const filename = `${designName} - ${field.name}.${file.type.replace('image/', '')}`
+
+      console.log(`Subiendo la imagen ${filename}`)
+
+      return await this._uploadImage(field.files[0], `${imagesPath}/${filename}`)
+    }
+
+    return ''
+  }
   
   private async _createHandler() {
     const data = this.form.getFinalData() // De aquí sacamos la info de los juegos
-    const fullData = this.form.getFullData() // De aquí sacamos la info de los diseños para almacenarlos
+    const rawData = this.form.getRawData() // De aquí sacamos la info de los diseños para almacenarlos
+    const fullData = this.form.getFullData() // De aquí sacamos las imágenes de los diseños para guardar las imágenes
 
     console.log('Game data', data)
-    console.log('Full Data', fullData)
+    console.log('Raw Data', rawData)
+    console.log('Full data', fullData)
 
     if (data) {
-      const gameId = await this._insertGame(data)
+      const idGame = await this._insertGame(data)
 
-      if (gameId) {
+      if (idGame) {
         fullData.designs.forEach(async (design: Design, index: number) => {
-          design.idGame = gameId
-          const designId = await this._insertDesign(design)
+          design.idGame = idGame
+          const idDesign = await this._insertDesign(design)
 
-          if (designId) {
+          if (idDesign) {
+            console.log(`El diseño de ${design.name} ha sido creado con el id ${idDesign}`)
             // Por cada diseño creado, almacenamos las imágenes en el storage
-            console.log(`El diseño de ${design.name} ha sido creado con el id ${designId}`)
+
+            const rawDesign = rawData.designs.fields[index]
+            const { poster, slipcover, material } = rawDesign
+
+            const posterUrl = await this._handleUploadImage(poster, idGame, idDesign, design.name)
+            if (posterUrl) design.poster = posterUrl
+            
+            const slipcoverUrl = await this._handleUploadImage(slipcover, idGame, idDesign, design.name)
+            if (slipcoverUrl) design.slipcover = slipcoverUrl
+            
+            const materialUrl = await this._handleUploadImage(material, idGame, idDesign, design.name)
+            if (materialUrl) design.material = materialUrl
+
+            if (posterUrl || slipcoverUrl || materialUrl) {
+              await catalogueDesignRepository.update(idDesign, design)
+            }
           } else {
             throw new Error(`No se pudo crear el diseño ${index + 1}`)
           }

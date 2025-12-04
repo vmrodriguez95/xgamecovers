@@ -83,7 +83,7 @@ class CForm extends LitElement {
             value=${field.fillValue}
             placeholder=${field.placeholder}
             tabindex="0"
-            @input=${this._updateschemeValue.bind(this, field)}
+            @input=${this._updateSchemeValue.bind(this, field)}
           ></e-input>
         `
       case 'file':
@@ -101,7 +101,7 @@ class CForm extends LitElement {
             value=${field.fillValue}
             placeholder=${field.placeholder}
             tabindex="0"
-            @change=${this._updateschemeValue.bind(this, field)}
+            @change=${this._updateSchemeValue.bind(this, field)}
           ></e-input>
         `
       case 'textarea':
@@ -117,7 +117,7 @@ class CForm extends LitElement {
             value=${field.fillValue}
             placeholder=${field.placeholder}
             tabindex="0"
-            @input=${this._updateschemeValue.bind(this, field)}
+            @input=${this._updateSchemeValue.bind(this, field)}
           ></e-textarea>
         `
       case 'select':
@@ -134,7 +134,7 @@ class CForm extends LitElement {
             value=${field.fillValue}
             placeholder=${field.placeholder}
             tabindex="0"
-            @input=${this._updateschemeValue.bind(this, field)}
+            @input=${this._updateSchemeValue.bind(this, field)}
           ></e-select>
         `
       case 'select-multiple':
@@ -150,7 +150,7 @@ class CForm extends LitElement {
             helpmsg=${field.helpmsg}
             .value=${field.fillValue}
             tabindex="0"
-            @change=${this._updateschemeValue.bind(this, field)}
+            @change=${this._updateSchemeValue.bind(this, field)}
           ></e-select-multiple>
         `
       case 'checkbox':
@@ -167,7 +167,7 @@ class CForm extends LitElement {
             ?readonly=${field.readonly}
             helpmsg=${field.helpmsg}
             tabindex="0"
-            @change=${this._updateschemeValue.bind(this, field)}
+            @change=${this._updateSchemeValue.bind(this, field)}
           ></e-checkbox>
         `
       default:
@@ -218,7 +218,7 @@ class CForm extends LitElement {
 
   private _printTemplate(scheme: Formscheme = this.scheme): TemplateResult {
     return html`
-      ${map(Object.values(scheme), (field: FieldBlock | Fieldscheme, index: number) => {
+      ${map(Object.values(scheme), (field: FieldBlock | Fieldscheme) => {
         if ('fields' in field) {
           return this._getFieldBlock(field)
         } else {
@@ -228,8 +228,12 @@ class CForm extends LitElement {
     `
   }
 
-  private _updateschemeValue(field: Fieldscheme, ev: Event) {
+  private _updateSchemeValue(field: Fieldscheme, ev: Event) {
     const input = ev.currentTarget as HTMLInputElement
+
+    if (field.type === 'file') {
+      field.files = input.files
+    }
 
     field.fillValue = field.type === 'checkbox' ? input.checked : input.value
   }

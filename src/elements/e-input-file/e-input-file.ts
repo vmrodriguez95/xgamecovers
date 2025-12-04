@@ -32,7 +32,7 @@ class EInputFile extends LitElement {
 
   fileLoadedSize = 0
 
-  file: File | undefined = undefined
+  files: FileList | null = null
 
   static styles = css`${unsafeCSS(style)}`
 
@@ -74,7 +74,7 @@ class EInputFile extends LitElement {
               @change=${this._onChange}
             />
           `, () => html`
-            <img src=${this.file ? this._generateValidUrl() : this.value} class="e-input-file__image" />
+            <img src=${this.files ? this._generateValidUrl() : this.value} class="e-input-file__image" />
           `)}
         </div>
         ${when(this._internals.validationMessage, () => html`
@@ -93,16 +93,19 @@ class EInputFile extends LitElement {
 
   private _onChange(e: Event) {
     const target = e.target as HTMLInputElement
-    this.file = target.files?.[0]
-    this.fileLoadedSize = this.file?.size || 0
+    this.files = target.files
+
+    this.fileLoadedSize = this.files?.[0].size || 0
     this.value = target.value
 
     this._validate()
     this._internals.setFormValue(this.value)
+
+    this.dispatchEvent(new Event('change'))
   }
 
   private _generateValidUrl() {
-    return URL.createObjectURL(this.file as Blob);
+    return this.files ? URL.createObjectURL(this.files[0] as Blob) : ''
   }
 
   private _calcFileSizeInMB(size: number): number {
@@ -117,7 +120,7 @@ class EInputFile extends LitElement {
       return
     } else {
       this._internals.setValidity(validity.state, validity.message, this)
-      this.file = undefined
+      this.files = null
       this.value = ''
     }
   }

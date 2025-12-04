@@ -9,7 +9,7 @@ import { statusRepository } from '../../domain/status/status.repository.ts'
 import { OrderFormscheme } from '../../domain/order/order.form.ts'
 
 // Types
-import { Option } from '../../domain/form/form.types.ts'
+import { Fieldscheme, Option } from '../../domain/form/form.types.ts'
 import { Status } from '../../domain/status/status.types.ts'
 
 // Mixins
@@ -53,7 +53,7 @@ class VOrderNew extends LayoutMixin(LitElement) {
           ></c-form>
           <div class="v-order-new__actions">
             <e-button class="v-order-new__button" @click=${this._goBack}>cancelar</e-button>
-            <e-button class="v-order-new__button" @click=${this.createOrder}>Crear</e-button>
+            <e-button class="v-order-new__button" @click=${this._createOrder}>Crear</e-button>
           </div>
         </div>
       `,
@@ -61,28 +61,33 @@ class VOrderNew extends LayoutMixin(LitElement) {
     )
   }
 
-  private async _fillStatusOptions() {
+  private async _getStatusOptions() {
     const allStatus = await statusRepository.getAll()
+
+    return allStatus.map((status: Status) => ({
+      value: status.id,
+      name: status.name
+    }))
+  }
+
+  private async _fillStatusOptions() {
     const newscheme = window.structuredClone(this._formscheme)
+    const idStatus = newscheme.idStatus as Fieldscheme
 
-    const options: Option[] = allStatus
-      .map((status: Status) => {
-        return {
-          value: status.id,
-          name: status.name
-        }
-      })
-
-    newscheme.idStatus.options = options
+    idStatus.options = await this._getStatusOptions()
 
     this._formscheme = newscheme
   }
 
-  private createOrder() {
+  private async _createOrder() {
     const data = this.form.getFinalData()
 
     if (data) {
-      orderRepository.create(data)
+      // const newIdOrder = await orderRepository.create(data)
+
+      // if (newIdOrder) {
+        // this.routerController.getAdminRoute('orderEdit', { id: newIdOrder })
+      // }
     }
   }
 

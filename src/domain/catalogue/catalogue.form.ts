@@ -80,6 +80,7 @@ export const CatalogueFormscheme: Formscheme = {
           accept: 'image/png, image/jpg, image/jpeg, image/webp',
           maxSize: 1 * 1024 * 1024 // 1MB
         },
+        files: null,
         required: false,
         readonly: false
       },
@@ -94,6 +95,7 @@ export const CatalogueFormscheme: Formscheme = {
           accept: 'image/png, image/jpg, image/jpeg, image/webp',
           maxSize: 1 * 1024 * 1024 // 1MB
         },
+        files: null,
         required: false,
         readonly: false
       },
@@ -108,6 +110,7 @@ export const CatalogueFormscheme: Formscheme = {
           accept: 'image/png, image/jpg, image/jpeg, image/webp',
           maxSize: 1 * 1024 * 1024 // 1MB
         },
+        files: null,
         required: false,
         readonly: false
       }
