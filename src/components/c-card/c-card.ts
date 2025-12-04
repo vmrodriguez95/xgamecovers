@@ -12,17 +12,17 @@ class CCard extends LitElement {
 
   @property({ type: String }) image = ''
 
-  @property({ type: Array }) platforms = []
+  @property({ type: Array }) consoles = []
 
   static styles = css`${unsafeCSS(style)}`
 
   render() {
     return html`
       <div class="c-card">
-        <img class="c-card__background" src=${this.image} alt=${this.name} />
-        <div class="c-card__platforms">
-          ${map(this.platforms, (platform: string) => html`
-            <e-icon icon=${platform} size="xs"></e-icon>
+        <img class="c-card__background" src=${this.image} alt=${this.name} loading="lazy" />
+        <div class="c-card__consoles">
+          ${map(this.consoles, (console: string) => html`
+            <e-icon icon=${console} size="xs"></e-icon>
           `)}
         </div>
         <div class="c-card__caption">

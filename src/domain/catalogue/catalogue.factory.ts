@@ -5,7 +5,6 @@ export const CatalogueFactory = {
     return {
       id: data.id,
       name: data.name ?? '',
-      designs: data.designs ?? [],
       consoles: data.consoles ?? [],
       createdAt: data.createdAt ?? '',
       updatedAt: data.updatedAt ?? ''
@@ -15,6 +14,7 @@ export const CatalogueFactory = {
   designFromApi(data: any): Design {
     return {
       id: data.id,
+      idGame: data.idGame ?? '',
       name: data.name ?? '',
       poster: data.poster ?? '',
       slipcover: data.slipcover ?? '',

@@ -13,7 +13,6 @@ export interface Design {
 export interface Game {
   id: string
   name: string
-  designs: string[]
   consoles: string[]
   createdAt: string
   updatedAt: string

@@ -117,10 +117,10 @@ export const CatalogueFormscheme: Formscheme = {
     },
     fields: [], // Está vacío a posta subnormal
   },
-  platforms: {
-    id: 'cataloguePlatforms',
-    name: 'platforms',
-    label: 'Plataformas',
+  consoles: {
+    id: 'catalogueConsoles',
+    name: 'consoles',
+    label: 'Consolas',
     type: 'select-multiple',
     options: [] as Option[],
     fillValue: [],

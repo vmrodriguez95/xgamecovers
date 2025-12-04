@@ -111,7 +111,7 @@ export class RouterController {
    * Methods
    */
   private _replaceParams(route: string, params: object): string {
-    let routeReplaced = ''
+    let routeReplaced = route
 
     Object.entries(params).forEach(([key, value]) => {
       routeReplaced = route.replace(`:${key}`, value)

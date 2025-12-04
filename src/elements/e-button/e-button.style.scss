@@ -3,6 +3,9 @@
 
 .e-button {
   @include body--s(600);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: rgba(var(--eButtonColor, var(--color-light)), 1);
   background-color: rgba(var(--eButtonBackground, var(--color-primary)), 1);
   border: 0;
@@ -13,10 +16,37 @@
   text-transform: uppercase;
   width: 100%;
 
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
   ::slotted(span) {
     --eIconColor: var(--eButtonColor, var(--color-light));
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: space(1);
+  }
+
+  &__shape {
+    border: 2px solid rgba(var(--eButtonColor, var(--color-light)), 1);
+    border-bottom-color: rgba(var(--eButtonColor, var(--color-light)), 0.3);
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    animation: rotate 1s linear infinite;
+    width: space(2);
+    height: space(2);
+    border-radius: 100%;
+    margin-left: space(2);
+    background-color: transparent;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0) rotate(360deg);
   }
 }

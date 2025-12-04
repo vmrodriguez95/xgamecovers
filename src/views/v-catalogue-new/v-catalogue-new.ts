@@ -22,6 +22,7 @@ import { Design, Game } from '../../domain/catalogue/catalogue.types.ts'
 
 // Styles
 import style from './v-catalogue-new.style.scss?inline'
+import { EButton } from '../../elements/e-button/e-button.ts'
 
 @customElement('v-catalogue-new')
 class VCatalogueNew extends LayoutMixin(LitElement) {
@@ -72,9 +73,9 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
 
   private async _fillConsolesOptions() {
     const newscheme = window.structuredClone(this._formscheme)
-    const platforms = newscheme.platforms as Fieldscheme
+    const consoles = newscheme.consoles as Fieldscheme
 
-    platforms.options = await this._getConsolesAsOptions()
+    consoles.options = await this._getConsolesAsOptions()
 
     this._formscheme = newscheme
   }
@@ -98,22 +99,20 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
       const file = field.files[0]
       const filename = `${designName} - ${field.name}.${file.type.replace('image/', '')}`
 
-      console.log(`Subiendo la imagen ${filename}`)
-
       return await this._uploadImage(field.files[0], `${imagesPath}/${filename}`)
     }
 
     return ''
   }
   
-  private async _createHandler() {
+  private async _createHandler(ev: Event) {
+    const button = ev.currentTarget as EButton
+
+    button.loading = true
+
     const data = this.form.getFinalData() // De aquí sacamos la info de los juegos
     const rawData = this.form.getRawData() // De aquí sacamos la info de los diseños para almacenarlos
     const fullData = this.form.getFullData() // De aquí sacamos las imágenes de los diseños para guardar las imágenes
-
-    console.log('Game data', data)
-    console.log('Raw Data', rawData)
-    console.log('Full data', fullData)
 
     if (data) {
       const idGame = await this._insertGame(data)
@@ -124,9 +123,6 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
           const idDesign = await this._insertDesign(design)
 
           if (idDesign) {
-            console.log(`El diseño de ${design.name} ha sido creado con el id ${idDesign}`)
-            // Por cada diseño creado, almacenamos las imágenes en el storage
-
             const rawDesign = rawData.designs.fields[index]
             const { poster, slipcover, material } = rawDesign
 
@@ -141,6 +137,8 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
 
             if (posterUrl || slipcoverUrl || materialUrl) {
               await catalogueDesignRepository.update(idDesign, design)
+
+              this._goBack()
             }
           } else {
             throw new Error(`No se pudo crear el diseño ${index + 1}`)
@@ -150,6 +148,8 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
         throw new Error('No se pudo crear el juego')
       }
     }
+
+    button.loading = false
   }
 
   private _goBack() {

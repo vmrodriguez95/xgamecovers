@@ -1,9 +1,8 @@
 import { LitElement, html, css, unsafeCSS } from 'lit'
-import { customElement } from 'lit/decorators.js'
+import { customElement, state } from 'lit/decorators.js'
 import { map } from 'lit/directives/map.js'
 import { when } from 'lit/directives/when.js'
-
-import { COVERS } from '../../utils/consts.utils.ts'
+import { until } from 'lit/directives/until.js'
 
 // Domain
 import { authStore } from '../../domain/auth/auth.store.ts'
@@ -14,38 +13,89 @@ import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 // Controllers
 import { RouterController } from '../../controllers/router.controller.ts'
 
+// Types
+import { Console } from '../../domain/console/console.types.ts'
+import { Design, Game } from '../../domain/catalogue/catalogue.types.ts'
+
+// Repository
+import { catalogueDesignRepository, catalogueGameRepository } from '../../domain/catalogue/catalogue.repository.ts'
+
 // Styles
 import style from './v-catalogue.style.scss?inline'
+import { consoleRepository } from '../../domain/console/console.repository.ts'
 
 @customElement('v-catalogue')
 class VCatalogue extends LayoutMixin(LitElement) {
 
-  routerController = new RouterController(this)
+  @state() _gameList: Game[] = []
+
+  @state() _consoleList: Console[] = []
+
+  _routerController = new RouterController(this)
 
   static styles = css`${unsafeCSS(style)}`
+
+  async connectedCallback() {
+    super.connectedCallback()
+
+    await this._loadGameList()
+    await this._loadConsoleList()
+  }
 
   render() {
     return this.layoutGrid(html`
       <div class="v-catalogue">
-        <c-search class="v-catalogue__search"></c-search>
-        <div class="v-catalogue__actions">
-          <c-filters class="v-catalogue__filters"></c-filters>
+        <div class="v-catalogue__head">
+          <c-search class="v-catalogue__search"></c-search>
           ${when(authStore.user, () => html`
-            <a href="/catalogue/new" class="v-catalogue__create">
+            <a href=${this._routerController.getAdminRoute('catalogueNew', {})} class="v-catalogue__create">
               <e-icon icon="add"></e-icon>
             </a>
           `)}
         </div>
-        ${map(COVERS, (cover) => html`
-          <a class="v-catalogue__link" href="${this.routerController.getAdminRoute('catalogueEdit', { id: cover.id })}">
-            <c-card
-              name=${cover.name}
-              image=${cover.poster}
-              .platforms=${cover.platforms}
-            ></c-card>
-          </a>
-        `)}
+        <div class="v-catalogue__actions">
+          <c-filters class="v-catalogue__filters"></c-filters>
+        </div>
+        ${when(this._consoleList.length > 0 && this._gameList.length > 0, () => 
+          map(this._gameList, (game: Game) => until(this._printGameCard(game)))
+        )}
       </div>
     `)
+  }
+
+  private async _loadGameList() {
+    this._gameList = await catalogueGameRepository.getAll()
+  }
+
+  private async _loadConsoleList() {
+    this._consoleList = await consoleRepository.getAll()
+  }
+
+  private _getFavDesign(designs: Design[]) {
+    return designs.find((design) => design.isFavorite)
+  }
+
+  private _findConsoleById(id: string) {
+    return this._consoleList.find((console) => console.id === id)
+  }
+
+  private _getConsoleLogos(game: Game) {
+    return game.consoles.map((id) => this._findConsoleById(id)?.logo)
+  }
+
+  private async _printGameCard(game: Game) {
+    const designs = await catalogueDesignRepository.getDesignsByGame(game.id)
+    const favDesign = this._getFavDesign(designs)
+    const design = favDesign ? favDesign : designs[0]
+
+    return html`
+      <a class="v-catalogue__link" href="">
+        <c-card
+          name=${game.name}
+          image=${design.poster}
+          .consoles=${this._getConsoleLogos(game)}
+        ></c-card>
+      </a>
+    `
   }
 }
