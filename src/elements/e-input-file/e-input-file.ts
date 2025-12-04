@@ -74,6 +74,9 @@ class EInputFile extends LitElement {
               @change=${this._onChange}
             />
           `, () => html`
+            <button class="e-input-file__remove" @click=${this._onRemove}>
+              <e-icon class="e-input-file__icon" icon="close"></e-icon>
+            </button>
             <img src=${this.files ? this._generateValidUrl() : this.value} class="e-input-file__image" />
           `)}
         </div>
@@ -89,6 +92,16 @@ class EInputFile extends LitElement {
 
   private _onClick() {
     this.field.click()
+  }
+
+  private _onRemove() {
+    this.files = null
+    this.value = ''
+
+    this._validate()
+    this._internals.setFormValue(this.value)
+
+    this.dispatchEvent(new Event('change'))
   }
 
   private _onChange(e: Event) {

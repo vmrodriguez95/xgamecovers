@@ -32,10 +32,22 @@
     display: none;
   }
 
+  &__remove {
+    --eIconColor: var(--color-light);
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    background-color: transparent;
+    cursor: pointer;
+    filter: drop-shadow(0 0 2px rgba(var(--color-dark), 1));
+  }
+
   &__image {
     display: block;
     max-width: 100%;
-    max-height: space(10);
     border-radius: space(1);
   }
 

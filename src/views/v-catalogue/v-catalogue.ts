@@ -31,6 +31,8 @@ class VCatalogue extends LayoutMixin(LitElement) {
 
   @state() _consoleList: Console[] = []
 
+  _userRole = '' // TODO
+
   _routerController = new RouterController(this)
 
   static styles = css`${unsafeCSS(style)}`
@@ -89,7 +91,7 @@ class VCatalogue extends LayoutMixin(LitElement) {
     const design = favDesign ? favDesign : designs[0]
 
     return html`
-      <a class="v-catalogue__link" href="">
+      <a class="v-catalogue__link" href=${this._routerController.getAdminRoute('catalogueEdit', { id: game.id })}>
         <c-card
           name=${game.name}
           image=${design.poster}
