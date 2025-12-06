@@ -1,0 +1,71 @@
+@use '../../styles/tools/tools' as *;
+@use '../../styles/tools/typography' as *;
+
+.v-catalogue-game {
+  display: block;
+  padding: space(2) var(--grid-margin);
+  box-sizing: border-box;
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__head {
+    display: flex;
+    border-radius: space(1);
+    overflow: hidden;
+    max-height: space(60);
+  }
+
+  &__image {
+    height: auto;
+    max-width: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  &__designs,
+  &__consoles {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: space(1);
+    margin-top: space(2);
+  }
+
+  &__design {
+    display: inline-flex;
+    padding: 0;
+    border: 0;
+    border-radius: space(1);
+    background-color: transparent;
+    cursor: pointer;
+    max-height: space(9);
+    overflow: hidden;
+
+    &--active {
+      outline: 2px solid rgba(var(--color-primary), 1);
+    }
+  }
+
+  &__preview {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+    object-position: 0 -62px;
+  }
+
+  &__title {
+    @include body--l;
+    margin: space(3) 0 space(1);
+    color: rgba(var(--color-dark), 1);
+  }
+  
+  &__name {
+    @include body--m(600);
+    margin: 0 0 space(3);
+    color: rgba(var(--color-dark), 1);
+  }
+}
