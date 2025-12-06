@@ -1,0 +1,60 @@
+@use '../../styles/tools/tools' as *;
+@use '../../styles/tools/typography' as *;
+
+.e-logo {
+  $root: &;
+  --eIconColor: var(--color-light);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: space(7);
+  height: space(7);
+  border: 1px solid;
+  border-radius: 50%;
+
+  &--m {
+    width: space(5);
+    height: space(5);
+  }
+
+  &--s {
+    width: space(3);
+    height: space(3);
+  }
+
+  &--blue {
+    border-color: rgba(var(--color-blue), 1);
+    background-color: rgba(var(--color-blue), 0.3);
+
+    &#{$root}--active {
+      background-color: rgba(var(--color-blue), 1);
+    }
+  }
+
+  &--green {
+    border-color: rgba(var(--color-green), 1);
+    background-color: rgba(var(--color-green), 0.3);
+
+    &#{$root}--active {
+      background-color: rgba(var(--color-green), 1);
+    }
+  }
+
+  &--red {
+    border-color: rgba(var(--color-red), 1);
+    background-color: rgba(var(--color-red), 0.3);
+
+    &#{$root}--active {
+      background-color: rgba(var(--color-red), 1);
+    }
+  }
+
+  &--black {
+    border-color: rgba(var(--color-black), 1);
+    background-color: rgba(var(--color-black), 0.3);
+
+    &#{$root}--active {
+      background-color: rgba(var(--color-black), 1);
+    }
+  }
+}

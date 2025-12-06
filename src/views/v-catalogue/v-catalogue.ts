@@ -91,7 +91,7 @@ class VCatalogue extends LayoutMixin(LitElement) {
     const design = favDesign ? favDesign : designs[0]
 
     return html`
-      <a class="v-catalogue__link" href=${this._routerController.getAdminRoute('catalogueEdit', { id: game.id })}>
+      <a class="v-catalogue__link" href=${this._routerController.getAdminRoute('catalogueGame', { id: game.id })}>
         <c-card
           name=${game.name}
           image=${design.poster}
