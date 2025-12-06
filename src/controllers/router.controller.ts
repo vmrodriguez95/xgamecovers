@@ -9,7 +9,7 @@ export class RouterController {
     home: {
       path: '/',
       render: () => html`
-        <v-home></v-home>
+        <v-catalogue></v-catalogue>
       `
     },
     catalogue: {
@@ -25,8 +25,14 @@ export class RouterController {
       `,
       enter: this._middleware
     },
+    catalogueGame: {
+      path: '/catalogue/game/:id',
+      render: (params: Object) => html`
+        <v-catalogue-game .urlParams=${params}></v-catalogue-game>
+      `,
+    },
     catalogueEdit: {
-      path: '/catalogue/:id',
+      path: '/catalogue/edit/:id',
       render: (params: Object) => html`
         <v-catalogue-edit .urlParams=${params}></v-catalogue-edit>
       `,
