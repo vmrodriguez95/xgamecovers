@@ -1,6 +1,6 @@
-import { Formscheme, Option } from "../form/form.types";
+import { FormScheme, Option } from "../form/form.types";
 
-export const CatalogueFormscheme: Formscheme = {
+export const CatalogueFormScheme: FormScheme = {
   id: {
     id: 'catalogueId',
     name: 'id',
