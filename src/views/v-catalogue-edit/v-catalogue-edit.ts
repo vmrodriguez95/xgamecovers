@@ -291,9 +291,6 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
     const fullData = this.form.getFullData()
 
     if (data) {
-      /************************************************************/
-      /* Esto funciona pero lo dejo comentado durante las pruebas */
-      /************************************************************/
       await this._saveGame(this._game.id, data)
 
       const newDesigns = this._getNewDesigns(fullData.designs)
@@ -314,7 +311,7 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
     }
 
     button.loading = false
-    // this._goBack()
+    this._goBack()
   }
 
   private _goBack() {

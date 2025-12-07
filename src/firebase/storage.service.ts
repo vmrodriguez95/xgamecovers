@@ -37,7 +37,6 @@ class StorageService {
       await deleteObject(item)
     }
   }
-
 }
 
 export const storageService = new StorageService()
