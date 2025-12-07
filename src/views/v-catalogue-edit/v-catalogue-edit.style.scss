@@ -1,17 +1,17 @@
 @use '../../styles/tools/tools' as *;
 
 .v-catalogue-edit {
+  display: block;
   padding: space(2) var(--grid-margin);
   box-sizing: border-box;
 
-  &__actions {
-    display: flex;
-    align-items: center;
-    gap: space(1);
-    margin-top: space(2);
+  &__cover {
+    max-height: space(33);
+    overflow: hidden;
+    border-radius: space(1);
   }
 
-  &__button {
-    flex: 1 0 auto;
+  &__img {
+    max-width: 100%;
   }
 }

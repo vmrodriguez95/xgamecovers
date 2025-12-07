@@ -59,7 +59,7 @@ class VCatalogueGame extends LayoutMixin(LitElement) {
           <a href=${this._routerController.getAdminRoute('catalogue', {})}>
             <e-icon icon="arrow-left"></e-icon>
           </a>
-          ${when(authStore.user && this._game, () => html`
+          ${when(authStore.user, () => html`
             <a href=${this._routerController.getAdminRoute('catalogueEdit', { id: this._game.id })}>
               <e-icon icon="edit"></e-icon>
             </a>
@@ -112,7 +112,7 @@ class VCatalogueGame extends LayoutMixin(LitElement) {
     }
    }
 
-   private async _loadGame() {
+   private async  _loadGame() {
     const game = await catalogueGameRepository.getById(this.urlParams.id)
 
     if (game) {
@@ -121,7 +121,7 @@ class VCatalogueGame extends LayoutMixin(LitElement) {
     }
    }
 
-   private async _loadDesigns() {
+   private async  _loadDesigns() {
     const designs = await catalogueDesignRepository.getDesignsByGame(this.urlParams.id)
 
     if (designs.length > 0) {

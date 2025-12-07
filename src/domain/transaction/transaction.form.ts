@@ -1,6 +1,6 @@
-import { FormScheme, Option } from "../form/form.types";
+import { Formscheme, Option } from "../form/form.types";
 
-export const TransactionFormScheme: FormScheme = {
+export const TransactionFormscheme: Formscheme = {
   id: {
     id: 'orderId',
     name: 'id',

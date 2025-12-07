@@ -6,7 +6,7 @@ import { transactionRepository } from '../../domain/transaction/transaction.repo
 import { transactionCategoryRepository } from '../../domain/transaction-category/transaction-category.repository.ts'
 
 // Domain
-import { TransactionFormScheme } from '../../domain/transaction/transaction.form.ts'
+import { TransactionFormscheme } from '../../domain/transaction/transaction.form.ts'
 
 // Mixins
 import { LayoutMixin } from '../../mixins/layout.mixin.ts'
@@ -23,7 +23,7 @@ class VTransactionNew extends LayoutMixin(LitElement) {
 
   @property({ type: String }) heading = ''
 
-  @state() _formscheme = TransactionFormScheme
+  @state() _formscheme = TransactionFormscheme
 
   @query('c-form') form!: HTMLFormElement
 

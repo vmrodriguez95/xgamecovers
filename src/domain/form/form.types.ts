@@ -11,11 +11,8 @@ export interface ComplexOption {
 }
 
 export interface Dependency {
-  field: FieldScheme
-  index: number | undefined
-  cb: ((ev: Event) => void) | null
+  field: Fieldscheme
   dependencies: string[]
-  attached?: boolean
 }
 
 export interface FieldBlock {
@@ -25,12 +22,11 @@ export interface FieldBlock {
   canDelete: boolean
   excludeBlock: boolean
   messageEmpty?: string
-  fields: FormScheme[]
-  structure: FormScheme
-  fillValue?: any
+  fields: Formscheme[]
+  structure: Formscheme
 }
 
-export interface FieldScheme {
+export interface Fieldscheme {
   id: string
   name: string
   label: string
@@ -46,7 +42,6 @@ export interface FieldScheme {
   placeholder?: string
   fillValue: string | number | boolean | string[]
   concatValue?: string
-  finalConcatValue?: string
   config?: any
   excludeValue?: boolean
   fieldSize?: string // 'min' | 'half' | 'max' | 'full'
@@ -56,4 +51,4 @@ export interface FieldScheme {
   files?: FileList | null
 }
 
-export type FormScheme = Record<string, FieldScheme | FieldBlock>
+export type Formscheme = Record<string, Fieldscheme | FieldBlock>
