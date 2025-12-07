@@ -1,9 +1,10 @@
 import { storage } from './index'
 import {
   ref,
+  listAll,
   uploadBytes,
-  getDownloadURL,
-  deleteObject
+  deleteObject,
+  getDownloadURL
 } from 'firebase/storage'
 
 class StorageService {
@@ -26,6 +27,17 @@ class StorageService {
 
     await deleteObject(storageRef)
   }
+
+  async deleteFolder(path: string): Promise<void> {
+    const folderRef = ref(storage, path)
+
+    const list = await listAll(folderRef)
+
+    for (const item of list.items) {
+      await deleteObject(item)
+    }
+  }
+
 }
 
 export const storageService = new StorageService()

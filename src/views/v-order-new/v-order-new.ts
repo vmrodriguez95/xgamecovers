@@ -6,10 +6,10 @@ import { orderRepository } from '../../domain/order/order.repository.ts'
 import { statusRepository } from '../../domain/status/status.repository.ts'
 
 // Domain
-import { OrderFormscheme } from '../../domain/order/order.form.ts'
+import { OrderFormScheme } from '../../domain/order/order.form.ts'
 
 // Types
-import { Fieldscheme, Option } from '../../domain/form/form.types.ts'
+import { FieldScheme, Option } from '../../domain/form/form.types.ts'
 import { Status } from '../../domain/status/status.types.ts'
 
 // Mixins
@@ -28,7 +28,7 @@ class VOrderNew extends LayoutMixin(LitElement) {
 
   @property({ type: String }) entity = ''
 
-  @state() _formscheme = OrderFormscheme
+  @state() _formscheme = OrderFormScheme
 
   @query('c-form') form!: HTMLFormElement
 
@@ -72,7 +72,7 @@ class VOrderNew extends LayoutMixin(LitElement) {
 
   private async _fillStatusOptions() {
     const newscheme = window.structuredClone(this._formscheme)
-    const idStatus = newscheme.idStatus as Fieldscheme
+    const idStatus = newscheme.idStatus as FieldScheme
 
     idStatus.options = await this._getStatusOptions()
 

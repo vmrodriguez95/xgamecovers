@@ -2,7 +2,7 @@ import { LitElement, html, css, unsafeCSS } from 'lit'
 import { customElement, property, state, query } from 'lit/decorators.js'
 
 // Form
-import { CatalogueFormscheme } from '../../domain/catalogue/catalogue.form.ts'
+import { CatalogueFormScheme } from '../../domain/catalogue/catalogue.form.ts'
 
 // Mixins
 import { LayoutMixin } from '../../mixins/layout.mixin.ts'
@@ -16,13 +16,13 @@ import { consoleRepository } from '../../domain/console/console.repository.ts'
 import { catalogueDesignRepository, catalogueGameRepository } from '../../domain/catalogue/catalogue.repository.ts'
 
 // Types
-import { Fieldscheme } from '../../domain/form/form.types.ts'
+import { EButton } from '../../elements/e-button/e-button.ts'
+import { FieldScheme } from '../../domain/form/form.types.ts'
 import { Console } from '../../domain/console/console.types.ts'
 import { Design, Game } from '../../domain/catalogue/catalogue.types.ts'
 
 // Styles
 import style from './v-catalogue-new.style.scss?inline'
-import { EButton } from '../../elements/e-button/e-button.ts'
 
 @customElement('v-catalogue-new')
 class VCatalogueNew extends LayoutMixin(LitElement) {
@@ -31,7 +31,7 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
   
   @property({ type: String }) entity = ''
 
-  @state() _formscheme = CatalogueFormscheme
+  @state() _formscheme = CatalogueFormScheme
 
   @query('c-form') form!: HTMLFormElement
 
@@ -73,7 +73,7 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
 
   private async _fillConsolesOptions() {
     const newscheme = window.structuredClone(this._formscheme)
-    const consoles = newscheme.consoles as Fieldscheme
+    const consoles = newscheme.consoles as FieldScheme
 
     consoles.options = await this._getConsolesAsOptions()
 
@@ -92,7 +92,7 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
     return await storageRepository.uploadImage(file, path)
   }
 
-  private async _handleUploadImage(field: Fieldscheme, idGame: string, idDesign: string, designName: string) {
+  private async _handleUploadImage(field: FieldScheme, idGame: string, idDesign: string, designName: string) {
     const imagesPath = `catalogue/${idGame}/${idDesign}`
 
     if (field.files && field.files.length > 0) {
@@ -119,13 +119,13 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
 
       if (idGame) {
         fullData.designs.forEach(async (design: Design, index: number) => {
-          design.idGame = idGame
           const idDesign = await this._insertDesign(design)
 
           if (idDesign) {
+            design.id = idDesign
             const rawDesign = rawData.designs.fields[index]
             const { poster, slipcover, material } = rawDesign
-
+            
             const posterUrl = await this._handleUploadImage(poster, idGame, idDesign, design.name)
             if (posterUrl) design.poster = posterUrl
             
