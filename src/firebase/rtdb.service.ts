@@ -27,6 +27,27 @@ class RTDBService {
     })) as T[]
   }
 
+  async getAllOrderedBy<T>(path: string, field: string): Promise<T[]> {
+    const ref = this.ref(path)
+
+    const snapshot = await get(
+      query(
+        ref,
+        orderByChild(field)
+      )
+    )
+
+    if (!snapshot.exists()) return []
+
+    const result: T[] = []
+
+    snapshot.forEach((child) => {
+      result.push({ id: child.key, ...child.val() })
+    })
+
+    return result
+  }
+
   async getById<T>(path: string, id: string): Promise<T | null> {
     const snapshot = await get(this.ref(`${path}/${id}`))
 
