@@ -14,9 +14,11 @@ import { Design, Game } from '../../domain/catalogue/catalogue.types.ts'
 
 // Repository
 import { consoleRepository } from '../../domain/console/console.repository.ts'
+import { storageRepository } from '../../domain/storage/storage.repository.ts'
 import { catalogueDesignRepository, catalogueGameRepository } from '../../domain/catalogue/catalogue.repository.ts'
 
 // Controllers
+import { ConfirmController } from '../../controllers/confirm.controller.ts'
 import { RouterController } from '../../controllers/router.controller.ts'
 
 // Auth
@@ -24,6 +26,7 @@ import { authStore } from '../../domain/auth/auth.store.ts'
 
 // Styles
 import style from './v-catalogue-game.style.scss?inline'
+import { CATALOGUE_IMAGE_PATH } from '../../utils/consts.utils.ts'
 
 @customElement('v-catalogue-game')
 class VCatalogueGame extends LayoutMixin(LitElement) {
@@ -34,20 +37,22 @@ class VCatalogueGame extends LayoutMixin(LitElement) {
 
   @state() _game!: Game
 
-  @state() _designs!: Design[]
+  @state() _designs: Design[] = []
 
-  @state() _consoles!: Console[]
+  @state() _consoles: Console[] = []
 
   @state() _lastDesignChoosen: Design | null = null
 
   _routerController = new RouterController(this)
 
+  _confirmController = new ConfirmController(this)
+
   static styles = css`${unsafeCSS(style)}`
 
-  connectedCallback(): void {
+  async connectedCallback() {
     super.connectedCallback()
 
-    this._loadGame()
+    await this._loadGame()
     this._loadDesigns()
     this._loadConsoles()
   }
@@ -56,13 +61,18 @@ class VCatalogueGame extends LayoutMixin(LitElement) {
     return this.layoutGrid(html`
       <div class="v-catalogue-game">
         <div class="v-catalogue-game__actions">
-          <a href=${this._routerController.getAdminRoute('catalogue', {})}>
+          <a class="v-catalogue-game__button" href=${this._routerController.getAdminRoute('catalogue', {})}>
             <e-icon icon="arrow-left"></e-icon>
           </a>
           ${when(authStore.user && this._game, () => html`
-            <a href=${this._routerController.getAdminRoute('catalogueEdit', { id: this._game.id })}>
+            <a class="v-catalogue-game__button" href=${this._routerController.getAdminRoute('catalogueEdit', { id: this._game?.id })}>
               <e-icon icon="edit"></e-icon>
             </a>
+          `)}
+          ${when(authStore.user && this._game, () => html`
+            <button class="v-catalogue-game__button" @click=${this._deleteHandler}>
+              <e-icon icon="delete"></e-icon>
+            </button>
           `)}
         </div>
         ${when(this._lastDesignChoosen, () => html`
@@ -73,6 +83,7 @@ class VCatalogueGame extends LayoutMixin(LitElement) {
             ${map(this._designs, (design: Design) => html`
               <button
                 class=${classMap({
+                  'v-catalogue-game__button': true,
                   'v-catalogue-game__design': true,
                   'v-catalogue-game__design--active': design.id === this._lastDesignChoosen?.id
                 })}
@@ -91,7 +102,7 @@ class VCatalogueGame extends LayoutMixin(LitElement) {
                 <e-logo
                   icon=${console.logo}
                   color=${console.color}
-                  ?active=${this._game.consoles.includes(console.id)}
+                  ?active=${this._game?.consoles.includes(console.id)}
                 ></e-logo>
               `)}
             </div>
@@ -104,33 +115,77 @@ class VCatalogueGame extends LayoutMixin(LitElement) {
   /*
    Methods
    */
-   private async  _loadConsoles() {
+  private async  _loadConsoles() {
     const consoles = await consoleRepository.getAll()
 
     if (consoles) {
       this._consoles = consoles
     }
-   }
+  }
 
-   private async _loadGame() {
+  private async _loadGame() {
     const game = await catalogueGameRepository.getById(this.urlParams.id)
 
     if (game) {
       this._game = game
       this.heading = this._game.name
+    } else {
+      this._kickOut()
     }
-   }
+  }
 
-   private async _loadDesigns() {
+  private async _loadDesigns() {
     const designs = await catalogueDesignRepository.getDesignsByGame(this.urlParams.id)
 
     if (designs.length > 0) {
       this._designs = designs
       this._lastDesignChoosen = designs[0]
     }
-   }
+  }
 
-   private changeDesign(design: Design) {
+  private changeDesign(design: Design) {
     this._lastDesignChoosen = design
-   }
+  }
+
+  private async _removeGame(idGame: string = '') {
+    await catalogueGameRepository.delete(idGame)
+  }
+
+  private async _removeDesign(idDesign: string = '') {
+    await catalogueDesignRepository.delete(idDesign)
+  }
+
+  private async _removeDesignFolder(idGame: string = '', idDesign: string = '') {
+    const folder = `${CATALOGUE_IMAGE_PATH}/${idGame}/${idDesign}`
+
+    await storageRepository.deleteFolder(folder)
+  }
+
+  private async removeAllDesigns(idGame: string = '') {
+    for (let i = 0; i < this._designs.length; i++) {
+      const design = this._designs[i]
+
+      await this._removeDesign(design.id)
+      await this._removeDesignFolder(idGame, design.id)
+    }
+  }
+
+  private async _deleteHandler() {
+    const idGame = this._game.id
+    const userChoise = await this._confirmController.confirm('¿Realmente quieres eliminar el juego?')
+
+    if (!userChoise) return
+
+    await this._removeGame(idGame)
+
+    if (this._designs.length > 0) {
+      await this.removeAllDesigns(idGame)
+    }
+
+    this._kickOut()
+  }
+
+  private _kickOut() {
+    location.href = this._routerController.getAdminRoute('catalogue', {})
+  }
 }
