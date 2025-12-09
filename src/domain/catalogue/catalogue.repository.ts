@@ -7,21 +7,29 @@ const PATH_DESIGNS = 'design'
 
 class CatalogueGameRepository {
   async getAll(): Promise<Game[]> {
-    const data = await rtdbService.getAll(PATH_GAMES)
+    const data = await rtdbService.getAll<Game>(PATH_GAMES)
+
+    return data.map(CatalogueFactory.gameFromApi)
+  }
+
+  async getAllOrderedBy(orderedBy: string): Promise<Game[]> {
+    const data = await rtdbService.getAllOrderedBy<Game>(PATH_GAMES, orderedBy)
+
     return data.map(CatalogueFactory.gameFromApi)
   }
 
   async getById(id: string): Promise<Game | null> {
-    const data = await rtdbService.getById(PATH_GAMES, id)
+    const data = await rtdbService.getById<Game>(PATH_GAMES, id)
+
     return data ? CatalogueFactory.gameFromApi(data) : null
   }
 
   async create(data: Game) {
-    return await rtdbService.set(PATH_GAMES, data)
+    return await rtdbService.set<Game>(PATH_GAMES, data)
   }
 
   async update(id: string, partial: Partial<Game>) {
-    await rtdbService.update(PATH_GAMES, id, partial)
+    await rtdbService.update<Game>(PATH_GAMES, id, partial)
   }
 
   async delete(id: string) {
@@ -32,11 +40,13 @@ class CatalogueGameRepository {
 class CatalogueDesignRepository {
   async getAll(): Promise<Design[]> {
     const data = await rtdbService.getAll(PATH_DESIGNS)
+
     return data.map(CatalogueFactory.designFromApi)
   }
 
   async getById(id: string): Promise<Design | null> {
     const data = await rtdbService.getById(PATH_DESIGNS, id)
+
     return data ? CatalogueFactory.designFromApi(data) : null
   }
 

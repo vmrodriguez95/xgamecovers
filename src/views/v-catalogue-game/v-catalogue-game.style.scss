@@ -17,6 +17,15 @@
     }
   }
 
+  &__empty {
+    text-align: center;
+
+    &__message {
+      @include body--s(600);
+      color: rgba(var(--color-dark), 1);
+    }
+  }
+
   &__head {
     display: flex;
     border-radius: space(1);
