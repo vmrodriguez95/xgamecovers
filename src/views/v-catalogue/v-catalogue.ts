@@ -66,7 +66,7 @@ class VCatalogue extends LayoutMixin(LitElement) {
   }
 
   private async _loadGameList() {
-    this._gameList = await catalogueGameRepository.getAll()
+    this._gameList = await catalogueGameRepository.getAllOrderedBy('name')
   }
 
   private async _loadConsoleList() {
