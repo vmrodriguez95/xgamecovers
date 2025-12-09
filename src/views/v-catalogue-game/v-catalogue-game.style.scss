@@ -8,8 +8,13 @@
 
   &__actions {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: space(1);
+    margin-bottom: space(2);
+
+    *:first-child {
+      margin-right: auto;
+    }
   }
 
   &__head {
@@ -35,13 +40,16 @@
     margin-top: space(2);
   }
 
-  &__design {
+  &__button {
     display: inline-flex;
     padding: 0;
     border: 0;
-    border-radius: space(1);
     background-color: transparent;
     cursor: pointer;
+  }
+
+  &__design {
+    border-radius: space(1);
     max-height: space(9);
     overflow: hidden;
 
@@ -54,7 +62,7 @@
     max-width: 100%;
     height: auto;
     object-fit: cover;
-    object-position: 0 -62px;
+    object-position: 0 72%;
   }
 
   &__title {
