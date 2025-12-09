@@ -107,49 +107,47 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
   
   private async _createHandler(ev: Event) {
     const button = ev.currentTarget as EButton
-
     button.loading = true
 
     const data = this.form.getFinalData() // De aquí sacamos la info de los juegos
     const rawData = this.form.getRawData() // De aquí sacamos la info de los diseños para almacenarlos
     const fullData = this.form.getFullData() // De aquí sacamos las imágenes de los diseños para guardar las imágenes
 
-    if (data) {
-      const idGame = await this._insertGame(data)
+    if (!data) {
+      button.loading = false
+      throw new Error('No se pudo crear el juego')
+    }
 
-      if (idGame) {
-        fullData.designs.forEach(async (design: Design, index: number) => {
-          const idDesign = await this._insertDesign(design)
+    const idGame = await this._insertGame(data)
+    if (!idGame) throw new Error('No se pudo crear el juego')
 
-          if (idDesign) {
-            design.id = idDesign
-            const rawDesign = rawData.designs.fields[index]
-            const { poster, slipcover, material } = rawDesign
-            
-            const posterUrl = await this._handleUploadImage(poster, idGame, idDesign, design.name)
-            if (posterUrl) design.poster = posterUrl
-            
-            const slipcoverUrl = await this._handleUploadImage(slipcover, idGame, idDesign, design.name)
-            if (slipcoverUrl) design.slipcover = slipcoverUrl
-            
-            const materialUrl = await this._handleUploadImage(material, idGame, idDesign, design.name)
-            if (materialUrl) design.material = materialUrl
+    for (let index = 0; index < fullData.designs.length; index++) {
+      const design = fullData.designs[index]
+      design.idGame = idGame
 
-            if (posterUrl || slipcoverUrl || materialUrl) {
-              await catalogueDesignRepository.update(idDesign, design)
+      const idDesign = await this._insertDesign(design)
+      if (!idDesign) throw new Error(`No se pudo crear el diseño ${design.name}`)
 
-              this._goBack()
-            }
-          } else {
-            throw new Error(`No se pudo crear el diseño ${index + 1}`)
-          }
-        })
-      } else {
-        throw new Error('No se pudo crear el juego')
+      design.id = idDesign
+      const rawDesign = rawData.designs.fields[index]
+      const { poster, slipcover, material } = rawDesign
+
+      const [posterUrl, slipcoverUrl, materialUrl] = await Promise.all([
+        this._handleUploadImage(poster, idGame, idDesign, design.name),
+        this._handleUploadImage(slipcover, idGame, idDesign, design.name),
+        this._handleUploadImage(material, idGame, idDesign, design.name),
+      ])
+
+      if (posterUrl) design.poster = posterUrl
+      if (slipcoverUrl) design.slipcover = slipcoverUrl
+      if (materialUrl) design.material = materialUrl
+      
+      if (posterUrl || slipcoverUrl || materialUrl) {
+        await catalogueDesignRepository.update(idDesign, design)
       }
     }
 
-    button.loading = false
+    this._goBack()
   }
 
   private _goBack() {

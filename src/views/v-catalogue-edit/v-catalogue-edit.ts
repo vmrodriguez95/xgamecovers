@@ -190,37 +190,37 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
   }
 
   private async _insertAllDesigns(designs: Design[], rawDesigns: FormScheme[]): Promise<void> {
-    designs.forEach(async (design: Design) => {
+    for(let i = 0; i < designs.length; i++) {
+      const design = designs[i]
+
       const idDesign = await this._insertDesign(design)
+      if (!idDesign) throw new Error(`No se pudo crear el diseño ${design.name}`)
+      
+      design.id = idDesign
+  
+      const rawDesign = this._getRawDesignByName(rawDesigns, design.name)
+      if (!rawDesign) throw new Error(`No se pudo encontrar los datos en crudo del diseño ${design.name}`)
 
-      if (idDesign) {
-        const rawDesign = this._getRawDesignByName(rawDesigns, design.name)
+      const { posterUrl, slipcoverUrl, materialUrl } = await this._uploadAllImages(rawDesign, idDesign, design)
+      if (posterUrl) design.poster = posterUrl
+      if (materialUrl) design.material = materialUrl
+      if (slipcoverUrl) design.slipcover = slipcoverUrl
 
-        design.id = idDesign
-
-        if (rawDesign) {
-          const { posterUrl, slipcoverUrl, materialUrl } = await this._uploadAllImages(rawDesign, idDesign, design)
-
-          if (posterUrl) design.poster = posterUrl
-          if (materialUrl) design.material = materialUrl
-          if (slipcoverUrl) design.slipcover = slipcoverUrl
-
-          if (posterUrl || slipcoverUrl || materialUrl) {
-            await catalogueDesignRepository.update(idDesign, design)
-          }
-        }
+      if (posterUrl || slipcoverUrl || materialUrl) {
+        await catalogueDesignRepository.update(idDesign, design)
       }
-    })
+    }
   }
 
   private async _updateDesign(idDesign: string, data: Design): Promise<void> {
     return await catalogueDesignRepository.update(idDesign, data)
   }
 
-  private _updateAllDesigns(designs: Design[], rawDesigns: FormScheme[]) {
-    designs.forEach(async (design: Design) => {
+  private async _updateAllDesigns(designs: Design[], rawDesigns: FormScheme[]) {
+    for (let i = 0; i < designs.length; i++) {
+      const design = designs[i]
       const rawDesign = this._getRawDesignByName(rawDesigns, design.name)
-
+  
       if (rawDesign) {
         const { posterUrl, slipcoverUrl, materialUrl } = await this._uploadAllImages(rawDesign, design.id, design)
   
@@ -228,10 +228,9 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
         if (materialUrl) design.material = materialUrl
         if (slipcoverUrl) design.slipcover = slipcoverUrl
       }
-
-
+  
       await this._updateDesign(design.id, design)
-    })
+    }
   }
 
   private async _deleteDesign(idDesign: string): Promise<void> {
