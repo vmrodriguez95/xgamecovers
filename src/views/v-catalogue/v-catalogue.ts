@@ -88,13 +88,13 @@ class VCatalogue extends LayoutMixin(LitElement) {
   private async _printGameCard(game: Game) {
     const designs = await catalogueDesignRepository.getDesignsByGame(game.id)
     const favDesign = this._getFavDesign(designs)
-    const design = favDesign ? favDesign : designs[0]
+    const design = favDesign || designs[0]
 
     return html`
       <a class="v-catalogue__link" href=${this._routerController.getAdminRoute('catalogueGame', { id: game.id })}>
         <c-card
           name=${game.name}
-          image=${design.poster}
+          image=${design?.poster}
           .consoles=${this._getConsoleLogos(game)}
         ></c-card>
       </a>

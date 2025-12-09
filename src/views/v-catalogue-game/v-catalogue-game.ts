@@ -93,21 +93,27 @@ class VCatalogueGame extends LayoutMixin(LitElement) {
               </button>
             `)}
           </div>
-          <div class="v-catalogue-game__info">
-            <p class="v-catalogue-game__title">Nombre del diseño</p>
-            <h1 class="v-catalogue-game__name">${this._lastDesignChoosen?.name}</h1>
-            <p class="v-catalogue-game__title">Plataformas</p>
-            <div class="v-catalogue-game__consoles">
-              ${map(this._consoles, (console: Console) => html`
-                <e-logo
-                  icon=${console.logo}
-                  color=${console.color}
-                  ?active=${this._game?.consoles.includes(console.id)}
-                ></e-logo>
-              `)}
-            </div>
+        `, () => html`
+          <div class="v-catalogue-game__empty">
+            <p class="v-catalogue-game__empty__message">Aún no se han asociado diseños a este juego</p>
           </div>
         `)}
+        <div class="v-catalogue-game__info">
+          ${when(this._lastDesignChoosen, () => html`
+            <p class="v-catalogue-game__title">Nombre del diseño</p>
+            <h1 class="v-catalogue-game__name">${this._lastDesignChoosen?.name}</h1>
+          `)}
+          <p class="v-catalogue-game__title">Plataformas</p>
+          <div class="v-catalogue-game__consoles">
+            ${map(this._consoles, (console: Console) => html`
+              <e-logo
+                icon=${console.logo}
+                color=${console.color}
+                ?active=${this._game?.consoles.includes(console.id)}
+              ></e-logo>
+            `)}
+          </div>
+        </div>
       </div>
     `, this.heading)
   }
