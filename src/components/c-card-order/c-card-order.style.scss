@@ -1,0 +1,108 @@
+@use '../../styles/tools/tools' as *;
+@use '../../styles/tools/typography' as *;
+
+.c-card-order {
+  --statusBgColor: var(--color-status--blue);
+  display: flex;
+  box-shadow: 0 3px 10px 0 rgba(var(--color-dark), 0.5);
+  background-color: rgba(var(--statusBgColor), 1);
+  border-radius: space(1);
+  min-height: space(14);
+
+  &--blue {
+    --statusBgColor: var(--color-status--blue);
+  }
+
+  &--yellow {
+    --statusBgColor: var(--color-status--yellow);
+  }
+
+  &--purple {
+    --statusBgColor: var(--color-status--purple);
+  }
+
+  &--green {
+    --statusBgColor: var(--color-status--green);
+  }
+
+  &--lilac {
+    --statusBgColor: var(--color-status--lilac);
+  }
+
+  &--red {
+    --statusBgColor: var(--color-status--red);
+  }
+
+  &__status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: space(0.5);
+    box-sizing: border-box;
+    width: space(3);
+
+    &__text {
+      @include body--xs(500);
+      color: rgba(var(--color-light), 1);
+      margin: 0;
+      transform: rotateZ(-90deg);
+    }
+  }
+
+  &__info {
+    display: flex;
+    padding: space(1) space(2);
+    gap: space(2);
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: space(1);
+    overflow: hidden;
+    color: rgba(var(--color-dark), 1);
+    background-color: rgba(var(--color-light), 1);
+  }
+
+  &__start {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__avatar {
+    --eIconColor: var(--color-light);
+    display: flex;
+    place-content: center;
+    width: space(9);
+    height: space(9);
+    background-color: rgba(var(--statusBgColor), 1);
+    border-radius: 100%;
+  }
+
+  &__middle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &__text {
+    @include body--s;
+    margin: 0;
+  }
+
+  &__price {
+    @include body--xl(500);
+    margin: 0;
+  }
+
+  &__end {
+    display: flex;
+    flex-direction: column;
+    // align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    text-align: right;
+
+    * {
+      margin-top: auto;
+    }
+  }
+}

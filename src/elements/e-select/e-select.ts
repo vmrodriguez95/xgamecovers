@@ -23,7 +23,7 @@ class ESelect extends LitElement {
 
   @property({ type: String }) type = ''
 
-  @property({ type: String }) value = ''
+  @property({ type: String, reflect: true }) value = ''
 
   @property({ type: String }) placeholder = ''
 
@@ -87,10 +87,12 @@ class ESelect extends LitElement {
 
   private _onChange(e: Event) {
     const target = e.target as HTMLInputElement
+
     this.value = target.value
 
     this._validate()
     this._internals.setFormValue(this.value)
+    this.dispatchEvent(new Event('change', { bubbles: true, composed: true }))
   }
 
   private _validate() {
