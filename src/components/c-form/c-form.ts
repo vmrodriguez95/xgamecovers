@@ -137,7 +137,7 @@ class CForm extends LitElement {
             value=${field.fillValue}
             placeholder=${field.placeholder}
             tabindex="0"
-            @input=${(ev: Event) => this._updateSchemeValue(field, ev)}
+            @change=${(ev: Event) => this._updateSchemeValue(field, ev)}
           ></e-select>
         `
       case 'select-multiple':

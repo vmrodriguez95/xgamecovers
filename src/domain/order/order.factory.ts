@@ -11,10 +11,9 @@ export const OrderFactory = {
       whatsapp: data.whatsapp ?? '',
       wallapop: data.wallapop ?? '',
       discount: data.discount ?? 0,
-      finalPrice: data.price ?? 0,
-      date: data.date ?? '',
+      finalPrice: data.finalPrice ?? 0,
       address: data.address ?? '',
-      designs: data.designs ?? [],
+      totalItems: data.totalItems ?? 0,
       createdAt: data.createdAt ?? '',
       updatedAt: data.updatedAt ?? ''
     }

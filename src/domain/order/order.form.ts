@@ -96,12 +96,12 @@ export const OrderFormScheme: FormScheme = {
     required: false,
     readonly: false
   },
-  designs: {
-    id: 'orderDesigns',
-    name: 'designs',
-    label: 'Diseños',
+  totalItems: {
+    id: 'orderTotalItems',
+    name: 'totalItems',
+    label: 'Total de diseños',
     type: 'hidden',
-    fillValue: [],
+    fillValue: 0,
     required: false,
     readonly: false
   }

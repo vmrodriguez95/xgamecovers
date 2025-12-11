@@ -9,7 +9,7 @@ import { statusRepository } from '../../domain/status/status.repository.ts'
 import { OrderFormScheme } from '../../domain/order/order.form.ts'
 
 // Types
-import { FieldScheme, Option } from '../../domain/form/form.types.ts'
+import { FieldScheme } from '../../domain/form/form.types.ts'
 import { Status } from '../../domain/status/status.types.ts'
 
 // Mixins
@@ -47,7 +47,6 @@ class VOrderNew extends LayoutMixin(LitElement) {
       html`
         <div class="v-order-new">
           <c-form
-            action="/order"
             class="v-order-new__form"
             .scheme=${this._formscheme}
           ></c-form>
@@ -83,12 +82,16 @@ class VOrderNew extends LayoutMixin(LitElement) {
     const data = this.form.getFinalData()
 
     if (data) {
-      // const newIdOrder = await orderRepository.create(data)
+      const newIdOrder = await orderRepository.create(data)
 
-      // if (newIdOrder) {
-        // this.routerController.getAdminRoute('orderEdit', { id: newIdOrder })
-      // }
+      if (newIdOrder) {
+        this._goToEdit(newIdOrder)
+      }
     }
+  }
+
+  private _goToEdit(idOrder: string) {
+    location.href = this.routerController.getAdminRoute('orderEdit', { id: idOrder })
   }
 
   private _goBack() {
