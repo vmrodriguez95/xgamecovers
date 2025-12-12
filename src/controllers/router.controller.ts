@@ -74,9 +74,16 @@ export class RouterController {
       enter: this._middleware
     },
     orderEdit: {
-      path: '/order/:id',
+      path: '/order/edit/:id',
       render: (params: Object) => html`
         <v-order-edit .urlParams=${params}></v-order-edit>
+      `,
+      enter: this._middleware
+    },
+    orderView: {
+      path: '/order/:id',
+      render: (params: Object) => html`
+        <v-order-view .urlParams=${params}></v-order-view>
       `,
       enter: this._middleware
     },

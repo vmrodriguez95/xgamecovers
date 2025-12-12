@@ -68,7 +68,6 @@ class VOrder extends LayoutMixin(LitElement) {
 
   private async _loadOrders() {
     this._orders = await orderRepository.getAll()
-    console.log(this._orders)
   }
 
   private async _loadStatus() {
@@ -89,6 +88,6 @@ class VOrder extends LayoutMixin(LitElement) {
   }
 
   private _getEditUrl(idOrder: string) {
-    return this._routerController.getAdminRoute('orderEdit', { id: idOrder })
+    return this._routerController.getAdminRoute('orderView', { id: idOrder })
   }
 }

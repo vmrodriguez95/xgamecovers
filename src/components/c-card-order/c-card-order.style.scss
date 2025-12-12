@@ -88,6 +88,10 @@
     margin: 0;
   }
 
+  &__logo {
+    border-radius: space(0.5);
+  }
+
   &__price {
     @include body--xl(500);
     margin: 0;
@@ -96,12 +100,12 @@
   &__end {
     display: flex;
     flex-direction: column;
-    // align-items: center;
+    align-items: center;
     justify-content: center;
     margin-left: auto;
     text-align: right;
 
-    * {
+    *:not(:only-child) {
       margin-top: auto;
     }
   }

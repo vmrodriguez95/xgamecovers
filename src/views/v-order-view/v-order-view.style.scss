@@ -1,0 +1,77 @@
+@use '../../styles/tools/tools' as *;
+@use '../../styles/tools/typography' as *;
+
+.v-order-view {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  padding: space(2) var(--grid-margin);
+  gap: space(1);
+  box-sizing: border-box;
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    grid-column: 1 / 13;
+    gap: space(1);
+
+    *:first-child {
+      margin-right: auto;
+    }
+  }
+
+  &__button {
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    background-color: transparent;
+  }
+
+  &__head {
+    grid-column: 1 / 13;
+    text-decoration: none;
+  }
+
+  &__pill,
+  &__status {
+    --eIconColor: var(--color-dark);
+    display: inline-flex;
+    place-content: center;
+    gap: space(0.5);
+    padding: space(1);
+    border-radius: space(1);
+    grid-column: span 3;
+    border-radius: space(1);
+    box-shadow: 0 3px 10px 0 rgba(var(--color-dark), 0.5);
+  }
+
+  &__status {
+    @include body--s;
+    --statusBgColor: var(--color-status--blue);
+    background-color: rgba(var(--statusBgColor), 1);
+    color: rgba(var(--color-light), 1);
+
+    &--blue {
+      --statusBgColor: var(--color-status--blue);
+    }
+
+    &--yellow {
+      --statusBgColor: var(--color-status--yellow);
+    }
+
+    &--purple {
+      --statusBgColor: var(--color-status--purple);
+    }
+
+    &--green {
+      --statusBgColor: var(--color-status--green);
+    }
+
+    &--lilac {
+      --statusBgColor: var(--color-status--lilac);
+    }
+
+    &--red {
+      --statusBgColor: var(--color-status--red);
+    }
+  }
+}

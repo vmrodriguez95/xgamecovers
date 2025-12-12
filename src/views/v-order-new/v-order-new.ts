@@ -26,8 +26,6 @@ class VOrderNew extends LayoutMixin(LitElement) {
 
   @property({ type: String }) heading = ''
 
-  @property({ type: String }) entity = ''
-
   @state() _formscheme = OrderFormScheme
 
   @query('c-form') form!: HTMLFormElement
