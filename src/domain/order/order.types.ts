@@ -1,6 +1,6 @@
 export interface Order {
   id: string
-  idStatus: number
+  idStatus: string
   name: string
   whatsapp: string
   wallapop: string
@@ -8,9 +8,8 @@ export interface Order {
   vinted: string
   discount: number
   finalPrice: number
-  date: string
   address: string
-  designs: string[]
+  totalItems: number
   createdAt: string
   updatedAt: string
 }
