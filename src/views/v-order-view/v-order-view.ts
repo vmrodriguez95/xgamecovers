@@ -87,6 +87,9 @@ class VOrderView extends LayoutMixin(LitElement) {
               totalItems=${this._order?.totalItems}
             ></c-card-order>
           </a>
+          <div class="v-order-view__address">
+            <e-icon icon="location"></e-icon> ${this._order?.address}
+          </div>
           <div class="v-order-view__pill">
             <e-icon icon="controller"></e-icon> ${this._order?.totalItems}
           </div>
