@@ -31,6 +31,18 @@
     text-decoration: none;
   }
 
+  &__address {
+    @include body--s;
+    --eIconColor: var(--color-dark);
+    display: inline-flex;
+    align-items: center;
+    padding: space(1) space(2);
+    gap: space(1);
+    border-radius: space(1);
+    grid-column: 1 / 13;
+    box-shadow: 0 3px 10px 0 rgba(var(--color-dark), 0.5);
+  }
+
   &__pill,
   &__status {
     --eIconColor: var(--color-dark);
@@ -40,7 +52,6 @@
     padding: space(1);
     border-radius: space(1);
     grid-column: span 3;
-    border-radius: space(1);
     box-shadow: 0 3px 10px 0 rgba(var(--color-dark), 0.5);
   }
 
