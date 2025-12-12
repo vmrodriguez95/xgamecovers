@@ -54,7 +54,7 @@ class ETextarea extends LitElement {
           ?readonly=${this.readonly}
           ?required=${this.required}
           placeholder=${this.placeholder}
-          value=${this.value}
+          .value=${this.value}
           .minlength=${this.minlength}
           .maxlength=${this.maxlength}
           @input=${this._onInput}
