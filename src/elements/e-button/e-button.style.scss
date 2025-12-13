@@ -2,6 +2,7 @@
 @use '../../styles/tools/typography' as *;
 
 .e-button {
+  --eIconColor: var(--eButtonColor, var(--color-light));
   @include body--s(600);
   display: inline-flex;
   align-items: center;
@@ -14,18 +15,14 @@
   box-sizing: border-box;
   cursor: pointer;
   text-transform: uppercase;
-  width: 100%;
+  
+  &--full {
+    width: 100%;
+  }
 
   &[disabled] {
     opacity: 0.5;
     cursor: not-allowed;
-  }
-
-  ::slotted(span) {
-    --eIconColor: var(--eButtonColor, var(--color-light));
-    display: inline-flex;
-    align-items: center;
-    gap: space(1);
   }
 
   &__shape {

@@ -11,14 +11,6 @@
     justify-content: flex-end;
   }
 
-  &__create {
-    --eIconColor: var(--color-light);
-    display: inline-flex;
-    padding: space(1);
-    border-radius: space(1);
-    background-color: rgba(var(--color-primary), 1);
-  }
-
   &__card {
     display: block;
     text-decoration: none;

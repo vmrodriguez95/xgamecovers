@@ -49,8 +49,8 @@ class VOrderNew extends LayoutMixin(LitElement) {
             .scheme=${this._formscheme}
           ></c-form>
           <div class="v-order-new__actions">
-            <e-button class="v-order-new__button" @click=${this._goBack}>cancelar</e-button>
-            <e-button class="v-order-new__button" @click=${this._createOrder}>Crear</e-button>
+            <e-button class="v-order-new__button" size="full" @click=${this._goBack}>cancelar</e-button>
+            <e-button class="v-order-new__button" size="full" @click=${this._createOrder}>Crear</e-button>
           </div>
         </div>
       `,

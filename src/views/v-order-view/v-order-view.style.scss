@@ -85,4 +85,9 @@
       --statusBgColor: var(--color-status--red);
     }
   }
+
+  &__add {
+    grid-column: 1 / 13;
+    text-align: right;
+  }
 }

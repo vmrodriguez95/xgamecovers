@@ -13,19 +13,11 @@
     align-items: center;
     grid-column: 1 / 4;
     margin-bottom: space(2);
+    gap: space(2);
   }
 
   &__search {
     width: 100%;
-  }
-  
-  &__create {
-    --eIconColor: var(--color-light);
-    display: inline-flex;
-    padding: space(1);
-    border-radius: space(1);
-    background-color: rgba(var(--color-primary), 1);
-    margin-left: space(2);
   }
   
   &__actions {
