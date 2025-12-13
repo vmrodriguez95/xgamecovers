@@ -70,6 +70,7 @@ class ESelect extends LitElement {
             value=${this.value}
             @change=${this._onChange}
           >
+            <option value="">Selecciona una opción</option>
             ${map(this.options, (option: Option) => html`
               <option value=${option.value}>${option.name}</option>
             `)}
