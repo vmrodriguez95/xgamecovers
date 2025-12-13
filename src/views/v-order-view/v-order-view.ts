@@ -87,9 +87,11 @@ class VOrderView extends LayoutMixin(LitElement) {
               totalItems=${this._order?.totalItems}
             ></c-card-order>
           </a>
-          <div class="v-order-view__address">
-            <e-icon icon="location"></e-icon> ${this._order?.address}
-          </div>
+          ${when(this._order?.address, () => html`
+            <div class="v-order-view__address">
+              <e-icon icon="location"></e-icon> ${this._order?.address}
+            </div>
+          `)}
           <div class="v-order-view__pill">
             <e-icon icon="controller"></e-icon> ${this._order?.totalItems}
           </div>
@@ -102,6 +104,11 @@ class VOrderView extends LayoutMixin(LitElement) {
           <div class="v-order-view__status v-order-view__status--${this._orderStatus?.color}">
             ${this._orderStatus?.name}
           </div>
+          <a class="v-order-view__add" href="${this._goToAddOrderItem()}">
+            <e-button icon="add">
+              <e-icon icon="add"></e-icon>
+            </e-button>
+          </a>
           ${map(this._designs, (design: OrderItem) => html`
             <p>Diseño</p>
           `)}
@@ -163,5 +170,9 @@ class VOrderView extends LayoutMixin(LitElement) {
 
   private _goBack() {
     location.href = this._routerController.getAdminRoute('order', {})
+  }
+
+  private _goToAddOrderItem() {
+    return this._routerController.getAdminRoute('orderItem', { idOrder: this._order?.id })
   }
 }
