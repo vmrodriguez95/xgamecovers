@@ -107,14 +107,17 @@ class VOrderNew extends LayoutMixin(LitElement) {
   private async _editOrder() {
     const data = this.form.getFinalData()
 
-    if (data) {
-      await orderRepository.update(this.urlParams.id, data)
+    if (data && this._order) {
+      await orderRepository.update(this._order.id, data)
 
       this._goToOrderView()
     }
   }
 
   private _goToOrderView() {
-    location.href = this.routerController.getAdminRoute('orderView', { id: this.urlParams.id })
+    const urlKey = this._order ? 'orderView' : 'order'
+    const params = this._order ? { id: this._order.id } : {}
+
+    location.href = this.routerController.getAdminRoute(urlKey, params)
   }
 }
