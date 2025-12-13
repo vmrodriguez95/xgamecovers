@@ -50,8 +50,8 @@ class VCatalogue extends LayoutMixin(LitElement) {
         <div class="v-catalogue__head">
           <c-search class="v-catalogue__search"></c-search>
           ${when(authStore.user, () => html`
-            <a href=${this._routerController.getAdminRoute('catalogueNew', {})} class="v-catalogue__create">
-              <e-icon icon="add"></e-icon>
+            <a href=${this._routerController.getAdminRoute('catalogueNew', {})}>
+              <e-button><e-icon icon="add"></e-icon></e-button>
             </a>
           `)}
         </div>

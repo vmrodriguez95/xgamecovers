@@ -38,8 +38,6 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
 
   @property({ type: Object }) urlParams!: URLParam
 
-  @state() _formBlocked = false
-
   @state() _formscheme = CatalogueFormScheme
 
   @state() _game!: Game
@@ -70,8 +68,8 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
           ></c-form>
         `)}
         <div class="v-catalogue-edit__actions">
-          <e-button class="v-catalogue-edit__button" ?loading=${this._formBlocked} @click=${this._goBack}>Cancelar</e-button>
-          <e-button class="v-catalogue-edit__button" ?loading=${this._formBlocked} @click=${this._editHandler}>Editar</e-button>
+          <e-button class="v-catalogue-edit__button" size="full" @click=${this._goBack}>Cancelar</e-button>
+          <e-button class="v-catalogue-edit__button" size="full" @click=${this._editHandler}>Editar</e-button>
         </div>
       </div>
     `, this.heading)

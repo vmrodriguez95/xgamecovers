@@ -44,8 +44,8 @@ class VOrder extends LayoutMixin(LitElement) {
       html`
         <div class="v-order">
           <div class="v-order__head">
-            <a href="/order/new" class="v-order__create">
-              <e-icon icon="add"></e-icon>
+            <a href="${this._getCreatetUrl()}">
+              <e-button><e-icon icon="add"></e-icon></e-button>
             </a>
           </div>
           ${map(this._orders, (order: Order) => html`
@@ -89,5 +89,9 @@ class VOrder extends LayoutMixin(LitElement) {
 
   private _getEditUrl(idOrder: string) {
     return this._routerController.getAdminRoute('orderView', { id: idOrder })
+  }
+
+  private _getCreatetUrl() {
+    return this._routerController.getAdminRoute('orderNew', {})
   }
 }
