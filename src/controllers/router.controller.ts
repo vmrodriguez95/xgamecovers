@@ -87,6 +87,20 @@ export class RouterController {
       `,
       enter: this._middleware
     },
+    orderItem: {
+      path: '/order-item/:idOrder',
+      render: (urlParams) => html`
+        <v-order-item .urlParams=${urlParams}></v-order-item>
+      `,
+      enter: this._middleware
+    },
+    // orderItemAdd: {
+    //   path: '/order-item/:idOrder/add/:idGame',
+    //   render: (urlParams) => html`
+    //     <v-order-item-add .urlParams=${urlParams}></v-order-item-add>
+    //   `,
+    //   enter: this._middleware
+    // },
     error: {
       path: '(.*)',
       enter: () => {

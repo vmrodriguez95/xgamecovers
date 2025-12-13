@@ -1,3 +1,4 @@
 export interface URLParam {
-  id: string
+  id: string,
+  idOrder?: string
 }
