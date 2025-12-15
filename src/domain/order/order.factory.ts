@@ -13,6 +13,8 @@ export const OrderFactory = {
       discount: data.discount ?? 0,
       finalPrice: data.finalPrice ?? 0,
       address: data.address ?? '',
+      payment: data.payment ?? '',
+      date: data.date ?? '',
       totalItems: data.totalItems ?? 0,
       createdAt: data.createdAt ?? '',
       updatedAt: data.updatedAt ?? ''
