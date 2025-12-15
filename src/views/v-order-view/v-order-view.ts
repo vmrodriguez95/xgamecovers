@@ -83,6 +83,7 @@ class VOrderView extends LayoutMixin(LitElement) {
               money=${this._order?.finalPrice}
               hideStatus=${true}
               hideDesigns=${true}
+              date=${this._order?.date || this._order?.createdAt}
               .rrss=${this._getRRSS(this._order)}
               totalItems=${this._order?.totalItems}
             ></c-card-order>

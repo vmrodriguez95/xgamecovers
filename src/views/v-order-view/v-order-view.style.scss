@@ -65,24 +65,24 @@
       --statusBgColor: var(--color-status--blue);
     }
 
-    &--yellow {
-      --statusBgColor: var(--color-status--yellow);
+    &--blue-dark {
+      --statusBgColor: var(--color-status--blue-dark);
+    }
+
+    &--red {
+      --statusBgColor: var(--color-status--red);
     }
 
     &--purple {
       --statusBgColor: var(--color-status--purple);
     }
 
+    &--orange {
+      --statusBgColor: var(--color-status--orange);
+    }
+
     &--green {
       --statusBgColor: var(--color-status--green);
-    }
-
-    &--lilac {
-      --statusBgColor: var(--color-status--lilac);
-    }
-
-    &--red {
-      --statusBgColor: var(--color-status--red);
     }
   }
 
