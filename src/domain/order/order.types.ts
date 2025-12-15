@@ -9,6 +9,8 @@ export interface Order {
   discount: number
   finalPrice: number
   address: string
+  payment: string
+  date: string
   totalItems: number
   createdAt: string
   updatedAt: string

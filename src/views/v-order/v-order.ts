@@ -53,7 +53,7 @@ class VOrder extends LayoutMixin(LitElement) {
               <c-card-order
                 .status=${this._getStatusById(order.idStatus)}
                 name=${order.name}
-                date=${order.createdAt}
+                date=${order.date || order.createdAt}
                 money=${order.finalPrice}
                 .rrss=${this._getRRSS(order)}
                 totalItems=${order.totalItems}

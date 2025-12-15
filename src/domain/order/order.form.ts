@@ -96,6 +96,38 @@ export const OrderFormScheme: FormScheme = {
     required: false,
     readonly: false
   },
+  payment: {
+    id: 'orderPayment',
+    name: 'payment',
+    label: 'Método de pago',
+    type: 'select',
+    fillValue: '',
+    options: [
+      {
+        name: 'Wallapop',
+        value: 'wallapop'
+      },
+      {
+        name: 'Vinted',
+        value: 'vinted'
+      },
+      {
+        name: 'Bizum',
+        value: 'bizum'
+      }
+    ] as Option[],
+    required: false,
+    readonly: false
+  },
+  date: {
+    id: 'orderDate',
+    name: 'date',
+    label: 'Fecha',
+    type: 'date',
+    fillValue: '',
+    required: false,
+    readonly: false
+  },
   totalItems: {
     id: 'orderTotalItems',
     name: 'totalItems',
