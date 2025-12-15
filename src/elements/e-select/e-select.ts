@@ -2,6 +2,7 @@ import { LitElement, html, css, unsafeCSS, PropertyValues } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { map } from 'lit/directives/map.js'
 import { when } from 'lit/directives/when.js'
+import { live } from 'lit/directives/live.js'
 import { classMap } from 'lit/directives/class-map.js'
 
 // Types
@@ -72,7 +73,7 @@ class ESelect extends LitElement {
           >
             <option value="">Selecciona una opción</option>
             ${map(this.options, (option: Option) => html`
-              <option value=${option.value}>${option.name}</option>
+              <option value=${option.value} ?selected=${this.value === option.value}>${option.name}</option>
             `)}
           </select>
         </div>
