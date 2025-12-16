@@ -87,6 +87,15 @@ export const OrderFormScheme: FormScheme = {
     required: false,
     readonly: false
   },
+  delivery: {
+    id: 'orderDelivery',
+    name: 'delivery',
+    label: 'Precio total acordado',
+    type: 'number',
+    fillValue: 0,
+    required: false,
+    readonly: false
+  },
   address: {
     id: 'orderAddress',
     name: 'address',

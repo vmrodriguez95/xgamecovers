@@ -10,6 +10,7 @@ export interface Order {
   finalPrice: number
   address: string
   payment: string
+  delivery: number
   date: string
   totalItems: number
   createdAt: string
@@ -21,7 +22,8 @@ export interface OrderItem {
   idOrder: string
   idDesign: string
   idStatus: string
-  idPlatform: string
+  idConsole: string
+  idVersion: string
   price: number
   createdAt: string
   updatedAt: string

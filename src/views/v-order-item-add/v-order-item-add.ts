@@ -136,7 +136,7 @@ class VOrderItemAdd extends LayoutMixin(LitElement) {
     const newIdOrderItem = await orderItemRepository.create(data)
 
     if (newIdOrderItem) {
-      this._goBack()
+      this._goToEditOrder()
     } else {
       button.loading = false
       throw new Error('No se ha podido añadir el diseño al pedido')

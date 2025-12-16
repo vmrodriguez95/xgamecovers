@@ -258,11 +258,20 @@ export class CForm extends LitElement {
   private _updateSchemeValue(field: FieldScheme, ev: Event) {
     const input = ev.currentTarget as HTMLInputElement
 
-    if (field.type === 'file') {
-      field.files = input.files
+    switch (field.type) {
+      case 'checkbox':
+        field.fillValue = input.checked
+        break
+      case 'number':
+        field.fillValue = parseInt(input.value)
+        break
+      case 'file':
+        field.files = input.files
+        field.fillValue = input.value
+        break
+      default:
+        field.fillValue = input.value
     }
-
-    field.fillValue = field.type === 'checkbox' ? input.checked : input.value
   }
 
   private _isValid(): boolean {
