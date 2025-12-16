@@ -12,7 +12,7 @@ import { FieldScheme, FieldBlock, FormScheme, Dependency } from '../../domain/fo
 import style from './c-form.style.scss?inline'
 
 @customElement('c-form')
-class CForm extends LitElement {
+export class CForm extends LitElement {
 
   @property({ type: String }) method = ''
 
@@ -70,6 +70,7 @@ class CForm extends LitElement {
     switch (field.type) {
       case 'text':
       case 'date':
+      case 'datetime-local':
       case 'hidden':
       case 'number':
         return html`
@@ -98,8 +99,8 @@ class CForm extends LitElement {
             label=${field.label}
             ?required=${field.required}
             ?readonly=${field.readonly}
-            maxSize=${field.config.maxSize}
-            accept=${field.config.accept}
+            maxSize=${field.config?.maxSize}
+            accept=${field.config?.accept}
             helpmsg=${field.helpmsg}
             value=${field.fillValue}
             placeholder=${field.placeholder}
@@ -336,7 +337,11 @@ class CForm extends LitElement {
       }
       // Si es un campo normal y corriente pasamos por aquí
       else {
-        newScheme[key] = field.fillValue
+        if (field.excludeValue) {
+          delete newScheme[key]
+        } else {
+          newScheme[key] = field.fillValue
+        }
       }
     })
 

@@ -45,6 +45,11 @@ class VOrderItem extends LayoutMixin(LitElement) {
   render() {
     return this.layoutGrid(html`
       <div class="v-order-item">
+        <div class="v-order-item__actions">
+          <a href=${this._getPreviousUrl()}>
+            <e-icon icon="arrow-left"></e-icon>
+          </a>
+        </div>
         <c-search class="v-order-item__search"></c-search>
         ${when(this._consoleList.length > 0 && this._gameList.length > 0, () => 
           map(this._gameList, (game: Game) => until(this._printGameCard(game)))
@@ -74,13 +79,12 @@ class VOrderItem extends LayoutMixin(LitElement) {
   }
 
   private async _printGameCard(game: Game) {
-    const { idOrder } = this.urlParams
     const designs = await catalogueDesignRepository.getDesignsByGame(game.id)
     const favDesign = this._getFavDesign(designs)
     const design = favDesign || designs[0]
 
     return html`
-      <a class="v-order-item__link" href="#">
+      <a class="v-order-item__link" href=${this._getOrderItemAddUrl(this.urlParams.idOrder, game.id)}>
         <c-card
           name=${game.name}
           image=${design?.poster}
@@ -90,7 +94,11 @@ class VOrderItem extends LayoutMixin(LitElement) {
     `
   }
 
-  // private _getOrderItemAddUrl(idOrder: string = '', idGame: string) {
-  //   return this._routerController.getAdminRoute('orderItemAdd', { idOrder, idGame })
-  // }
+  private _getOrderItemAddUrl(idOrder: string = '', idGame: string) {
+    return this._routerController.getAdminRoute('orderItemAdd', { idOrder, idGame })
+  }
+
+  private _getPreviousUrl() {
+    return this._routerController.getAdminRoute('orderView', { id: this.urlParams.idOrder })
+  }
 }

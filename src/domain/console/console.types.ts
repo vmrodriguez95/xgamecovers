@@ -4,9 +4,3 @@ export interface Console {
   logo: string
   color: string
 }
-
-export interface Version {
-  id: string
-  idPlatform: string
-  name: string
-}

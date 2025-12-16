@@ -1,0 +1,23 @@
+@use '../../styles/tools/tools' as *;
+@use '../../styles/tools/typography' as *;
+
+.v-order-item-add {
+  display: block;
+  padding: space(2) var(--grid-margin);
+  box-sizing: border-box;
+
+  &__actions {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    gap: space(1);
+    padding: space(2);
+    box-sizing: border-box;
+
+    * {
+      flex: 1 0 auto;
+    }
+  }
+}
