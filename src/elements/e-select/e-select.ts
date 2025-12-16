@@ -1,9 +1,7 @@
-import { LitElement, html, css, unsafeCSS, PropertyValues } from 'lit'
-import { customElement, property, state } from 'lit/decorators.js'
+import { LitElement, html, css, unsafeCSS } from 'lit'
+import { customElement, property } from 'lit/decorators.js'
 import { map } from 'lit/directives/map.js'
 import { when } from 'lit/directives/when.js'
-import { live } from 'lit/directives/live.js'
-import { classMap } from 'lit/directives/class-map.js'
 
 // Types
 import { Option } from '../../domain/form/form.types.ts'
@@ -12,7 +10,7 @@ import { Option } from '../../domain/form/form.types.ts'
 import style from './e-select.style.scss?inline'
 
 @customElement('e-select')
-class ESelect extends LitElement {
+export class ESelect extends LitElement {
 
   private _internals: ElementInternals
 
@@ -22,11 +20,7 @@ class ESelect extends LitElement {
 
   @property({ type: String }) label = ''
 
-  @property({ type: String }) type = ''
-
   @property({ type: String, reflect: true }) value = ''
-
-  @property({ type: String }) placeholder = ''
 
   @property({ type: String }) helpmsg = ''
 
@@ -46,13 +40,8 @@ class ESelect extends LitElement {
   }
 
   render() {
-    const inputClasses = classMap({
-      'e-select': true,
-      'e-select--hidden': this.type === 'hidden'
-    })
-
     return html`
-      <div class=${inputClasses}>
+      <div class="e-select">
         ${when(this.label, () => html`
           <label class="e-select__label" for=${this.id}>
             ${this.label} ${when(this.required, () => html`*`)}
@@ -64,10 +53,8 @@ class ESelect extends LitElement {
             id=${this.id}
             name=${this.name}
             class="e-select__field"
-            type=${this.type}
             ?readonly=${this.readonly}
             ?required=${this.required}
-            placeholder=${this.placeholder}
             value=${this.value}
             @change=${this._onChange}
           >

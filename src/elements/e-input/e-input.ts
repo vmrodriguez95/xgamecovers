@@ -8,7 +8,7 @@ import { classMap } from 'lit/directives/class-map.js'
 import style from './e-input.style.scss?inline'
 
 @customElement('e-input')
-class EInput extends LitElement {
+export class EInput extends LitElement {
 
   private _internals: ElementInternals
 
@@ -26,7 +26,7 @@ class EInput extends LitElement {
 
   @property({ type: String }) autocomplete = 'off'
 
-  @property({ type: String, reflect: true }) value = ''
+  @property({ type: String, reflect: true }) value!: string | number
 
   @property({ type: String }) placeholder = ''
 
@@ -162,11 +162,11 @@ class EInput extends LitElement {
       return this._getRequiredValidy()
     }
     
-    if (this.minlength && this.value.length < this.minlength) {
+    if (this.minlength && Number.isInteger(this.value) && (this.value as number) < this.minlength) {
       return this._getMinLengthValidy()
     }
     
-    if (this.maxlength && this.value.length > this.maxlength) {
+    if (this.maxlength && Number.isInteger(this.value) && (this.value as number) > this.maxlength) {
       return this._getMaxLengthValidy()
     }
 

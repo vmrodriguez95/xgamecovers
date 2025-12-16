@@ -1,16 +1,21 @@
 import { LitElement, html, css, unsafeCSS } from 'lit'
-import { customElement, property, query, state } from 'lit/decorators.js'
+import { customElement, property, state } from 'lit/decorators.js'
 import { map } from 'lit/directives/map.js'
 import { when } from 'lit/directives/when.js'
+import { until } from 'lit/directives/until.js'
 
 // BBDD
 import { orderRepository } from '../../domain/order/order.repository.ts'
 import { statusRepository } from '../../domain/status/status.repository.ts'
+import { versionRepository } from '../../domain/version/version.repository.ts'
+import { orderItemRepository } from '../../domain/order-item/order-item.repository.ts'
+import { catalogueDesignRepository } from '../../domain/catalogue/catalogue.repository.ts'
 
 // Types
+import { Status } from '../../domain/status/status.types.ts'
+import { Version } from '../../domain/version/version.types.ts'
 import { URLParam } from '../../domain/generic/generic.types.ts'
 import { Order, OrderItem } from '../../domain/order/order.types.ts'
-import { Status, ItemStatus } from '../../domain/status/status.types.ts'
 
 // Mixins
 import { LayoutMixin } from '../../mixins/layout.mixin.ts'
@@ -18,6 +23,7 @@ import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 //Controllers
 import { RouterController } from '../../controllers/router.controller.ts'
 import { ConfirmController } from '../../controllers/confirm.controller.ts'
+
 
 // Auth
 import { authStore } from '../../domain/auth/auth.store.ts'
@@ -36,9 +42,11 @@ class VOrderView extends LayoutMixin(LitElement) {
 
   @state() _designs: OrderItem[] = []
 
+  @state() _versions: Version[] = []
+
   @state() _status: Status[] = []
 
-  @state() _itemStatus: ItemStatus[] = []
+  @state() _itemStatus: Status[] = []
 
   _orderStatus: Status | undefined
 
@@ -48,13 +56,14 @@ class VOrderView extends LayoutMixin(LitElement) {
 
   static styles = css`${unsafeCSS(style)}`
 
-  async connectedCallback() {
+  connectedCallback() {
     super.connectedCallback()
     
-    await this._loadOrderData()
-    await this._loadStatus()
-    this._loadOrderStatus()
-    await this._loadItemStatus()
+    this._loadOrderData()
+    this._loadStatus()
+    this._loadItemStatus()
+    this._loadDesigns()
+    this._loadVersions()
   }
 
   render() {
@@ -91,10 +100,11 @@ class VOrderView extends LayoutMixin(LitElement) {
           ${when(this._order?.address, () => html`
             <div class="v-order-view__address">
               <e-icon icon="location"></e-icon> ${this._order?.address}
+              <e-icon icon="truck"></e-icon> ${this._order?.delivery}
             </div>
           `)}
           <div class="v-order-view__pill">
-            <e-icon icon="controller"></e-icon> ${this._order?.totalItems}
+            <e-icon icon="controller"></e-icon> ${this._designs?.length}
           </div>
           <div class="v-order-view__pill">
             <e-icon icon="credit-card"></e-icon> ${this._calculateTotalPrice()}€
@@ -110,9 +120,11 @@ class VOrderView extends LayoutMixin(LitElement) {
               <e-icon icon="add"></e-icon>
             </e-button>
           </a>
-          ${map(this._designs, (design: OrderItem) => html`
-            <p>Diseño</p>
-          `)}
+          ${when(this._designs.length > 0,
+            () => map(this._designs, (design: OrderItem) =>
+              until(this._printDesign(design))
+            )
+          )}
         </div>
       `,
       this.heading
@@ -125,14 +137,39 @@ class VOrderView extends LayoutMixin(LitElement) {
 
   private async _loadStatus() {
     this._status = await statusRepository.getAll()
+    this._orderStatus = this._getStatusById(this._order?.idStatus || '')
   }
 
-  private _loadOrderStatus() {
-    this._orderStatus = this._status.find((status: Status) => status.id === this._order?.idStatus)
+  private _getStatusById(idStatus: string) {
+    return this._status.find((status: Status) => status.id === idStatus)
   }
 
   private async _loadItemStatus() {
-    this._itemStatus = await statusRepository.getAllItems()
+    const status = await statusRepository.getAllItems()
+
+    console.log(status)
+
+    this._itemStatus = status
+  }
+
+  private _getStatusItemById(idStatus: string) {
+    return this._itemStatus.find((status: Status) => status.id === idStatus)
+  }
+
+  private async _loadDesigns() {
+    this._designs = await orderItemRepository.getAllByIdOrder(this.urlParams.id)
+  }
+  
+  private async _getDesignById(idDesign: string) {
+    return await catalogueDesignRepository.getById(idDesign)
+  }
+
+  private async _loadVersions() {
+    this._versions = await versionRepository.getAll()
+  }
+
+  private _getVersionItemById(idVersion: string) {
+    return this._versions.find((version: Version) => version.id === idVersion)
   }
 
   private async _removeOrder(idOrder: string) {
@@ -162,7 +199,7 @@ class VOrderView extends LayoutMixin(LitElement) {
   }
 
   private _calculateTotalPrice() {
-    return 0
+    return this._designs.reduce((acc, design) => acc + design.price, 0)
   }
 
   private _calculateDiscount() {
@@ -175,5 +212,21 @@ class VOrderView extends LayoutMixin(LitElement) {
 
   private _goToAddOrderItem() {
     return this._routerController.getAdminRoute('orderItem', { idOrder: this._order?.id })
+  }
+
+  private async _printDesign(designInOrder: OrderItem) {
+    const design = await this._getDesignById(designInOrder.idDesign)
+    const version = this._getVersionItemById(designInOrder.idVersion)
+
+    return html`
+      <c-card-design
+        class="v-order-view__design"
+        name=${design?.name}
+        version=${version?.name}
+        money=${designInOrder.price}
+        poster=${design?.poster}
+        .status=${this._getStatusItemById(designInOrder.idStatus)}
+      ></c-card-design>
+    `
   }
 }

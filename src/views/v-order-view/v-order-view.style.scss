@@ -89,5 +89,10 @@
   &__add {
     grid-column: 1 / 13;
     text-align: right;
+    margin-top: space(2);
+  }
+  
+  &__design {
+    grid-column: 1 / 13;
   }
 }

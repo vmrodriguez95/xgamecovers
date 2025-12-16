@@ -6,13 +6,15 @@ import { repeat } from 'lit/directives/repeat.js'
 import { classMap } from 'lit/directives/class-map.js'
 
 // Types
+import { EInput } from '../../elements/e-input/e-input.ts'
+import { ESelect } from '../../elements/e-select/e-select.ts'
 import { FieldScheme, FieldBlock, FormScheme, Dependency } from '../../domain/form/form.types.ts'
 
 // Styles
 import style from './c-form.style.scss?inline'
 
 @customElement('c-form')
-class CForm extends LitElement {
+export class CForm extends LitElement {
 
   @property({ type: String }) method = ''
 
@@ -70,6 +72,7 @@ class CForm extends LitElement {
     switch (field.type) {
       case 'text':
       case 'date':
+      case 'datetime-local':
       case 'hidden':
       case 'number':
         return html`
@@ -98,8 +101,8 @@ class CForm extends LitElement {
             label=${field.label}
             ?required=${field.required}
             ?readonly=${field.readonly}
-            maxSize=${field.config.maxSize}
-            accept=${field.config.accept}
+            maxSize=${field.config?.maxSize}
+            accept=${field.config?.accept}
             helpmsg=${field.helpmsg}
             value=${field.fillValue}
             placeholder=${field.placeholder}
@@ -155,6 +158,22 @@ class CForm extends LitElement {
             tabindex="0"
             @change=${(ev: Event) => this._updateSchemeValue(field, ev)}
           ></e-select-multiple>
+        `
+      case 'select-preview':
+        return html`
+          <e-select-preview
+            id=${field.id}
+            class=${this._getInputClasses(field)}
+            name=${field.name}
+            label=${field.label}
+            .options=${field.options}
+            ?required=${field.required}
+            ?readonly=${field.readonly}
+            helpmsg=${field.helpmsg}
+            value=${field.fillValue}
+            tabindex="0"
+            @change=${(ev: Event) => this._updateSchemeValue(field, ev)}
+          ></e-select-preview>
         `
       case 'checkbox':
         return html`
@@ -239,11 +258,20 @@ class CForm extends LitElement {
   private _updateSchemeValue(field: FieldScheme, ev: Event) {
     const input = ev.currentTarget as HTMLInputElement
 
-    if (field.type === 'file') {
-      field.files = input.files
+    switch (field.type) {
+      case 'checkbox':
+        field.fillValue = input.checked
+        break
+      case 'number':
+        field.fillValue = parseInt(input.value)
+        break
+      case 'file':
+        field.files = input.files
+        field.fillValue = input.value
+        break
+      default:
+        field.fillValue = input.value
     }
-
-    field.fillValue = field.type === 'checkbox' ? input.checked : input.value
   }
 
   private _isValid(): boolean {
@@ -255,23 +283,23 @@ class CForm extends LitElement {
     ev.stopPropagation()
   }
 
-  private concatValueDynamically(field: HTMLInputElement, concatValue: string = '') {
+  private concatValueDynamically(field: EInput, concatValue: string = '') {
     return field.value && concatValue ? `${field.value}${concatValue}` : field.value
   }
 
-  private _dependencyActionTextToText(mainField: HTMLInputElement, input: HTMLInputElement, dependency: Dependency) {
+  private _dependencyActionTextToText(mainField: EInput, input: EInput, dependency: Dependency) {
     mainField.value = this.concatValueDynamically(input, dependency.field.finalConcatValue)
     mainField.dispatchEvent(new Event('input'))
   }
 
-  private _inputHandler(mainField: HTMLInputElement, input: HTMLInputElement, dependency: Dependency) {
+  private _inputHandler(mainField: EInput, input: EInput, dependency: Dependency) {
     mainField.value = this.concatValueDynamically(input, dependency.field.finalConcatValue)
     mainField.dispatchEvent(new Event('input'))
   }
 
-  private _attachDependencyActionTextToText(mainField: HTMLInputElement, input: HTMLInputElement, dependency: Dependency) {
+  private _attachDependencyActionTextToText(mainField: EInput, input: EInput, dependency: Dependency) {
     if (!dependency.cb) {
-      dependency.cb = (ev: Event) => {
+      dependency.cb = () => {
         this._inputHandler(mainField, input, dependency)
       }
     }
@@ -282,25 +310,57 @@ class CForm extends LitElement {
     }
   }
 
+  private _getNewOptions(select: ESelect, dependency: Dependency) {
+    if (dependency.field.additionalData) {
+      return dependency.field.additionalData[select.value]
+    }
+
+    return []
+  }
+
+  private _dependencyActionSelectToSelect(mainField: ESelect, select: ESelect, dependency: Dependency) {
+    mainField.options = this._getNewOptions(select, dependency)
+  }
+
+  private _attachDependencyActionSelectToSelect(mainField: ESelect, select: ESelect, dependency: Dependency) {
+    if (!dependency.cb) {
+      dependency.cb = () => {
+        this._dependencyActionSelectToSelect(mainField, select, dependency)
+      }
+    }
+
+    if (!dependency.attached) {
+      select.addEventListener('change', dependency.cb)
+      dependency.attached = true
+    }
+  }
+
   private _associateDependency(dependency: Dependency) {
-    const mainField = this.shadowRoot?.querySelector(`#${dependency.field.id}${dependency.index !== undefined ? `-${dependency.index}` : ''}`) as HTMLInputElement
-    const dependencyFields = this.shadowRoot?.querySelectorAll(`#${dependency.dependencies.join(', #')}`)
+    if (!this.shadowRoot) return
+
+    const mainField = this.shadowRoot.querySelector(`#${dependency.field.id}${dependency.index !== undefined ? `-${dependency.index}` : ''}`) as EInput | ESelect
+    const dependencyFields = this.shadowRoot.querySelectorAll(`#${dependency.dependencies.join(', #')}`)
 
     if (!mainField || !dependencyFields) return
     
     dependencyFields.forEach((field) => {
-      const input = field as HTMLInputElement
+      const input = field as EInput | ESelect
 
-      if (mainField.type === 'text' && input.type === 'text') {
-        this._dependencyActionTextToText(mainField, input, dependency)
-        this._attachDependencyActionTextToText(mainField, input, dependency)
+      if (mainField.tagName === 'E-INPUT' && input.tagName === 'E-INPUT') {
+        this._dependencyActionTextToText(mainField as EInput, input as EInput, dependency)
+        this._attachDependencyActionTextToText(mainField as EInput, input as EInput, dependency)
+      } else if (mainField.tagName === 'E-SELECT' && input.tagName === 'E-SELECT') {
+        this._dependencyActionSelectToSelect(mainField as ESelect, input as ESelect, dependency)
+        this._attachDependencyActionSelectToSelect(mainField as ESelect, input as ESelect, dependency)
       }
     })
   }
 
   private _activateDependencies() {
     this._dependencies.forEach((dependency) => {
-      this._associateDependency(dependency)
+      if (!dependency.attached) {
+        this._associateDependency(dependency)
+      }
     })
   }
 
@@ -336,7 +396,11 @@ class CForm extends LitElement {
       }
       // Si es un campo normal y corriente pasamos por aquí
       else {
-        newScheme[key] = field.fillValue
+        if (field.excludeValue && applyExcludes) {
+          delete newScheme[key]
+        } else {
+          newScheme[key] = field.fillValue
+        }
       }
     })
 

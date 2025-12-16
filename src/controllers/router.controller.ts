@@ -94,13 +94,13 @@ export class RouterController {
       `,
       enter: this._middleware
     },
-    // orderItemAdd: {
-    //   path: '/order-item/:idOrder/add/:idGame',
-    //   render: (urlParams) => html`
-    //     <v-order-item-add .urlParams=${urlParams}></v-order-item-add>
-    //   `,
-    //   enter: this._middleware
-    // },
+    orderItemAdd: {
+      path: '/order-item/:idOrder/add/:idGame',
+      render: (urlParams) => html`
+        <v-order-item-add .urlParams=${urlParams}></v-order-item-add>
+      `,
+      enter: this._middleware
+    },
     error: {
       path: '(.*)',
       enter: () => {
@@ -141,7 +141,7 @@ export class RouterController {
     let routeReplaced = route
 
     Object.entries(params).forEach(([key, value]) => {
-      routeReplaced = route.replace(`:${key}`, value)
+      routeReplaced = routeReplaced.replace(`:${key}`, value)
     })
 
     return routeReplaced

@@ -89,7 +89,7 @@ class VOrderNew extends LayoutMixin(LitElement) {
   }
 
   private _goToEdit(idOrder: string) {
-    location.href = this.routerController.getAdminRoute('orderEdit', { id: idOrder })
+    location.href = this.routerController.getAdminRoute('orderView', { id: idOrder })
   }
 
   private _goBack() {
