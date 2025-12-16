@@ -8,7 +8,7 @@ import { classMap } from 'lit/directives/class-map.js'
 import style from './e-input.style.scss?inline'
 
 @customElement('e-input')
-class EInput extends LitElement {
+export class EInput extends LitElement {
 
   private _internals: ElementInternals
 

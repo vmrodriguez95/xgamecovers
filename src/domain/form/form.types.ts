@@ -10,6 +10,11 @@ export interface ComplexOption {
   color: string
 }
 
+interface FieldConfig {
+  accept: string
+  maxSize: number
+}
+
 export interface Dependency {
   field: FieldScheme
   index: number | undefined
@@ -47,7 +52,8 @@ export interface FieldScheme {
   fillValue: string | number | boolean | string[]
   concatValue?: string
   finalConcatValue?: string
-  config?: any
+  config?: FieldConfig
+  additionalData?: Record<string, Option[]>
   excludeValue?: boolean
   fieldSize?: string // 'min' | 'half' | 'max' | 'full'
   dependencyActivated?: boolean // Uso exclusivo para las dependencias que se maneja desde el código

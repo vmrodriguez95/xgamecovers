@@ -3,9 +3,3 @@ export interface Status {
   name: string
   color: string
 }
-
-export interface ItemStatus {
-  id: string
-  name: string
-  color: string
-}

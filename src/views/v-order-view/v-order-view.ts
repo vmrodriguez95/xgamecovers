@@ -8,9 +8,9 @@ import { orderRepository } from '../../domain/order/order.repository.ts'
 import { statusRepository } from '../../domain/status/status.repository.ts'
 
 // Types
+import { Status } from '../../domain/status/status.types.ts'
 import { URLParam } from '../../domain/generic/generic.types.ts'
 import { Order, OrderItem } from '../../domain/order/order.types.ts'
-import { Status, ItemStatus } from '../../domain/status/status.types.ts'
 
 // Mixins
 import { LayoutMixin } from '../../mixins/layout.mixin.ts'
@@ -38,7 +38,7 @@ class VOrderView extends LayoutMixin(LitElement) {
 
   @state() _status: Status[] = []
 
-  @state() _itemStatus: ItemStatus[] = []
+  @state() _itemStatus: Status[] = []
 
   _orderStatus: Status | undefined
 
