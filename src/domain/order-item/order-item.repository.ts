@@ -10,10 +10,10 @@ class OrderItemRepository {
     return data ? OrderItemFactory.fromApi(data) : null
   }
 
-  async getAllByIdOrder(id: string): Promise<OrderItem | null> {
+  async getAllByIdOrder(id: string): Promise<OrderItem[]> {
     const data = await rtdbService.filterByChild(PATH, 'idOrder', id)
 
-    return data ? OrderItemFactory.fromApi(data) : null
+    return data.map(OrderItemFactory.fromApi)
   }
 
   async create(data: OrderItem) {

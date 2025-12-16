@@ -14,6 +14,7 @@ export const OrderFactory = {
       finalPrice: data.finalPrice ?? 0,
       address: data.address ?? '',
       payment: data.payment ?? '',
+      delivery: data.delivery ?? '',
       date: data.date ?? '',
       totalItems: data.totalItems ?? 0,
       createdAt: data.createdAt ?? '',
