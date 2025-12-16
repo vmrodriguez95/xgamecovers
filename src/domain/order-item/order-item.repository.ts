@@ -4,7 +4,7 @@ import type { OrderItem } from './order-item.types'
 
 const PATH = 'orderItem'
 
-export class OrderItemRepository {
+class OrderItemRepository {
   async getById(id: string): Promise<OrderItem | null> {
     const data = await rtdbService.getById(PATH, id)
     return data ? OrderItemFactory.fromApi(data) : null
@@ -29,4 +29,4 @@ export class OrderItemRepository {
   }
 }
 
-export const orderRepository = new OrderItemRepository()
+export const orderItemRepository = new OrderItemRepository()

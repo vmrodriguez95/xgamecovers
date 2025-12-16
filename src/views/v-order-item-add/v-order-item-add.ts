@@ -17,6 +17,7 @@ import { Design } from '../../domain/catalogue/catalogue.types.ts'
 import { statusRepository } from '../../domain/status/status.repository.ts'
 import { versionRepository } from '../../domain/version/version.repository.ts'
 import { consoleRepository } from '../../domain/console/console.repository.ts'
+import { orderItemRepository } from '../../domain/order-item/order-item.repository.ts'
 import { catalogueDesignRepository } from '../../domain/catalogue/catalogue.repository.ts'
 
 // Controllers
@@ -102,7 +103,7 @@ class VOrderItemAdd extends LayoutMixin(LitElement) {
 
     const designs = await catalogueDesignRepository.getDesignsByGame(idGame)
 
-    return designs.map((design: Design) => ({ value: design.id, name: design.name }))
+    return designs.map((design: Design) => ({ value: design.id, name: design.name, logo: design.slipcover }))
   }
 
   private async _prepareForm() {
@@ -132,12 +133,23 @@ class VOrderItemAdd extends LayoutMixin(LitElement) {
     const data = this._form.getFinalData()
     if (!data) return
 
-    console.log(data)
+    const newIdOrderItem = await orderItemRepository.create(data)
+
+    if (newIdOrderItem) {
+      this._goBack()
+    } else {
+      button.loading = false
+      throw new Error('No se ha podido añadir el diseño al pedido')
+    }
 
     button.loading = false
   }
 
   private _goBack() {
     location.href = this._routerController.getAdminRoute('orderItem', { idOrder: this.urlParams.idOrder })
+  }
+
+  private _goToEditOrder() {
+    location.href = this._routerController.getAdminRoute('orderView', { id: this.urlParams.idOrder })
   }
 }

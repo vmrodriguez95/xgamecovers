@@ -1,4 +1,4 @@
-import { FormScheme, Option } from "../form/form.types";
+import { ComplexOption, FormScheme, Option } from "../form/form.types";
 
 export const OrderItemFormScheme: FormScheme = {
   id: {
@@ -22,23 +22,12 @@ export const OrderItemFormScheme: FormScheme = {
   idDesign: {
     id: 'orderItemIdDesign',
     name: 'idDesign',
-    label: 'Id del diseño',
-    type: 'select',
+    label: 'Diseños',
+    type: 'select-preview',
     fillValue: '',
-    options: [] as Option[],
+    options: [] as ComplexOption[],
     required: false,
     readonly: false
-  },
-  name: {
-    id: 'orderItemName',
-    name: 'name',
-    label: 'Nombre',
-    type: 'text',
-    fillValue: '',
-    dependsOn: ['orderItemIdDesign'],
-    required: false,
-    readonly: true,
-    excludeValue: true
   },
   idStatus: {
     id: 'orderItemIdStatus',
@@ -95,7 +84,7 @@ export const OrderItemFormScheme: FormScheme = {
         name: 'Stealbook + Steelbook',
         value: 'Stealbook + Steelbook'
       },
-    ] as Option[],
+    ],
     required: false,
     readonly: false
   },
@@ -123,15 +112,6 @@ export const OrderItemFormScheme: FormScheme = {
     label: 'Anotaciones',
     type: 'textarea',
     fillValue: '',
-    required: false,
-    readonly: false
-  },
-  totalItems: {
-    id: 'orderTotalItems',
-    name: 'totalItems',
-    label: 'Total de diseños',
-    type: 'hidden',
-    fillValue: 0,
     required: false,
     readonly: false
   }

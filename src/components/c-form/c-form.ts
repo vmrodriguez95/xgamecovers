@@ -159,6 +159,22 @@ export class CForm extends LitElement {
             @change=${(ev: Event) => this._updateSchemeValue(field, ev)}
           ></e-select-multiple>
         `
+      case 'select-preview':
+        return html`
+          <e-select-preview
+            id=${field.id}
+            class=${this._getInputClasses(field)}
+            name=${field.name}
+            label=${field.label}
+            .options=${field.options}
+            ?required=${field.required}
+            ?readonly=${field.readonly}
+            helpmsg=${field.helpmsg}
+            value=${field.fillValue}
+            tabindex="0"
+            @change=${(ev: Event) => this._updateSchemeValue(field, ev)}
+          ></e-select-preview>
+        `
       case 'checkbox':
         return html`
           <e-checkbox
@@ -297,14 +313,10 @@ export class CForm extends LitElement {
     mainField.options = this._getNewOptions(select, dependency)
   }
 
-  private _selectHandler(mainField: ESelect, select: ESelect, dependency: Dependency) {
-    mainField.options = this._getNewOptions(select, dependency)
-  }
-
   private _attachDependencyActionSelectToSelect(mainField: ESelect, select: ESelect, dependency: Dependency) {
     if (!dependency.cb) {
       dependency.cb = () => {
-        this._selectHandler(mainField, select, dependency)
+        this._dependencyActionSelectToSelect(mainField, select, dependency)
       }
     }
 
@@ -315,8 +327,10 @@ export class CForm extends LitElement {
   }
 
   private _associateDependency(dependency: Dependency) {
-    const mainField = this.shadowRoot?.querySelector(`#${dependency.field.id}${dependency.index !== undefined ? `-${dependency.index}` : ''}`) as EInput | ESelect
-    const dependencyFields = this.shadowRoot?.querySelectorAll(`#${dependency.dependencies.join(', #')}`)
+    if (!this.shadowRoot) return
+
+    const mainField = this.shadowRoot.querySelector(`#${dependency.field.id}${dependency.index !== undefined ? `-${dependency.index}` : ''}`) as EInput | ESelect
+    const dependencyFields = this.shadowRoot.querySelectorAll(`#${dependency.dependencies.join(', #')}`)
 
     if (!mainField || !dependencyFields) return
     
@@ -327,7 +341,6 @@ export class CForm extends LitElement {
         this._dependencyActionTextToText(mainField as EInput, input as EInput, dependency)
         this._attachDependencyActionTextToText(mainField as EInput, input as EInput, dependency)
       } else if (mainField.tagName === 'E-SELECT' && input.tagName === 'E-SELECT') {
-        console.log(mainField, input)
         this._dependencyActionSelectToSelect(mainField as ESelect, input as ESelect, dependency)
         this._attachDependencyActionSelectToSelect(mainField as ESelect, input as ESelect, dependency)
       }
@@ -374,7 +387,7 @@ export class CForm extends LitElement {
       }
       // Si es un campo normal y corriente pasamos por aquí
       else {
-        if (field.excludeValue) {
+        if (field.excludeValue && applyExcludes) {
           delete newScheme[key]
         } else {
           newScheme[key] = field.fillValue
