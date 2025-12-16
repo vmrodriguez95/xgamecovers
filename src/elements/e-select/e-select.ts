@@ -12,7 +12,7 @@ import { Option } from '../../domain/form/form.types.ts'
 import style from './e-select.style.scss?inline'
 
 @customElement('e-select')
-class ESelect extends LitElement {
+export class ESelect extends LitElement {
 
   private _internals: ElementInternals
 

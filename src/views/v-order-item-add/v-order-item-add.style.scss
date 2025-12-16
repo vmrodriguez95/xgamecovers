@@ -3,7 +3,7 @@
 
 .v-order-item-add {
   display: block;
-  padding: space(2) var(--grid-margin);
+  padding: space(2) var(--grid-margin) space(10);
   box-sizing: border-box;
 
   &__actions {
