@@ -6,6 +6,7 @@ export const CatalogueFactory = {
       id: data.id,
       name: data.name ?? '',
       consoles: data.consoles ?? [],
+      socialMedia: data.socialMedia ?? [],
       createdAt: data.createdAt ?? '',
       updatedAt: data.updatedAt ?? ''
     }

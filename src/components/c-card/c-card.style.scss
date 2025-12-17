@@ -3,12 +3,14 @@
 
 .c-card {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: flex-start;
   position: relative;
   box-shadow: 0 3px 10px 0 rgba(var(--color-dark), 0.5);
   border-radius: space(1);
   min-height: space(25);
   padding: space(0.5);
+  box-sizing: border-box;
   
   &__background {
     display: block;
@@ -20,11 +22,11 @@
     object-fit: cover;
     object-position: center;
     border-radius: space(1);
+    z-index: -1;
   }
 
   &__consoles {
     --eIconColor: var(--color-dark);
-    position: relative;
     display: flex;
     max-width: max-content;
     gap: space(0.5);
@@ -34,18 +36,25 @@
     padding: space(0.5);
   }
 
-  &__caption {
+  &__platforms {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
+    max-width: max-content;
+    gap: space(0.5);
+    align-items: center;
+    background: rgba(var(--color-light), 0.9);
+    border-radius: space(0.5);
+    padding: space(0.5);
+    margin-left: auto;
+  }
+
+  &__caption {
     text-align: center;
     color: rgba(var(--color-dark), 1);
     background: rgba(var(--color-light), 0.9);
     padding: space(1);
     box-sizing: border-box;
     border-radius: space(1);
-    justify-self: flex-end;
+    width: 100%;
     margin-top: auto;
   }
   

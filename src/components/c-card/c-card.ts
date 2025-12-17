@@ -1,6 +1,7 @@
 import { LitElement, html, css, unsafeCSS } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import { map } from 'lit/directives/map.js'
+import { when } from 'lit/directives/when.js'
 
 // Styles
 import style from './c-card.style.scss?inline'
@@ -14,6 +15,8 @@ class CCard extends LitElement {
 
   @property({ type: Array }) consoles = []
 
+  @property({ type: Array }) platforms = []
+
   static styles = css`${unsafeCSS(style)}`
 
   render() {
@@ -25,6 +28,13 @@ class CCard extends LitElement {
             <e-icon icon=${console} size="xs"></e-icon>
           `)}
         </div>
+        ${when(this.platforms.length > 0, () => html`
+          <div class="c-card__platforms">
+            ${map(this.platforms, (platform: string) => html`
+              <img class="c-card__platform" src="/images/logos/${platform}.png" alt="Logo ${platform}" width="8" height="8" />
+            `)}
+          </div>
+        `)}
         <div class="c-card__caption">
           <p class="c-card__name">${this.name}</p>
         </div>

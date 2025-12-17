@@ -1,7 +1,8 @@
 import { LitElement, html, css, unsafeCSS } from 'lit'
-import { customElement, property, state } from 'lit/decorators.js'
+import { customElement, property } from 'lit/decorators.js'
 import { map } from 'lit/directives/map.js'
 import { when } from 'lit/directives/when.js'
+import { classMap } from 'lit/directives/class-map.js'
 
 // Types
 import { ComplexOption } from '../../domain/form/form.types'
@@ -57,7 +58,7 @@ class ESelectMultiple extends LitElement {
         `)}
         <div class="e-select-multiple__wrapper">
           ${map(this.options, (option, index) => html`
-            <label class="e-select-multiple__fake-field e-select-multiple__fake-field--${option.color}" for="${this.id}-${index}">
+            <label class=${this._getLabelClasses(option)} for="${this.id}-${index}">
               <input
                 id="${this.id}-${index}"
                 name=${this.name}
@@ -69,7 +70,12 @@ class ESelectMultiple extends LitElement {
                 ?checked=${this.value.includes(option.value)}
                 @change=${this._onChange}
               />
-              <e-icon class="e-select-multiple__icon" icon="${option.logo}"></e-icon>
+              <e-logo
+                logo=${option.color ? '' : option.logo}
+                icon=${option.color ? option.logo : ''}
+                color=${option.color}
+                ?active=${this.value.includes(option.value)}
+              ></e-logo>
             </label>
           `)}
         </div>
@@ -81,6 +87,13 @@ class ESelectMultiple extends LitElement {
         `)}
       </div>
     `
+  }
+
+  private _getLabelClasses(option: ComplexOption) {
+    return classMap({
+      'e-select-multiple__fake-field': true,
+      [`e-select-multiple__fake-field--${option.color}`]: option.color
+    })
   }
 
   private _valueExists(value: string) {

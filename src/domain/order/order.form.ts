@@ -69,15 +69,6 @@ export const OrderFormScheme: FormScheme = {
     required: false,
     readonly: false
   },
-  discount: {
-    id: 'orderDiscount',
-    name: 'discount',
-    label: 'Descuento aplicado',
-    type: 'hidden',
-    fillValue: 0,
-    required: false,
-    readonly: false
-  },
   finalPrice: {
     id: 'orderFinalPrice',
     name: 'finalPrice',
@@ -114,26 +105,17 @@ export const OrderFormScheme: FormScheme = {
     options: [
       {
         name: 'Wallapop',
-        value: 'wallapop'
+        value: 'Wallapop'
       },
       {
         name: 'Vinted',
-        value: 'vinted'
+        value: 'Vinted'
       },
       {
         name: 'Bizum',
-        value: 'bizum'
+        value: 'Bizum'
       }
     ] as Option[],
-    required: false,
-    readonly: false
-  },
-  date: {
-    id: 'orderDate',
-    name: 'date',
-    label: 'Fecha',
-    type: 'datetime-local',
-    fillValue: '',
     required: false,
     readonly: false
   },

@@ -66,15 +66,11 @@ class VOrderNew extends LayoutMixin(LitElement) {
   }
 
   private _setFormData(order: Order) {
-    this._formscheme.id.fillValue = order.id
-    this._formscheme.idStatus.fillValue = order.idStatus
-    this._formscheme.name.fillValue = order.name
-    this._formscheme.whatsapp.fillValue = order.whatsapp
-    this._formscheme.wallapop.fillValue = order.wallapop
-    this._formscheme.vinted.fillValue = order.vinted
-    this._formscheme.instagram.fillValue = order.instagram
-    this._formscheme.finalPrice.fillValue = order.finalPrice
-    this._formscheme.address.fillValue = order.address
+    (Object.keys(order) as Array<keyof Order>).forEach((key) => {
+      if (this._formscheme[key]) {
+        this._formscheme[key].fillValue = order[key]
+      }
+    })
   }
 
   private async _loadOrderData() {

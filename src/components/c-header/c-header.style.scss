@@ -1,9 +1,11 @@
+@use '../../styles/tools/tools' as *;
 @use '../../styles/tools/typography' as *;
 
 .c-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: space(1);
   padding: var(--grid-margin);
   box-sizing: border-box;
   box-shadow: 0 3px 10px 0 rgba(var(--color-dark), 1);
@@ -12,10 +14,15 @@
     background: none;
     border: none;
     cursor: pointer;
+    padding: 0;
   }
 
   &__title {
-    @include body--xl;
+    @include body--l;
     margin: 0;
+    color: rgba(var(--color-dark), 1);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 }

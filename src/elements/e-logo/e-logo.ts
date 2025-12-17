@@ -11,6 +11,8 @@ export class ELogo extends LitElement {
 
   @property({ type: String }) icon = ''
 
+  @property({ type: String }) logo = ''
+
   @property({ type: String }) size = ''
 
   @property({ type: String }) color = ''
@@ -28,10 +30,13 @@ export class ELogo extends LitElement {
           [`e-logo--${this.size}`]: this.size,
           [`e-logo--${this.color}`]: this.color
         })}
-        ?active=${this.active}
       >
         ${when(this.icon, () => html`
           <e-icon icon=${this.icon} size=${this.size || 'l'}></e-icon>
+        `)}
+
+        ${when(this.logo && !this.icon, () => html`
+          <img src="/images/logos/${this.logo}.png" width="48" height="48">
         `)}
       </div>
     `

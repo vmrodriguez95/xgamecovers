@@ -41,11 +41,11 @@
   }
 
   &__designs,
-  &__consoles {
+  &__logos {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: space(1);
+    gap: space(2);
     margin-top: space(2);
   }
 
@@ -84,5 +84,9 @@
     @include body--m(600);
     margin: 0 0 space(3);
     color: rgba(var(--color-dark), 1);
+  }
+
+  &__logo {
+    border-radius: space(1);
   }
 }

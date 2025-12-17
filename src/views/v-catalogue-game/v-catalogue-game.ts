@@ -104,7 +104,7 @@ class VCatalogueGame extends LayoutMixin(LitElement) {
             <h1 class="v-catalogue-game__name">${this._lastDesignChoosen?.name}</h1>
           `)}
           <p class="v-catalogue-game__title">Plataformas</p>
-          <div class="v-catalogue-game__consoles">
+          <div class="v-catalogue-game__logos">
             ${map(this._consoles, (console: Console) => html`
               <e-logo
                 icon=${console.logo}
@@ -113,6 +113,14 @@ class VCatalogueGame extends LayoutMixin(LitElement) {
               ></e-logo>
             `)}
           </div>
+          ${when(this._game && this._game.socialMedia, () => html`
+            <p class="v-catalogue-game__title">Publicaciones</p>
+            <div class="v-catalogue-game__logos">
+              ${map(this._game.socialMedia, (platform: string) => html`
+                <img class="v-catalogue-game__logo" src="/images/logos/${platform}.png" width="48" height="48" alt="${platform}">
+              `)}
+            </div>
+          `)}
         </div>
       </div>
     `, this.heading)

@@ -1,4 +1,4 @@
-import { FormScheme, Option } from "../form/form.types";
+import { ComplexOption, FormScheme } from "../form/form.types"
 
 export const CatalogueFormScheme: FormScheme = {
   id: {
@@ -122,7 +122,33 @@ export const CatalogueFormScheme: FormScheme = {
     name: 'consoles',
     label: 'Consolas',
     type: 'select-multiple',
-    options: [] as Option[],
+    options: [] as ComplexOption[],
+    fillValue: [],
+    required: true,
+    readonly: false
+  },
+  socialMedia: {
+    id: 'catalogueSocialMedia',
+    name: 'socialMedia',
+    label: 'Publicaciones',
+    type: 'select-multiple',
+    options: [
+      {
+        value: 'vinted',
+        name: 'Vinted',
+        logo: 'vinted'
+      },
+      {
+        value: 'instagram',
+        name: 'Instagram',
+        logo: 'instagram'
+      },
+      {
+        value: 'wallapop',
+        name: 'Wallapop',
+        logo: 'wallapop'
+      }
+    ] as ComplexOption[],
     fillValue: [],
     required: true,
     readonly: false
