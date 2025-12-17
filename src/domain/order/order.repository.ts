@@ -10,6 +10,12 @@ export class OrderRepository {
     return data.map(OrderFactory.fromApi)
   }
 
+  async getAllOrderedByDate(): Promise<Order[]> {
+    const data = await rtdbService.getAllOrderedBy(PATH, 'updatedAt')
+
+    return data.map(OrderFactory.fromApi)
+  }
+
   async getById(id: string): Promise<Order | null> {
     const data = await rtdbService.getById(PATH, id)
     return data ? OrderFactory.fromApi(data) : null

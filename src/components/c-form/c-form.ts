@@ -263,7 +263,7 @@ export class CForm extends LitElement {
         field.fillValue = input.checked
         break
       case 'number':
-        field.fillValue = parseInt(input.value)
+        field.fillValue = Number(input.value)
         break
       case 'file':
         field.files = input.files

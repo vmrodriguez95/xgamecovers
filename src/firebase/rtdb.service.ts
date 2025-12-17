@@ -73,6 +73,7 @@ class RTDBService {
   }
 
   async set<T>(path: string, data: T) {
+    const date = new Date().toISOString()
     const newRef = push(this.ref(path))
     const technicalId = newRef.key
 
@@ -83,7 +84,8 @@ class RTDBService {
       {
         ...data,
         id: technicalId,
-        createdAt: new Date().toISOString(),
+        createdAt: date,
+        updatedAt: date,
       }
     )
 

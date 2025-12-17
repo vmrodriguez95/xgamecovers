@@ -6,12 +6,10 @@ export interface Order {
   wallapop: string
   instagram: string
   vinted: string
-  discount: number
   finalPrice: number
   address: string
   payment: string
   delivery: number
-  date: string
   totalItems: number
   createdAt: string
   updatedAt: string

@@ -53,7 +53,7 @@ class VOrder extends LayoutMixin(LitElement) {
               <c-card-order
                 .status=${this._getStatusById(order.idStatus)}
                 name=${order.name}
-                date=${order.date || order.createdAt}
+                date=${order.createdAt}
                 money=${order.finalPrice}
                 .rrss=${this._getRRSS(order)}
                 totalItems=${order.totalItems}
@@ -67,7 +67,7 @@ class VOrder extends LayoutMixin(LitElement) {
   }
 
   private async _loadOrders() {
-    this._orders = await orderRepository.getAll()
+    this._orders = await orderRepository.getAllOrderedByDate()
   }
 
   private async _loadStatus() {

@@ -96,6 +96,7 @@ class VCatalogue extends LayoutMixin(LitElement) {
           name=${game.name}
           image=${design?.poster}
           .consoles=${this._getConsoleLogos(game)}
+          .platforms=${authStore.user ? game.socialMedia : []}
         ></c-card>
       </a>
     `

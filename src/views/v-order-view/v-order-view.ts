@@ -93,7 +93,7 @@ class VOrderView extends LayoutMixin(LitElement) {
               money=${this._order?.finalPrice}
               hideStatus=${true}
               hideDesigns=${true}
-              date=${this._order?.date || this._order?.createdAt}
+              date=${this._order?.createdAt}
               .rrss=${this._getRRSS(this._order)}
               totalItems=${this._order?.totalItems}
             ></c-card-order>
@@ -101,7 +101,6 @@ class VOrderView extends LayoutMixin(LitElement) {
           ${when(this._order?.address, () => html`
             <div class="v-order-view__address">
               <e-icon icon="location"></e-icon> ${this._order?.address}
-              <e-icon icon="truck"></e-icon> ${this._order?.delivery}
             </div>
           `)}
           <div class="v-order-view__pill">
@@ -111,7 +110,7 @@ class VOrderView extends LayoutMixin(LitElement) {
             <e-icon icon="credit-card"></e-icon> ${this._calculateTotalPrice()}€
           </div>
           <div class="v-order-view__pill">
-            <e-icon icon="discount"></e-icon> ${this._calculateDiscount()}%
+            <e-icon icon="truck"></e-icon> ${this._order?.delivery}€
           </div>
           <div class="v-order-view__status v-order-view__status--${this._orderStatus?.color}">
             ${this._orderStatus?.name}

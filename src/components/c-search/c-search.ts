@@ -17,6 +17,9 @@ class CSearch extends LitElement {
           id="search"
           type="text"
           placeholder="Buscar juego"
+          name="search"
+          autocomplete="off"
+          value=""
         ></e-input>
       </div>
     `
