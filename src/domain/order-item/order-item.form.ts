@@ -66,7 +66,7 @@ export const OrderItemFormScheme: FormScheme = {
     name: 'combination',
     label: 'Combinación',
     type: 'select',
-    fillValue: '',
+    fillValue: 'Juego',
     options: [
       {
         name: 'Juego',
@@ -81,19 +81,14 @@ export const OrderItemFormScheme: FormScheme = {
         value: 'Juego + Steelbook'
       },
       {
-        name: 'Stealbook + Steelbook',
-        value: 'Stealbook + Steelbook'
+        name: 'Steelbook',
+        value: 'Steelbook'
       },
-    ],
-    required: false,
-    readonly: false
-  },
-  date: {
-    id: 'orderDate',
-    name: 'date',
-    label: 'Fecha',
-    type: 'datetime-local',
-    fillValue: '',
+      {
+        name: 'Steelbook + Steelbook',
+        value: 'Steelbook + Steelbook'
+      },
+    ] as Option[],
     required: false,
     readonly: false
   },
@@ -102,7 +97,7 @@ export const OrderItemFormScheme: FormScheme = {
     name: 'price',
     label: 'Precio del diseño',
     type: 'number',
-    fillValue: 0,
+    fillValue: 6,
     required: false,
     readonly: false
   },

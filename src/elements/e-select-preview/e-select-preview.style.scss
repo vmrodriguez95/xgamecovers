@@ -30,11 +30,14 @@
 
   &__option {
     border-radius: space(1);
-    max-height: space(9);
+    max-height: space(20);
     overflow: hidden;
+    transition: transform 0.3s ease;
+    transform: scale(0.9);
 
     &--active {
       outline: 2px solid rgba(var(--color-primary), 1);
+      transform: scale(1.1);
     }
   }
 
@@ -42,7 +45,6 @@
     max-width: 100%;
     height: auto;
     object-fit: cover;
-    object-position: 0 72%;
   }
 
   &__helpmsg {
