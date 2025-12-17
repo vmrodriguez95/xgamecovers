@@ -26,7 +26,7 @@ export const OrderFormScheme: FormScheme = {
     label: 'Nombre',
     type: 'text',
     fillValue: '',
-    required: true,
+    required: false,
     readonly: false
   },
   whatsapp: {
@@ -90,7 +90,7 @@ export const OrderFormScheme: FormScheme = {
   delivery: {
     id: 'orderDelivery',
     name: 'delivery',
-    label: 'Precio total acordado',
+    label: 'Coste del envío',
     type: 'number',
     fillValue: 0,
     required: false,
@@ -132,7 +132,7 @@ export const OrderFormScheme: FormScheme = {
     id: 'orderDate',
     name: 'date',
     label: 'Fecha',
-    type: 'date',
+    type: 'datetime-local',
     fillValue: '',
     required: false,
     readonly: false

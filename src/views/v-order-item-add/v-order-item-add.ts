@@ -28,6 +28,7 @@ import { OrderItemFormScheme } from '../../domain/order-item/order-item.form.ts'
 
 // Styles
 import style from './v-order-item-add.style.scss?inline'
+import { orderRepository } from '../../domain/order/order.repository.ts'
 
 @customElement('v-order-item-add')
 class VOrderItemAdd extends LayoutMixin(LitElement) {
@@ -103,7 +104,7 @@ class VOrderItemAdd extends LayoutMixin(LitElement) {
 
     const designs = await catalogueDesignRepository.getDesignsByGame(idGame)
 
-    return designs.map((design: Design) => ({ value: design.id, name: design.name, logo: design.slipcover }))
+    return designs.map((design: Design) => ({ value: design.id, name: design.name, logo: design.poster }))
   }
 
   private async _prepareForm() {
@@ -126,6 +127,16 @@ class VOrderItemAdd extends LayoutMixin(LitElement) {
     this._formScheme = newScheme
   }
 
+  private async _incrementOrderItemCounter() {
+    const order = await orderRepository.getById(this.urlParams.idOrder || '')
+
+    if (!order) return
+
+    order.totalItems = order.totalItems + 1
+
+    await orderRepository.update(order.id, order)
+  }
+
   private async _addHandler(ev: Event) {
     const button = ev.currentTarget as EButton
     button.loading = true
@@ -136,6 +147,7 @@ class VOrderItemAdd extends LayoutMixin(LitElement) {
     const newIdOrderItem = await orderItemRepository.create(data)
 
     if (newIdOrderItem) {
+      await this._incrementOrderItemCounter()
       this._goToEditOrder()
     } else {
       button.loading = false

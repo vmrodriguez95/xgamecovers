@@ -16,15 +16,3 @@ export interface Order {
   createdAt: string
   updatedAt: string
 }
-
-export interface OrderItem {
-  id: string
-  idOrder: string
-  idDesign: string
-  idStatus: string
-  idConsole: string
-  idVersion: string
-  price: number
-  createdAt: string
-  updatedAt: string
-}

@@ -18,6 +18,8 @@ class CCardDesign extends LitElement {
   @property({ type: String }) name = ''
 
   @property({ type: String }) version = ''
+
+  @property({ type: String }) combination = ''
   
   @property({ type: String }) money = ''
 
@@ -41,6 +43,7 @@ class CCardDesign extends LitElement {
           <div class="c-card-design__middle">
             <p class="c-card-design__text">${this.name}</p>
             <p class="c-card-design__text">${this.version}</p>
+            <p class="c-card-design__text">${this.combination}</p>
           </div>
           <p class="c-card-design__price">${this.money}€</p>
         </div>

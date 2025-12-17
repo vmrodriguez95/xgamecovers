@@ -12,10 +12,11 @@ import { orderItemRepository } from '../../domain/order-item/order-item.reposito
 import { catalogueDesignRepository } from '../../domain/catalogue/catalogue.repository.ts'
 
 // Types
+import { Order } from '../../domain/order/order.types.ts'
 import { Status } from '../../domain/status/status.types.ts'
 import { Version } from '../../domain/version/version.types.ts'
 import { URLParam } from '../../domain/generic/generic.types.ts'
-import { Order, OrderItem } from '../../domain/order/order.types.ts'
+import { OrderItem } from '../../domain/order-item/order-item.types.ts'
 
 // Mixins
 import { LayoutMixin } from '../../mixins/layout.mixin.ts'
@@ -147,8 +148,6 @@ class VOrderView extends LayoutMixin(LitElement) {
   private async _loadItemStatus() {
     const status = await statusRepository.getAllItems()
 
-    console.log(status)
-
     this._itemStatus = status
   }
 
@@ -223,6 +222,7 @@ class VOrderView extends LayoutMixin(LitElement) {
         class="v-order-view__design"
         name=${design?.name}
         version=${version?.name}
+        combination=${designInOrder.combination}
         money=${designInOrder.price}
         poster=${design?.poster}
         .status=${this._getStatusItemById(designInOrder.idStatus)}
