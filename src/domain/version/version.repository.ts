@@ -6,7 +6,7 @@ const PATH = 'version'
 
 class VersionRepository {
   async getAll(): Promise<Version[]> {
-    const data = await rtdbService.getAll(PATH)
+    const data = await rtdbService.getAllOrderedBy(PATH, 'order')
 
     return data.map(VersionFactory.fromApi)
   }
@@ -15,18 +15,6 @@ class VersionRepository {
     const data = await rtdbService.getById(PATH, id)
 
     return data ? VersionFactory.fromApi(data) : null
-  }
-
-  async create(data: Console) {
-    await rtdbService.set(PATH, data)
-  }
-
-  async update(id: string, partial: Partial<Console>) {
-    await rtdbService.update(PATH, id, partial)
-  }
-
-  async delete(id: string) {
-    await rtdbService.delete(PATH, id)
   }
 }
 
