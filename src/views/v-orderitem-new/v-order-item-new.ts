@@ -14,6 +14,7 @@ import { URLParam } from '../../domain/generic/generic.types.ts'
 import { Design } from '../../domain/catalogue/catalogue.types.ts'
 
 // Repository
+import { orderRepository } from '../../domain/order/order.repository.ts'
 import { statusRepository } from '../../domain/status/status.repository.ts'
 import { versionRepository } from '../../domain/version/version.repository.ts'
 import { consoleRepository } from '../../domain/console/console.repository.ts'
@@ -27,10 +28,9 @@ import { RouterController } from '../../controllers/router.controller.ts'
 import { OrderItemFormScheme } from '../../domain/order-item/order-item.form.ts'
 
 // Styles
-import style from './v-order-item-add.style.scss?inline'
-import { orderRepository } from '../../domain/order/order.repository.ts'
+import style from './v-order-item-new.style.scss?inline'
 
-@customElement('v-order-item-add')
+@customElement('v-order-item-new')
 class VOrderItemAdd extends LayoutMixin(LitElement) {
 
   @property({ type: Object }) heading: string = ''
@@ -53,14 +53,16 @@ class VOrderItemAdd extends LayoutMixin(LitElement) {
 
   render() {
     return this.layoutGrid(html`
-      <div class="v-order-item-add">
+      <div class="v-order-item-new">
         <c-form
-          class="v-order-item-add__form"
+          class="v-order-item-new__form"
           .scheme=${this._formScheme}
         ></c-form>
-        <div class="v-order-item-add__actions">
-          <e-button class="v-order-item-add__button" size="full" @click=${this._goBack}>Cancelar</e-button>
-          <e-button class="v-order-item-add__button" size="full" @click=${this._addHandler}>Añadir</e-button>
+        <div class="v-order-item-new__actions">
+          <a href=${this._getURLBack()}>
+            <e-button class="v-order-item-new__button" size="full">Cancelar</e-button>
+          </a>
+          <e-button class="v-order-item-new__button" size="full" @click=${this._addHandler}>Añadir</e-button>
         </div>
       </div>
     `, this.heading)
@@ -157,8 +159,8 @@ class VOrderItemAdd extends LayoutMixin(LitElement) {
     button.loading = false
   }
 
-  private _goBack() {
-    location.href = this._routerController.getAdminRoute('orderItem', { idOrder: this.urlParams.idOrder })
+  private _getURLBack() {
+    return this._routerController.getAdminRoute('orderItem', { idOrder: this.urlParams.idOrder })
   }
 
   private _goToEditOrder() {

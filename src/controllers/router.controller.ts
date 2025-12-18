@@ -86,10 +86,10 @@ export class RouterController {
         <v-order-item .urlParams=${urlParams}></v-order-item>
       `
     },
-    orderItemAdd: {
-      path: '/order-item/:idOrder/add/:idGame',
+    orderItemNew: {
+      path: '/order-item/:idOrder/new/:idGame',
       render: (urlParams) => html`
-        <v-order-item-add .urlParams=${urlParams}></v-order-item-add>
+        <v-order-item-new .urlParams=${urlParams}></v-order-item-new>
       `
     },
     orderItemEdit: {

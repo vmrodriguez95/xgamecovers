@@ -95,7 +95,7 @@ class VOrderItem extends LayoutMixin(LitElement) {
   }
 
   private _getOrderItemAddUrl(idOrder: string = '', idGame: string) {
-    return this._routerController.getAdminRoute('orderItemAdd', { idOrder, idGame })
+    return this._routerController.getAdminRoute('orderItemNew', { idOrder, idGame })
   }
 
   private _getPreviousUrl() {
