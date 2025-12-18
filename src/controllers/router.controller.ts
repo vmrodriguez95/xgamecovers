@@ -22,91 +22,78 @@ export class RouterController {
     },
     catalogueNew: {
       path: '/catalogue/new',
-      enter: this._middleware,
       render: () => html`
         <v-catalogue-new></v-catalogue-new>
       `
     },
     catalogueGame: {
       path: '/catalogue/game/:id',
-      enter: this._middleware,
       render: (params: Object) => html`
         <v-catalogue-game .urlParams=${params}></v-catalogue-game>
       `,
     },
     catalogueEdit: {
       path: '/catalogue/edit/:id',
-      enter: this._middleware,
       render: (params: Object) => html`
         <v-catalogue-edit .urlParams=${params}></v-catalogue-edit>
       `
     },
     transaction: {
       path: '/transaction',
-      enter: this._middleware,
       render: () => html`
         <v-transaction></v-transaction>
       `
     },
     transactionNew: {
       path: '/transaction/new',
-      enter: this._middleware,
       render: () => html`
         <v-transaction-new></v-transaction-new>
       `
     },
     transactionEdit: {
       path: '/transaction/:id',
-      enter: this._middleware,
       render: (params: Object) => html`
         <v-transaction-edit .urlParams=${params}></v-transaction-edit>
       `
     },
     order: {
       path: '/order',
-      enter: this._middleware,
       render: () => html`
         <v-order heading="Pedidos"></v-order>
       `
     },
     orderNew: {
       path: '/order/new',
-      enter: this._middleware,
       render: () => html`
         <v-order-new heading="Nuevo Pedido"></v-order-new>
       `
     },
     orderEdit: {
       path: '/order/edit/:id',
-      enter: this._middleware,
       render: (params: Object) => html`
         <v-order-edit .urlParams=${params}></v-order-edit>
       `
     },
     orderView: {
       path: '/order/:id',
-      enter: this._middleware,
       render: (params: Object) => html`
         <v-order-view .urlParams=${params}></v-order-view>
       `
     },
     orderItem: {
       path: '/order-item/:idOrder',
-      enter: this._middleware,
       render: (urlParams) => html`
         <v-order-item .urlParams=${urlParams}></v-order-item>
       `
     },
     orderItemAdd: {
       path: '/order-item/:idOrder/add/:idGame',
-      enter: this._middleware,
       render: (urlParams) => html`
         <v-order-item-add .urlParams=${urlParams}></v-order-item-add>
       `
     },
     orderItemEdit: {
       path: '/order-item/:idOrder/edit/:idOrderItem',
-      enter: this._middleware,
       render: (urlParams) => html`
         <v-order-item-edit .urlParams=${urlParams}></v-order-item-edit>
       `,
