@@ -64,12 +64,10 @@ class VCatalogueGame extends LayoutMixin(LitElement) {
           <a class="v-catalogue-game__button" href=${this._routerController.getAdminRoute('catalogue', {})}>
             <e-icon icon="arrow-left"></e-icon>
           </a>
-          ${when(authStore.user && this._game, () => html`
+          ${when(authStore.isLogged() && this._game, () => html`
             <a class="v-catalogue-game__button" href=${this._routerController.getAdminRoute('catalogueEdit', { id: this._game?.id })}>
               <e-icon icon="edit"></e-icon>
             </a>
-          `)}
-          ${when(authStore.user && this._game, () => html`
             <button class="v-catalogue-game__button" @click=${this._deleteHandler}>
               <e-icon icon="delete"></e-icon>
             </button>

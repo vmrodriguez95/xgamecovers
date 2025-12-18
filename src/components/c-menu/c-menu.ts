@@ -21,6 +21,7 @@ class CHeader extends LitElement {
       'c-menu': true,
       'c-menu--active': this.opened
     })
+
     return html`
       <nav class=${classes}>
         <ul class="c-menu__list">
@@ -30,33 +31,28 @@ class CHeader extends LitElement {
           <li class="c-menu__item">
             <a href="/catalogue" class="c-menu__link"><e-icon icon="gamepad"></e-icon>Catálogo</a>
           </li>
-          ${when(authStore.user, () => html`
+          ${when(authStore.isLogged(), () => html`
             <li class="c-menu__item">
               <a href="/order" class="c-menu__link"><e-icon icon="storefront"></e-icon>Pedidos</a>
             </li>
-          `)}
-          ${when(authStore.user, () => html`
             <li class="c-menu__item">
               <a href="/transaction" class="c-menu__link"><e-icon icon="receipt"></e-icon>Transacciones</a>
             </li>
           `)}
           <li class="c-menu__item c-menu__item--last">
-            ${when(!authStore.user, () => html`
+            ${when(!authStore.isLogged(), () => html`
               <e-button icon="person" @click=${this._onLogin}>
-                <span><e-icon icon="person"></e-icon> Iniciar sesión</span>
+                <e-icon icon="person"></e-icon> Iniciar sesión
               </e-button>
             `, () => html`
               <e-button icon="person" @click=${this._onLogout}>
-                <span><e-icon icon="person"></e-icon> Cerrar sesión</span>
+                <e-icon icon="person"></e-icon> Cerrar sesión
               </e-button>
             `)}
           </li>
         </ul>
       </nav>
-      <div
-        class="c-menu__overlay ${this.opened ? 'c-menu__overlay--active' : ''}"
-        @click=${this._onClose}
-      ></div>
+      <div class="c-menu__overlay ${this.opened ? 'c-menu__overlay--active' : ''}" @click=${this._onClose}></div>
     `
   }
 

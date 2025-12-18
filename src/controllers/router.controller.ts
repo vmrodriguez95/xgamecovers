@@ -1,6 +1,8 @@
 import { html } from 'lit'
 import { StrictRouteConfig } from '../domain/router/router.types'
 import { authService } from '../firebase/auth.service'
+import { auth } from '../firebase'
+import { authStore } from '../domain/auth/auth.store'
 
 export class RouterController {
   host
@@ -20,93 +22,94 @@ export class RouterController {
     },
     catalogueNew: {
       path: '/catalogue/new',
+      enter: this._middleware,
       render: () => html`
         <v-catalogue-new></v-catalogue-new>
-      `,
-      enter: this._middleware
+      `
     },
     catalogueGame: {
       path: '/catalogue/game/:id',
+      enter: this._middleware,
       render: (params: Object) => html`
         <v-catalogue-game .urlParams=${params}></v-catalogue-game>
       `,
     },
     catalogueEdit: {
       path: '/catalogue/edit/:id',
+      enter: this._middleware,
       render: (params: Object) => html`
         <v-catalogue-edit .urlParams=${params}></v-catalogue-edit>
-      `,
-      enter: this._middleware
+      `
     },
     transaction: {
       path: '/transaction',
+      enter: this._middleware,
       render: () => html`
         <v-transaction></v-transaction>
-      `,
-      enter: this._middleware
+      `
     },
     transactionNew: {
       path: '/transaction/new',
+      enter: this._middleware,
       render: () => html`
         <v-transaction-new></v-transaction-new>
-      `,
-      enter: this._middleware
+      `
     },
     transactionEdit: {
       path: '/transaction/:id',
+      enter: this._middleware,
       render: (params: Object) => html`
         <v-transaction-edit .urlParams=${params}></v-transaction-edit>
-      `,
-      enter: this._middleware
+      `
     },
     order: {
       path: '/order',
+      enter: this._middleware,
       render: () => html`
         <v-order heading="Pedidos"></v-order>
-      `,
-      enter: this._middleware
+      `
     },
     orderNew: {
       path: '/order/new',
+      enter: this._middleware,
       render: () => html`
         <v-order-new heading="Nuevo Pedido"></v-order-new>
-      `,
-      enter: this._middleware
+      `
     },
     orderEdit: {
       path: '/order/edit/:id',
+      enter: this._middleware,
       render: (params: Object) => html`
         <v-order-edit .urlParams=${params}></v-order-edit>
-      `,
-      enter: this._middleware
+      `
     },
     orderView: {
       path: '/order/:id',
+      enter: this._middleware,
       render: (params: Object) => html`
         <v-order-view .urlParams=${params}></v-order-view>
-      `,
-      enter: this._middleware
+      `
     },
     orderItem: {
       path: '/order-item/:idOrder',
+      enter: this._middleware,
       render: (urlParams) => html`
         <v-order-item .urlParams=${urlParams}></v-order-item>
-      `,
-      enter: this._middleware
+      `
     },
     orderItemAdd: {
       path: '/order-item/:idOrder/add/:idGame',
+      enter: this._middleware,
       render: (urlParams) => html`
         <v-order-item-add .urlParams=${urlParams}></v-order-item-add>
-      `,
-      enter: this._middleware
+      `
     },
     orderItemEdit: {
       path: '/order-item/:idOrder/edit/:idOrderItem',
+      enter: this._middleware,
       render: (urlParams) => html`
         <v-order-item-edit .urlParams=${urlParams}></v-order-item-edit>
       `,
-      enter: this._middleware
     },
     error: {
       path: '(.*)',
@@ -154,17 +157,13 @@ export class RouterController {
     return routeReplaced
   }
 
-  private async _middleware(): Promise<boolean> {
-    return new Promise((resolve) => {
-      authService.listenAuthChanges((user) => {
-        if (!user) {
-          location.href = '/'
-          resolve(false)
-        }
-    
-        resolve(true)
-      })
-    })
+  private _middleware() {
+    if (!authStore.isLogged()) {
+      location.href = '/'
+      return false
+    }
+
+    return true
   }
 
   getRoutes() {

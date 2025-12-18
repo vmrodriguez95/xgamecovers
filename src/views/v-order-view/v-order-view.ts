@@ -75,12 +75,10 @@ class VOrderView extends LayoutMixin(LitElement) {
             <a class="v-order-view__button" href=${this._routerController.getAdminRoute('order', {})}>
               <e-icon icon="arrow-left"></e-icon>
             </a>
-            ${when(authStore.user && this._order, () => html`
+            ${when(authStore.isLogged() && this._order, () => html`
               <a class="v-order-view__button" href=${this._routerController.getAdminRoute('orderEdit', { id: this._order?.id })}>
                 <e-icon icon="edit"></e-icon>
               </a>
-            `)}
-            ${when(authStore.user && this._order, () => html`
               <button class="v-order-view__button" @click=${this._deleteHandler}>
                 <e-icon icon="delete"></e-icon>
               </button>
