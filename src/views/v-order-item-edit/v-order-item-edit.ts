@@ -15,7 +15,6 @@ import { Design } from '../../domain/catalogue/catalogue.types.ts'
 import { OrderItem } from '../../domain/order-item/order-item.types.ts'
 
 // Repository
-import { orderRepository } from '../../domain/order/order.repository.ts'
 import { statusRepository } from '../../domain/status/status.repository.ts'
 import { versionRepository } from '../../domain/version/version.repository.ts'
 import { consoleRepository } from '../../domain/console/console.repository.ts'
@@ -147,16 +146,6 @@ class VOrderItemEdit extends LayoutMixin(LitElement) {
     this._formScheme = newScheme
   }
 
-  private async _incrementOrderItemCounter() {
-    const order = await orderRepository.getById(this.urlParams.idOrder || '')
-
-    if (!order) return
-
-    order.totalItems = order.totalItems + 1
-
-    await orderRepository.update(order.id, order)
-  }
-
   private async _editHandler(ev: Event) {
     const button = ev.currentTarget as EButton
     button.loading = true
@@ -165,7 +154,6 @@ class VOrderItemEdit extends LayoutMixin(LitElement) {
     if (!data || !this._orderItem) return
 
     await orderItemRepository.update(this._orderItem.id, data)
-    await this._incrementOrderItemCounter()
     this._goBack()
 
     button.loading = false
