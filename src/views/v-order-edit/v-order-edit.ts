@@ -30,7 +30,7 @@ class VOrderNew extends LayoutMixin(LitElement) {
 
   @property({ type: Object }) urlParams!: URLParam
 
-  @state() _formscheme = OrderFormScheme
+  @state() _formScheme = OrderFormScheme
 
   @query('c-form') form!: HTMLFormElement
 
@@ -53,7 +53,7 @@ class VOrderNew extends LayoutMixin(LitElement) {
         <div class="v-order-edit">
           <c-form
             class="v-order-edit__form"
-            .scheme=${this._formscheme}
+            .scheme=${this._formScheme}
           ></c-form>
           <div class="v-order-edit__actions">
             <e-button class="v-order-edit__button" size="full" @click=${this._goToOrderView}>cancelar</e-button>
@@ -67,8 +67,8 @@ class VOrderNew extends LayoutMixin(LitElement) {
 
   private _setFormData(order: Order) {
     (Object.keys(order) as Array<keyof Order>).forEach((key) => {
-      if (this._formscheme[key]) {
-        this._formscheme[key].fillValue = order[key]
+      if (this._formScheme[key]) {
+        this._formScheme[key].fillValue = order[key]
       }
     })
   }
@@ -92,12 +92,12 @@ class VOrderNew extends LayoutMixin(LitElement) {
   }
 
   private async _fillStatusOptions() {
-    const newscheme = window.structuredClone(this._formscheme)
+    const newscheme = window.structuredClone(this._formScheme)
     const idStatus = newscheme.idStatus as FieldScheme
 
     idStatus.options = await this._getStatusOptions()
 
-    this._formscheme = newscheme
+    this._formScheme = newscheme
   }
 
   private async _editOrder() {
