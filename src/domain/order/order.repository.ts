@@ -13,6 +13,8 @@ export class OrderRepository {
   async getAllOrderedByDate(): Promise<Order[]> {
     const data = await rtdbService.getAllOrderedBy(PATH, 'updatedAt')
 
+    data.reverse()
+
     return data.map(OrderFactory.fromApi)
   }
 
