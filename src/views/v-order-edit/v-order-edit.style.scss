@@ -9,9 +9,9 @@
     align-items: center;
     gap: space(1);
     margin-top: space(2);
-  }
 
-  &__button {
-    flex: 1 0 auto;
+    > * {
+      flex: 1 0 auto;
+    }
   }
 }

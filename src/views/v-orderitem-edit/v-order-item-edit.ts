@@ -65,8 +65,10 @@ class VOrderItemEdit extends LayoutMixin(LitElement) {
           .scheme=${this._formScheme}
         ></c-form>
         <div class="v-order-item-edit__actions">
-          <e-button class="v-order-item-edit__button" size="full" @click=${this._goBack}>Cancelar</e-button>
-          <e-button class="v-order-item-edit__button" size="full" @click=${this._editHandler}>Editar</e-button>
+          <a href=${this._getURLBack()}>
+            <e-button size="full">Cancelar</e-button>
+          </a>
+          <e-button size="full" @click=${this._editHandler}>Editar</e-button>
         </div>
       </div>
     `, this.heading)
@@ -159,7 +161,11 @@ class VOrderItemEdit extends LayoutMixin(LitElement) {
     button.loading = false
   }
 
+  private _getURLBack() {
+    return this._routerController.getAdminRoute('orderView', { id: this.urlParams.idOrder })
+  }
+
   private _goBack() {
-    location.href = this._routerController.getAdminRoute('orderView', { id: this.urlParams.idOrder })
+    location.href = this._getURLBack()
   }
 }
