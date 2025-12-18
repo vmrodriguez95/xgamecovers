@@ -43,7 +43,7 @@ export interface FieldScheme {
   type: string
   checked?: boolean
   autocomplete?: string
-  options?: Option[]
+  options?: Option[] | ComplexOption[]
   required: boolean
   readonly: boolean
   dependsOn?: string[]

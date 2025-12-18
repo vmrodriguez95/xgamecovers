@@ -121,9 +121,11 @@ class VOrderView extends LayoutMixin(LitElement) {
             </e-button>
           </a>
           ${when(this._designs.length > 0,
-            () => map(this._designs, (design: OrderItem) =>
-              until(this._printDesign(design))
-            )
+            () => map(this._designs, (design: OrderItem) => html`
+              <a class="v-order-view__design" href=${this._routerController.getAdminRoute('orderItemEdit', { idOrder: this.urlParams.id, idOrderItem: design.id })}>
+                ${until(this._printDesign(design))}
+              </a>
+            `)
           )}
         </div>
       `,
@@ -218,7 +220,6 @@ class VOrderView extends LayoutMixin(LitElement) {
 
     return html`
       <c-card-design
-        class="v-order-view__design"
         name=${design?.name}
         version=${version?.name}
         combination=${designInOrder.combination}
