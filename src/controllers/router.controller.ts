@@ -101,6 +101,13 @@ export class RouterController {
       `,
       enter: this._middleware
     },
+    orderItemEdit: {
+      path: '/order-item/:idOrder/edit/:idOrderItem',
+      render: (urlParams) => html`
+        <v-order-item-edit .urlParams=${urlParams}></v-order-item-edit>
+      `,
+      enter: this._middleware
+    },
     error: {
       path: '(.*)',
       enter: () => {
