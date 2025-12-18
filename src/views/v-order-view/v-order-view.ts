@@ -75,12 +75,10 @@ class VOrderView extends LayoutMixin(LitElement) {
             <a class="v-order-view__button" href=${this._routerController.getAdminRoute('order', {})}>
               <e-icon icon="arrow-left"></e-icon>
             </a>
-            ${when(authStore.user && this._order, () => html`
+            ${when(authStore.isLogged() && this._order, () => html`
               <a class="v-order-view__button" href=${this._routerController.getAdminRoute('orderEdit', { id: this._order?.id })}>
                 <e-icon icon="edit"></e-icon>
               </a>
-            `)}
-            ${when(authStore.user && this._order, () => html`
               <button class="v-order-view__button" @click=${this._deleteHandler}>
                 <e-icon icon="delete"></e-icon>
               </button>
@@ -115,11 +113,13 @@ class VOrderView extends LayoutMixin(LitElement) {
           <div class="v-order-view__status v-order-view__status--${this._orderStatus?.color}">
             ${this._orderStatus?.name}
           </div>
-          <a class="v-order-view__add" href="${this._goToAddOrderItem()}">
-            <e-button icon="add">
-              <e-icon icon="add"></e-icon>
-            </e-button>
-          </a>
+          <div class="v-order-view__add">
+            <a href="${this._goToAddOrderItem()}">
+              <e-button icon="add">
+                <e-icon icon="add"></e-icon>
+              </e-button>
+            </a>
+          </div>
           ${when(this._designs.length > 0,
             () => map(this._designs, (design: OrderItem) => html`
               <a class="v-order-view__design" href=${this._routerController.getAdminRoute('orderItemEdit', { idOrder: this.urlParams.id, idOrderItem: design.id })}>

@@ -49,7 +49,7 @@ class VCatalogue extends LayoutMixin(LitElement) {
       <div class="v-catalogue">
         <div class="v-catalogue__head">
           <c-search class="v-catalogue__search"></c-search>
-          ${when(authStore.user, () => html`
+          ${when(authStore.isLogged(), () => html`
             <a href=${this._routerController.getAdminRoute('catalogueNew', {})}>
               <e-button><e-icon icon="add"></e-icon></e-button>
             </a>
@@ -96,7 +96,7 @@ class VCatalogue extends LayoutMixin(LitElement) {
           name=${game.name}
           image=${design?.poster}
           .consoles=${this._getConsoleLogos(game)}
-          .platforms=${authStore.user ? game.socialMedia : []}
+          .platforms=${authStore.isLogged() ? game.socialMedia : []}
         ></c-card>
       </a>
     `
