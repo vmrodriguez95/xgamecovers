@@ -16,7 +16,7 @@
     padding: space(2);
     box-sizing: border-box;
 
-    * {
+    > * {
       flex: 1 0 auto;
     }
   }

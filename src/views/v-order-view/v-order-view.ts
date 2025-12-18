@@ -72,11 +72,11 @@ class VOrderView extends LayoutMixin(LitElement) {
       html`
         <div class="v-order-view">
           <div class="v-order-view__actions">
-            <a class="v-order-view__button" href=${this._routerController.getAdminRoute('order', {})}>
+            <a class="v-order-view__button" href=${this._getURLBack()}>
               <e-icon icon="arrow-left"></e-icon>
             </a>
             ${when(authStore.isLogged() && this._order, () => html`
-              <a class="v-order-view__button" href=${this._routerController.getAdminRoute('orderEdit', { id: this._order?.id })}>
+              <a class="v-order-view__button" href=${this._getOrderEditURL()}>
                 <e-icon icon="edit"></e-icon>
               </a>
               <button class="v-order-view__button" @click=${this._deleteHandler}>
@@ -84,7 +84,7 @@ class VOrderView extends LayoutMixin(LitElement) {
               </button>
             `)}
           </div>
-          <a class="v-order-view__head" href=${this._routerController.getAdminRoute('orderEdit', { id: this._order?.id })}>
+          <a class="v-order-view__head" href=${this._getOrderEditURL()}>
             <c-card-order
               .status=${this._orderStatus}
               name=${this._order?.name}
@@ -114,7 +114,7 @@ class VOrderView extends LayoutMixin(LitElement) {
             ${this._orderStatus?.name}
           </div>
           <div class="v-order-view__add">
-            <a href="${this._goToAddOrderItem()}">
+            <a href="${this._getOrderItemAddURL()}">
               <e-button icon="add">
                 <e-icon icon="add"></e-icon>
               </e-button>
@@ -122,7 +122,7 @@ class VOrderView extends LayoutMixin(LitElement) {
           </div>
           ${when(this._designs.length > 0,
             () => map(this._designs, (design: OrderItem) => html`
-              <a class="v-order-view__design" href=${this._routerController.getAdminRoute('orderItemEdit', { idOrder: this.urlParams.id, idOrderItem: design.id })}>
+              <a class="v-order-view__design" href=${this.getOrderItemEditURL(design.id)}>
                 ${until(this._printDesign(design))}
               </a>
             `)
@@ -201,18 +201,27 @@ class VOrderView extends LayoutMixin(LitElement) {
   private _calculateTotalPrice() {
     return this._designs.reduce((acc, design) => acc + design.price, 0)
   }
+  
+  private _getOrderEditURL() {
+    return this._routerController.getAdminRoute('orderEdit', { id: this._order?.id })
+  }
+  
+  private _getOrderItemAddURL() {
+    return this._routerController.getAdminRoute('orderItem', { idOrder: this._order?.id })
+  }
 
-  private _calculateDiscount() {
-    return 0
+  private getOrderItemEditURL(idDesign: string) {
+    return this._routerController.getAdminRoute('orderItemEdit', { idOrder: this.urlParams.id, idOrderItem: idDesign })
+  }
+
+  private _getURLBack() {
+    return this._routerController.getAdminRoute('order', {})
   }
 
   private _goBack() {
-    location.href = this._routerController.getAdminRoute('order', {})
+    location.href = this._getURLBack()
   }
 
-  private _goToAddOrderItem() {
-    return this._routerController.getAdminRoute('orderItem', { idOrder: this._order?.id })
-  }
 
   private async _printDesign(designInOrder: OrderItem) {
     const design = await this._getDesignById(designInOrder.idDesign)

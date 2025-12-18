@@ -49,8 +49,10 @@ class VOrderNew extends LayoutMixin(LitElement) {
             .scheme=${this._formscheme}
           ></c-form>
           <div class="v-order-new__actions">
-            <e-button class="v-order-new__button" size="full" @click=${this._goBack}>cancelar</e-button>
-            <e-button class="v-order-new__button" size="full" @click=${this._createOrder}>Crear</e-button>
+            <a href="${this._getURLBack()}">
+              <e-button size="full">cancelar</e-button>
+            </a>
+            <e-button size="full" @click=${this._createOrder}>Crear</e-button>
           </div>
         </div>
       `,
@@ -92,7 +94,7 @@ class VOrderNew extends LayoutMixin(LitElement) {
     location.href = this.routerController.getAdminRoute('orderView', { id: idOrder })
   }
 
-  private _goBack() {
-    location.href = this.routerController.getAdminRoute('order', {})
+  private _getURLBack() {
+    return this.routerController.getAdminRoute('order', {})
   }
 }
