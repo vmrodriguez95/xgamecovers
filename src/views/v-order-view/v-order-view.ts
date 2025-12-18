@@ -115,11 +115,13 @@ class VOrderView extends LayoutMixin(LitElement) {
           <div class="v-order-view__status v-order-view__status--${this._orderStatus?.color}">
             ${this._orderStatus?.name}
           </div>
-          <a class="v-order-view__add" href="${this._goToAddOrderItem()}">
-            <e-button icon="add">
-              <e-icon icon="add"></e-icon>
-            </e-button>
-          </a>
+          <div class="v-order-view__add">
+            <a href="${this._goToAddOrderItem()}">
+              <e-button icon="add">
+                <e-icon icon="add"></e-icon>
+              </e-button>
+            </a>
+          </div>
           ${when(this._designs.length > 0,
             () => map(this._designs, (design: OrderItem) => html`
               <a class="v-order-view__design" href=${this._routerController.getAdminRoute('orderItemEdit', { idOrder: this.urlParams.id, idOrderItem: design.id })}>
