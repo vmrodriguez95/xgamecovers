@@ -194,12 +194,22 @@ class VOrderView extends LayoutMixin(LitElement) {
     await orderItemRepository.delete(idDesign)
   }
 
-  private async _removeDesignsByOrder(idOrder: string) {
+  private async _deleteDesignsByOrder(idOrder: string) {
     await orderItemRepository.deleteByOrder(idOrder)
   }
 
-  private async _removeOrder(idOrder: string) {
+  private async _deleteOrder(idOrder: string) {
     await orderRepository.delete(idOrder)
+  }
+
+  private async _decreaseOrderItemCounter() {
+    const order = await orderRepository.getById(this._order?.id || '')
+
+    if (!order) return
+
+    order.totalItems = order.totalItems - 1
+
+    await orderRepository.update(order.id, order)
   }
 
   private _startDeleteAnimation(design: HTMLElement) {
@@ -221,6 +231,7 @@ class VOrderView extends LayoutMixin(LitElement) {
     }
 
     await this._deleteDesign(design.id)
+    await this._decreaseOrderItemCounter()
 
     this._startDeleteAnimation(designEl)
   }
@@ -232,8 +243,8 @@ class VOrderView extends LayoutMixin(LitElement) {
     if (!userChoise) return
 
     const idOrder = this._order.id    
-    await this._removeOrder(idOrder)
-    await this._removeDesignsByOrder(idOrder)
+    await this._deleteOrder(idOrder)
+    await this._deleteDesignsByOrder(idOrder)
 
     this._goBack()
   }

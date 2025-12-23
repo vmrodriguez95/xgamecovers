@@ -57,7 +57,7 @@
 
   &__status {
     @include body--s;
-    --statusBgColor: var(--color-status--blue);
+    --statusBgColor: var(--color-gray);
     background-color: rgba(var(--statusBgColor), 1);
     color: rgba(var(--color-light), 1);
 
