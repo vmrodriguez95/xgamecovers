@@ -1,6 +1,10 @@
 @use '../../styles/tools/tools' as *;
 @use '../../styles/tools/typography' as *;
 
+:host {
+  display: block;
+}
+
 .c-card-design {
   --statusBgColor: var(--color-status--blue);
   display: flex;
