@@ -24,6 +24,7 @@ import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 //Controllers
 import { RouterController } from '../../controllers/router.controller.ts'
 import { ConfirmController } from '../../controllers/confirm.controller.ts'
+import { DragAndDropController } from '../../controllers/drag-and-drop.controller.ts'
 
 
 // Auth
@@ -52,6 +53,8 @@ class VOrderView extends LayoutMixin(LitElement) {
   _orderStatus: Status | undefined
 
   _routerController = new RouterController(this)
+
+  _ddController = new DragAndDropController(this)
 
   _confirmController = new ConfirmController(this)
 
@@ -120,13 +123,28 @@ class VOrderView extends LayoutMixin(LitElement) {
               </e-button>
             </a>
           </div>
-          ${when(this._designs.length > 0,
-            () => map(this._designs, (design: OrderItem) => html`
-              <a class="v-order-view__design" href=${this.getOrderItemEditURL(design.id)}>
-                ${until(this._printDesign(design))}
-              </a>
-            `)
-          )}
+          <div class="v-order-view__designs">
+            ${when(this._designs.length > 0,
+              () => map(this._designs, (design: OrderItem) => html`
+                <a
+                  class="v-order-view__design"
+                  href=${this.getOrderItemEditURL(design.id)}
+                  @mousedown=${(event: MouseEvent) => this._ddController.onStart(event)}
+                  @touchstart=${(event: TouchEvent) => this._ddController.onStart(event)}
+                  @mousemove=${(event: MouseEvent) => this._ddController.onMove(event)}
+                  @touchmove=${(event: TouchEvent) => this._ddController.onMove(event)}
+                  @mouseup=${() => this._ddController.onEnd()}
+                  @touchend=${() => this._ddController.onEnd()}
+                  @trigger=${(event: Event) => this._deleteDesignHandler(design, event)}
+                >
+                  ${until(this._printDesign(design))}
+                  <div class="v-order-view__delete is-sibling-draggable">
+                    <e-icon icon="delete" size="xl"></e-icon>
+                  </div>
+                </a>
+              `)
+            )}
+          </div>
         </div>
       `,
       this.heading
@@ -172,19 +190,61 @@ class VOrderView extends LayoutMixin(LitElement) {
     return this._versions.find((version: Version) => version.id === idVersion)
   }
 
-  private async _removeOrder(idOrder: string) {
+  private async _deleteDesign(idDesign: string) {
+    await orderItemRepository.delete(idDesign)
+  }
+
+  private async _deleteDesignsByOrder(idOrder: string) {
+    await orderItemRepository.deleteByOrder(idOrder)
+  }
+
+  private async _deleteOrder(idOrder: string) {
     await orderRepository.delete(idOrder)
+  }
+
+  private async _decreaseOrderItemCounter() {
+    const order = await orderRepository.getById(this._order?.id || '')
+
+    if (!order) return
+
+    order.totalItems = order.totalItems - 1
+
+    await orderRepository.update(order.id, order)
+  }
+
+  private _startDeleteAnimation(design: HTMLElement) {
+    design.classList.add('is-deleting')
+
+    setTimeout(() => {
+      design.remove()
+    }, 300)
+  }
+
+  private async _deleteDesignHandler(design: OrderItem, event: Event) {
+    if (!design) return
+    const designEl = event.currentTarget as HTMLElement
+
+    const userChoise = await this._confirmController.confirm('¿Realmente quieres eliminar el diseño?')
+    if (!userChoise) {
+      this._ddController.reset()
+      return
+    }
+
+    await this._deleteDesign(design.id)
+    await this._decreaseOrderItemCounter()
+
+    this._startDeleteAnimation(designEl)
   }
 
   private async _deleteHandler() {
     if (!this._order) return
 
-    const idOrder = this._order.id
     const userChoise = await this._confirmController.confirm('¿Realmente quieres eliminar el pedido?')
-
     if (!userChoise) return
 
-    await this._removeOrder(idOrder)
+    const idOrder = this._order.id    
+    await this._deleteOrder(idOrder)
+    await this._deleteDesignsByOrder(idOrder)
 
     this._goBack()
   }
@@ -222,13 +282,13 @@ class VOrderView extends LayoutMixin(LitElement) {
     location.href = this._getURLBack()
   }
 
-
   private async _printDesign(designInOrder: OrderItem) {
     const design = await this._getDesignById(designInOrder.idDesign)
     const version = this._getVersionItemById(designInOrder.idVersion)
 
     return html`
       <c-card-design
+        class="v-order-view__design-item is-draggable"
         name=${design?.name}
         version=${version?.name}
         combination=${designInOrder.combination}

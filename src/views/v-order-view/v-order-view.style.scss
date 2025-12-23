@@ -57,7 +57,7 @@
 
   &__status {
     @include body--s;
-    --statusBgColor: var(--color-status--blue);
+    --statusBgColor: var(--color-gray);
     background-color: rgba(var(--statusBgColor), 1);
     color: rgba(var(--color-light), 1);
 
@@ -92,8 +92,34 @@
     margin-top: space(2);
   }
   
-  &__design {
+  &__designs {
     grid-column: 1 / 13;
+  }
+
+  &__design {
+    display: flex;
     text-decoration: none;
+    touch-action: pan-y;
+    background-color: rgba(var(--color-danger), 1);
+    border-radius: space(1);
+    margin-top: space(2);
+    
+    &.is-deleting {
+      height: 0;
+      transform: translateX(-100%);
+      transition: transform 0.3s ease, height 0.3s ease;
+    }
+    
+    &-item {
+      width: 100%;
+    }
+  }
+
+  &__delete {
+    --eIconColor: var(--color-light);
+    display: inline-flex;
+    justify-content: center;
+    flex: 1 0 0;
+    overflow: hidden;
   }
 }

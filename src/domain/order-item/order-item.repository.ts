@@ -27,6 +27,16 @@ class OrderItemRepository {
   async delete(id: string) {
     await rtdbService.delete(PATH, id)
   }
+
+  async deleteByOrder(idOrder: string) {
+    const orderItems = await this.getAllByIdOrder(idOrder)
+
+    for (let i = 0; i < orderItems.length; i++) {
+      await rtdbService.delete(PATH, orderItems[i].id)
+    }
+
+    return
+  }
 }
 
 export const orderItemRepository = new OrderItemRepository()

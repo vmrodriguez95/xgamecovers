@@ -76,9 +76,9 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
   }
 
   private _setGameValues(game: Game) {
-    this._formscheme.id.fillValue = game.id
-    this._formscheme.name.fillValue = game.name
-    this._formscheme.consoles.fillValue = game.consoles
+    (Object.keys(this._formscheme) as Array<keyof Game>).forEach((key) => {
+      this._formscheme[key].fillValue = game[key]
+    })
   }
 
   private async _loadGame() {
@@ -95,13 +95,9 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
   }
 
   private _setDesignValuesInNewScheme(newScheme: FormScheme, design: Design) {
-    newScheme.id.fillValue = design.id
-    newScheme.idGame.fillValue = design.idGame
-    newScheme.name.fillValue = design.name
-    newScheme.poster.fillValue = design.poster
-    newScheme.slipcover.fillValue = design.slipcover
-    newScheme.material.fillValue = design.material
-    newScheme.isFavorite.fillValue = design.isFavorite
+    (Object.keys(newScheme) as Array<keyof Design>).forEach((key) => {
+      newScheme[key].fillValue = design[key]
+    })
   }
 
   private _setDesignsValue(designs: Design[]) {
