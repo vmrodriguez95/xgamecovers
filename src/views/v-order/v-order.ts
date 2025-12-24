@@ -18,6 +18,7 @@ import { RouterController } from '../../controllers/router.controller.ts'
 // Styles
 import style from './v-order.style.scss?inline'
 import { statusRepository } from '../../domain/status/status.repository.ts'
+import { when } from 'lit/directives/when'
 
 @customElement('v-order')
 class VOrder extends LayoutMixin(LitElement) {
@@ -25,6 +26,8 @@ class VOrder extends LayoutMixin(LitElement) {
   @property({ type: String }) heading = ''
 
   @state() _orders: Order[] = []
+
+  @state() _queryOrders: Order[] = []
 
   @state() _status: Status[] = []
 
@@ -44,11 +47,12 @@ class VOrder extends LayoutMixin(LitElement) {
       html`
         <div class="v-order">
           <div class="v-order__head">
-            <a href="${this._getCreatetUrl()}">
+            <c-search class="v-order__search" @search=${this._searchHandler}></c-search>
+            <a href=${this._getCreatetUrl()}>
               <e-button><e-icon icon="add"></e-icon></e-button>
             </a>
           </div>
-          ${map(this._orders, (order: Order) => html`
+          ${map(this._queryOrders, (order: Order) => html`
             <a href=${this._getEditUrl(order.id)} class="v-order__card">
               <c-card-order
                 .status=${this._getStatusById(order.idStatus)}
@@ -67,7 +71,10 @@ class VOrder extends LayoutMixin(LitElement) {
   }
 
   private async _loadOrders() {
-    this._orders = await orderRepository.getAllOrderedByDate()
+    const orders = await orderRepository.getAllOrderedByDate()
+
+    this._orders = orders
+    this._queryOrders = orders
   }
 
   private async _loadStatus() {
@@ -93,5 +100,11 @@ class VOrder extends LayoutMixin(LitElement) {
 
   private _getCreatetUrl() {
     return this._routerController.getAdminRoute('orderNew', {})
+  }
+
+  private _searchHandler(e: CustomEvent) {
+    const query = e.detail
+
+    this._queryOrders = this._orders.filter((order) => order.name.toLowerCase().includes(query.toLowerCase()))
   }
 }
