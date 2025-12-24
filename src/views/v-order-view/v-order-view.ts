@@ -87,42 +87,44 @@ class VOrderView extends LayoutMixin(LitElement) {
               </button>
             `)}
           </div>
-          <a class="v-order-view__head" href=${this._getOrderEditURL()}>
-            <c-card-order
-              .status=${this._orderStatus}
-              name=${this._order?.name}
-              money=${this._order?.finalPrice}
-              hideStatus=${true}
-              hideDesigns=${true}
-              date=${this._order?.createdAt}
-              .rrss=${this._getRRSS(this._order)}
-              totalItems=${this._order?.totalItems}
-            ></c-card-order>
-          </a>
-          ${when(this._order?.address, () => html`
-            <div class="v-order-view__address">
-              <e-icon icon="location"></e-icon> ${this._order?.address}
+          ${when(this._order, () => html`
+            <a class="v-order-view__head" href=${this._getOrderEditURL()}>
+              <c-card-order
+                .status=${this._orderStatus}
+                name=${this._order?.name}
+                money=${this._order?.finalPrice}
+                hideStatus=${true}
+                hideDesigns=${true}
+                date=${this._order?.createdAt}
+                .rrss=${this._getRRSS(this._order)}
+                totalItems=${this._order?.totalItems}
+              ></c-card-order>
+            </a>
+            ${when(this._order?.address, () => html`
+              <div class="v-order-view__address">
+                <e-icon icon="location"></e-icon> ${this._order?.address}
+              </div>
+            `)}
+            <div class="v-order-view__pill">
+              <e-icon icon="controller"></e-icon> ${this._order?.totalItems}
+            </div>
+            <div class="v-order-view__pill">
+              <e-icon icon="credit-card"></e-icon> ${this._calculateTotalPrice()}€
+            </div>
+            <div class="v-order-view__pill">
+              <e-icon icon="truck"></e-icon> ${this._order?.delivery}€
+            </div>
+            <div class="v-order-view__status v-order-view__status--${this._orderStatus?.color}">
+              ${this._orderStatus?.name}
+            </div>
+            <div class="v-order-view__add">
+              <a href="${this._getOrderItemAddURL()}">
+                <e-button icon="add">
+                  <e-icon icon="add"></e-icon>
+                </e-button>
+              </a>
             </div>
           `)}
-          <div class="v-order-view__pill">
-            <e-icon icon="controller"></e-icon> ${this._designs?.length}
-          </div>
-          <div class="v-order-view__pill">
-            <e-icon icon="credit-card"></e-icon> ${this._calculateTotalPrice()}€
-          </div>
-          <div class="v-order-view__pill">
-            <e-icon icon="truck"></e-icon> ${this._order?.delivery}€
-          </div>
-          <div class="v-order-view__status v-order-view__status--${this._orderStatus?.color}">
-            ${this._orderStatus?.name}
-          </div>
-          <div class="v-order-view__add">
-            <a href="${this._getOrderItemAddURL()}">
-              <e-button icon="add">
-                <e-icon icon="add"></e-icon>
-              </e-button>
-            </a>
-          </div>
           <div class="v-order-view__designs">
             ${when(this._designs.length > 0,
               () => map(this._designs, (design: OrderItem) => html`
