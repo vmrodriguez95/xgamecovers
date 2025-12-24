@@ -29,17 +29,19 @@ class VOrderItem extends LayoutMixin(LitElement) {
 
   @state() _gameList: Game[] = []
 
+  @state() _queryGameList: Game[] = []
+
   @state() _consoleList: Console[] = []
 
   _routerController = new RouterController(this)
 
   static styles = css`${unsafeCSS(style)}`
 
-  async connectedCallback() {
+  connectedCallback() {
     super.connectedCallback()
 
-    await this._loadGameList()
-    await this._loadConsoleList()
+    this._loadConsoleList()
+    this._loadGameList()
   }
 
   render() {
@@ -50,16 +52,19 @@ class VOrderItem extends LayoutMixin(LitElement) {
             <e-icon icon="arrow-left"></e-icon>
           </a>
         </div>
-        <c-search class="v-order-item__search"></c-search>
-        ${when(this._consoleList.length > 0 && this._gameList.length > 0, () => 
-          map(this._gameList, (game: Game) => until(this._printGameCard(game)))
+        <c-search class="v-order-item__search" @search=${this._searchHandler}></c-search>
+        ${when(this._consoleList.length > 0 && this._queryGameList.length > 0, () => 
+          map(this._queryGameList, (game: Game) => until(this._printGameCard(game)))
         )}
       </div>
     `)
   }
 
   private async _loadGameList() {
-    this._gameList = await catalogueGameRepository.getAllOrderedBy('name')
+    const gameList = await catalogueGameRepository.getAllOrderedBy('name')
+
+    this._gameList = gameList
+    this._queryGameList = gameList
   }
 
   private async _loadConsoleList() {
@@ -100,5 +105,11 @@ class VOrderItem extends LayoutMixin(LitElement) {
 
   private _getPreviousUrl() {
     return this._routerController.getAdminRoute('orderView', { id: this.urlParams.idOrder })
+  }
+
+  private _searchHandler(e: CustomEvent) {
+    const query = e.detail
+
+    this._queryGameList = this._gameList.filter((game) => game.name.toLowerCase().includes(query.toLowerCase()))
   }
 }

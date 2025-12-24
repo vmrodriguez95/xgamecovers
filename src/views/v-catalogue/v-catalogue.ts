@@ -27,6 +27,8 @@ import { consoleRepository } from '../../domain/console/console.repository.ts'
 @customElement('v-catalogue')
 class VCatalogue extends LayoutMixin(LitElement) {
 
+  @state() _queryGameList: Game[] = []
+  
   @state() _gameList: Game[] = []
 
   @state() _consoleList: Console[] = []
@@ -37,20 +39,20 @@ class VCatalogue extends LayoutMixin(LitElement) {
 
   static styles = css`${unsafeCSS(style)}`
 
-  async connectedCallback() {
+  connectedCallback() {
     super.connectedCallback()
 
-    await this._loadGameList()
-    await this._loadConsoleList()
+    this._loadGameList()
+    this._loadConsoleList()
   }
 
   render() {
     return this.layoutGrid(html`
       <div class="v-catalogue">
         <div class="v-catalogue__head">
-          <c-search class="v-catalogue__search"></c-search>
+          <c-search class="v-catalogue__search" @search=${this._searchHandler}></c-search>
           ${when(authStore.isLogged(), () => html`
-            <a href=${this._routerController.getAdminRoute('catalogueNew', {})}>
+            <a href=${this._getCreateUrl()}>
               <e-button><e-icon icon="add"></e-icon></e-button>
             </a>
           `)}
@@ -58,15 +60,18 @@ class VCatalogue extends LayoutMixin(LitElement) {
         <div class="v-catalogue__actions">
           <c-filters class="v-catalogue__filters"></c-filters>
         </div>
-        ${when(this._consoleList.length > 0 && this._gameList.length > 0, () => 
-          map(this._gameList, (game: Game) => until(this._printGameCard(game)))
+        ${when(this._consoleList.length > 0 && this._queryGameList.length > 0, () => 
+          map(this._queryGameList, (game: Game) => until(this._printGameCard(game)))
         )}
       </div>
     `)
   }
 
   private async _loadGameList() {
-    this._gameList = await catalogueGameRepository.getAllOrderedBy('name')
+    const gameList = await catalogueGameRepository.getAllOrderedBy('name')
+
+    this._gameList = gameList
+    this._queryGameList = gameList
   }
 
   private async _loadConsoleList() {
@@ -100,5 +105,15 @@ class VCatalogue extends LayoutMixin(LitElement) {
         ></c-card>
       </a>
     `
+  }
+
+  private _getCreateUrl() {
+    return this._routerController.getAdminRoute('catalogueNew', {})
+  }
+
+  private _searchHandler(e: CustomEvent) {
+    const query = e.detail
+
+    this._queryGameList = this._gameList.filter((game) => game.name.toLowerCase().includes(query.toLowerCase()))
   }
 }
