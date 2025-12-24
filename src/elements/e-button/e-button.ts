@@ -26,7 +26,7 @@ export class EButton extends LitElement {
     return html`
       <button class=${classes} ?disabled=${this.loading}>
         <slot></slot>
-        ${when(this.loading, () => html`<div class="e-button__shape"></div>`)}
+        ${when(this.loading, () => html`<div class="loader"></div>`)}
       </button>
     `
   }

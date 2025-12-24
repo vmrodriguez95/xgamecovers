@@ -1,11 +1,22 @@
 import { LitElement, html, css, unsafeCSS } from 'lit'
-import { customElement } from 'lit/decorators.js'
+import { customElement, property, query } from 'lit/decorators.js'
+import { when } from 'lit/directives/when.js'
+
+// Types
+import { EInput } from '../../elements/e-input/e-input'
+
+// Utils
+import { debounce } from '../../utils/events.utils'
 
 // Styles
 import style from './c-search.style.scss?inline'
 
 @customElement('c-search')
 class CSearch extends LitElement {
+
+  @property({ type: String }) loading = false
+
+  @query('e-input') _input!: EInput
 
   static styles = css`${unsafeCSS(style)}`
 
@@ -18,9 +29,10 @@ class CSearch extends LitElement {
           type="text"
           placeholder="Buscar juego"
           name="search"
-          autocomplete="off"
           value=""
+          @input=${this._onInput}
         ></e-input>
+        ${when(this.loading, () => html`<div class="c-search__loader loader"></div>`)}
       </div>
     `
   }
@@ -28,4 +40,7 @@ class CSearch extends LitElement {
   /*
    Methods
    */
+  private _onInput() {
+    this.dispatchEvent(new CustomEvent('search', { detail: this._input.value }))
+  }
 }

@@ -1,8 +1,10 @@
 @use '../../styles/tools/tools' as *;
 @use '../../styles/tools/typography' as *;
+@use '../../styles/utils/loader.scss' as *;
 
 .e-button {
   --eIconColor: var(--eButtonColor, var(--color-light));
+  --loaderColor: var(--eButtonColor, var(--color-light));
   @include body--s(600);
   display: inline-flex;
   align-items: center;
@@ -23,27 +25,5 @@
   &[disabled] {
     opacity: 0.5;
     cursor: not-allowed;
-  }
-
-  &__shape {
-    border: 2px solid rgba(var(--eButtonColor, var(--color-light)), 1);
-    border-bottom-color: rgba(var(--eButtonColor, var(--color-light)), 0.3);
-    transform: translate3d(0, 0, 0) rotate(0deg);
-    animation: rotate 1s linear infinite;
-    width: space(2);
-    height: space(2);
-    border-radius: 100%;
-    margin-left: space(2);
-    background-color: transparent;
-  }
-}
-
-@keyframes rotate {
-  from {
-    transform: translate3d(0, 0, 0) rotate(0deg);
-  }
-
-  to {
-    transform: translate3d(0, 0, 0) rotate(360deg);
   }
 }

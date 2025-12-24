@@ -1,7 +1,14 @@
 @use '../../styles/tools/tools' as *;
 @use '../../styles/tools/typography' as *;
+@use '../../styles/utils/loader.scss' as *;
 
 .c-search {
   display: block;
   position: relative;
+  
+  &__loader {
+    position: absolute;
+    top: 25%;
+    right: space(1);
+  }
 }
