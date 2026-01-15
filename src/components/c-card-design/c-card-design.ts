@@ -36,7 +36,7 @@ class CCardDesign extends LitElement {
     return html`
       <div class=${classes}>
         <div class="c-card-design__status">
-          <p class="c-card-design__status__text">${this.status?.name}</p>
+          <button class="c-card-design__status__text" @click=${this._launchStatusChange}>${this.status?.name}</button>
         </div>
         <div class="c-card-design__info">
           <img class="c-card-design__image" src=${this.poster} alt=${this.name}>
@@ -49,5 +49,12 @@ class CCardDesign extends LitElement {
         </div>
       </div>
     `
+  }
+
+  private _launchStatusChange(ev: Event) {
+    ev.preventDefault()
+    ev.stopPropagation()
+
+    this.dispatchEvent(new CustomEvent('changeStatus', { bubbles: true, composed: true, cancelable: true }))
   }
 }
