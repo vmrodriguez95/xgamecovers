@@ -69,7 +69,7 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
         `)}
         <div class="v-catalogue-edit__actions">
           <e-button class="v-catalogue-edit__button" size="full" @click=${this._goBack}>Cancelar</e-button>
-          <e-button class="v-catalogue-edit__button" size="full" @click=${this._editHandler}>Editar</e-button>
+          <e-button class="v-catalogue-edit__button" size="full" @click=${this._editHandler}>Guardar</e-button>
         </div>
       </div>
     `, this.heading)
