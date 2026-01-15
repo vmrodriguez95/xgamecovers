@@ -41,7 +41,10 @@ class CCardOrder extends LitElement {
       <div class=${classes}>
         ${when(!this.hideStatus, () => html`
           <div class="c-card-order__status">
-            <p class="c-card-order__status__text">${this.status?.name}</p>
+            <button
+              class="c-card-order__status__text"
+              @click=${this._launchStatusChange}
+            >${this.status?.name}</button>
           </div>
         `)}
         <div class="c-card-order__info">
@@ -80,5 +83,12 @@ class CCardOrder extends LitElement {
     const year = dateObj.getFullYear()
 
     return `${day}/${month}/${year}`
+  }
+
+  private _launchStatusChange(ev: Event) {
+    ev.preventDefault()
+    ev.stopPropagation()
+
+    this.dispatchEvent(new CustomEvent('changeStatus', { bubbles: true, composed: true, cancelable: true }))
   }
 }

@@ -1,4 +1,5 @@
 @use '../../styles/tools/tools' as *;
+@use '../../styles/tools/typography' as *;
 
 .v-order {
   display: block;
@@ -21,5 +22,56 @@
     display: block;
     text-decoration: none;
     margin-top: space(2);
+  }
+
+  &__modal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: space(1);
+    justify-content: center;
+  }
+
+  &__avatar {
+    --eIconColor: var(--color-light);
+    display: inline-flex;
+    place-content: center;
+    width: space(9);
+    height: space(9);
+    background-color: rgba(var(--statusBgColor), 1);
+    border-radius: 100%;
+
+    &--blue {
+      --statusBgColor: var(--color-status--blue);
+    }
+
+    &--blue-dark {
+      --statusBgColor: var(--color-status--blue-dark);
+    }
+
+    &--red {
+      --statusBgColor: var(--color-status--red);
+    }
+
+    &--purple {
+      --statusBgColor: var(--color-status--purple);
+    }
+
+    &--orange {
+      --statusBgColor: var(--color-status--orange);
+    }
+
+    &--green {
+      --statusBgColor: var(--color-status--green);
+    }
+  }
+
+  &__text {
+    @include body--s;
+    margin: 0;
+    flex: 1 0 100%;
+  }
+
+  &__button {
+    flex: 1 0 100%;
   }
 }

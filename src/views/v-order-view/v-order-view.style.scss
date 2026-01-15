@@ -31,59 +31,32 @@
     text-decoration: none;
   }
 
+  &__address,
+  &__pill {
+    --eIconColor: var(--color-dark);
+    @include body--s;
+    display: inline-flex;
+    border-radius: space(1);
+    box-shadow: 0 3px 10px 0 rgba(var(--color-dark), 0.5);
+  }
+
   &__address {
     @include body--s;
-    --eIconColor: var(--color-dark);
-    display: inline-flex;
     align-items: center;
     padding: space(1) space(2);
     gap: space(1);
-    border-radius: space(1);
     grid-column: 1 / 13;
-    box-shadow: 0 3px 10px 0 rgba(var(--color-dark), 0.5);
   }
 
-  &__pill,
-  &__status {
-    --eIconColor: var(--color-dark);
-    display: inline-flex;
+  &__pill {
     place-content: center;
     gap: space(0.5);
     padding: space(1);
-    border-radius: space(1);
     grid-column: span 3;
-    box-shadow: 0 3px 10px 0 rgba(var(--color-dark), 0.5);
   }
 
   &__status {
-    @include body--s;
-    --statusBgColor: var(--color-gray);
-    background-color: rgba(var(--statusBgColor), 1);
-    color: rgba(var(--color-light), 1);
-
-    &--blue {
-      --statusBgColor: var(--color-status--blue);
-    }
-
-    &--blue-dark {
-      --statusBgColor: var(--color-status--blue-dark);
-    }
-
-    &--red {
-      --statusBgColor: var(--color-status--red);
-    }
-
-    &--purple {
-      --statusBgColor: var(--color-status--purple);
-    }
-
-    &--orange {
-      --statusBgColor: var(--color-status--orange);
-    }
-
-    &--green {
-      --statusBgColor: var(--color-status--green);
-    }
+    grid-column: span 3;
   }
 
   &__add {
@@ -121,5 +94,60 @@
     justify-content: center;
     flex: 1 0 0;
     overflow: hidden;
+  }
+
+  &__modal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: space(1);
+    justify-content: center;
+  }
+
+  &__image {
+    border-radius: space(1);
+  }
+
+  &__avatar {
+    --eIconColor: var(--color-light);
+    display: inline-flex;
+    place-content: center;
+    width: space(9);
+    height: space(9);
+    background-color: rgba(var(--statusBgColor), 1);
+    border-radius: 100%;
+
+    &--blue {
+      --statusBgColor: var(--color-status--blue);
+    }
+
+    &--blue-dark {
+      --statusBgColor: var(--color-status--blue-dark);
+    }
+
+    &--red {
+      --statusBgColor: var(--color-status--red);
+    }
+
+    &--purple {
+      --statusBgColor: var(--color-status--purple);
+    }
+
+    &--orange {
+      --statusBgColor: var(--color-status--orange);
+    }
+
+    &--green {
+      --statusBgColor: var(--color-status--green);
+    }
+  }
+
+  &__text {
+    @include body--s;
+    margin: 0;
+    flex: 1 0 100%;
+  }
+
+  &__button-status {
+    flex: 1 0 100%;
   }
 }

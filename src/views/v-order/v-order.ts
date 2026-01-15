@@ -1,6 +1,7 @@
-import { LitElement, html, css, unsafeCSS } from 'lit'
+import { LitElement, html, css, unsafeCSS, TemplateResult } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { map } from 'lit/directives/map.js'
+import { when } from 'lit/directives/when.js'
 
 // Mixins
 import { LayoutMixin } from '../../mixins/layout.mixin.ts'
@@ -11,14 +12,13 @@ import { Status } from '../../domain/status/status.types.ts'
 
 // Repository
 import { orderRepository } from '../../domain/order/order.repository.ts'
+import { statusRepository } from '../../domain/status/status.repository.ts'
 
 // Controllers
 import { RouterController } from '../../controllers/router.controller.ts'
 
 // Styles
 import style from './v-order.style.scss?inline'
-import { statusRepository } from '../../domain/status/status.repository.ts'
-import { when } from 'lit/directives/when'
 
 @customElement('v-order')
 class VOrder extends LayoutMixin(LitElement) {
@@ -30,6 +30,10 @@ class VOrder extends LayoutMixin(LitElement) {
   @state() _queryOrders: Order[] = []
 
   @state() _status: Status[] = []
+
+  @state() _showModal = false
+
+  @state() _selectedOrder: Order | null = null
 
   _routerController = new RouterController(this)
 
@@ -55,19 +59,42 @@ class VOrder extends LayoutMixin(LitElement) {
           ${map(this._queryOrders, (order: Order) => html`
             <a href=${this._getEditUrl(order.id)} class="v-order__card">
               <c-card-order
-                .status=${this._getStatusById(order.idStatus)}
+                .status=${this._getStatusById(order)}
                 name=${order.name}
                 date=${order.createdAt}
                 money=${order.finalPrice}
                 .rrss=${this._getRRSS(order)}
                 totalItems=${order.totalItems}
+                @changeStatus=${(ev: Event) => this._changeStatusHandler(ev, order)}
               ></c-card-order>
             </a>
           `)}
         </div>
+        ${when(this._showModal && this._selectedOrder, () => html`
+          <c-modal @close=${this._closeModal}>
+            <div class="v-order__modal">
+              <div class="v-order__avatar v-order__avatar--${this._getStatusById(this._selectedOrder)?.color}">
+                <e-icon icon="person-rounded" size="xxl"></e-icon>
+              </div>
+              <p class="v-order__text">${this._selectedOrder?.name}</p>
+              ${map(this._status, (status: Status) => html`
+                <e-button
+                  class="v-order__button"
+                  color=${status.color}
+                  size="full"
+                  @click=${() => this._changeStatusToOrder(this._selectedOrder, status)}
+                >${status.name}</e-button>
+              `)}
+            </div>
+          </c-modal>
+        `)}
       `,
       this.heading
     )
+  }
+
+  private _setSelectedOrder(order: Order | null) {
+    this._selectedOrder = order
   }
 
   private async _loadOrders() {
@@ -81,8 +108,10 @@ class VOrder extends LayoutMixin(LitElement) {
     this._status = await statusRepository.getAll()
   }
 
-  private _getStatusById(idStatus: string) {
-    return this._status.find((status: Status) => status.id === idStatus)
+  private _getStatusById(order: Order | null) {
+    if (!order) return
+
+    return this._status.find((status: Status) => status.id === order.idStatus)
   }
 
   private _getRRSS(order: Order) {
@@ -106,5 +135,31 @@ class VOrder extends LayoutMixin(LitElement) {
     const query = e.detail
 
     this._queryOrders = this._orders.filter((order) => order.name.toLowerCase().includes(query.toLowerCase()))
+  }
+
+  private async _changeStatusToOrder(order: Order | null, status: Status) {
+    if (!order) return
+
+    order.idStatus = status.id
+    await orderRepository.update(order.id, { idStatus: status.id })
+
+    this._closeModal()
+  }
+
+  private _changeStatusHandler(ev: Event, order: Order) {
+    ev.preventDefault()
+    ev.stopPropagation()
+
+    this._setSelectedOrder(order)
+    this._openModal()
+  }
+
+  private _openModal() {
+    this._showModal = true
+  }
+
+  private _closeModal() {
+    this._showModal = false
+    this._setSelectedOrder(null)
   }
 }
