@@ -28,6 +28,8 @@ export class OrderRepository {
   }
 
   async update(id: string, partial: Partial<Order>) {
+    if (!id) return
+
     await rtdbService.update(PATH, id, partial)
   }
 

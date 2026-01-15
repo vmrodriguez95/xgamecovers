@@ -39,12 +39,15 @@
     justify-content: center;
     padding: space(0.5);
     box-sizing: border-box;
-    width: space(3);
+    width: space(4);
 
     &__text {
       @include body--xs(500);
       color: rgba(var(--color-light), 1);
+      background-color: transparent;
+      border: 0;
       margin: 0;
+      padding: 0;
       transform: rotateZ(-90deg);
     }
   }

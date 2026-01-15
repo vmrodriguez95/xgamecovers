@@ -17,6 +17,7 @@ import { Status } from '../../domain/status/status.types.ts'
 import { Version } from '../../domain/version/version.types.ts'
 import { URLParam } from '../../domain/generic/generic.types.ts'
 import { OrderItem } from '../../domain/order-item/order-item.types.ts'
+import { Design } from '../../domain/catalogue/catalogue.types.ts'
 
 // Mixins
 import { LayoutMixin } from '../../mixins/layout.mixin.ts'
@@ -25,7 +26,6 @@ import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 import { RouterController } from '../../controllers/router.controller.ts'
 import { ConfirmController } from '../../controllers/confirm.controller.ts'
 import { DragAndDropController } from '../../controllers/drag-and-drop.controller.ts'
-
 
 // Auth
 import { authStore } from '../../domain/auth/auth.store.ts'
@@ -50,7 +50,13 @@ class VOrderView extends LayoutMixin(LitElement) {
 
   @state() _itemStatus: Status[] = []
 
-  _orderStatus: Status | undefined
+  @state() _showModal = false
+
+  @state() _orderStatus: Status | undefined
+
+  @state() _selectedDesign: Design | null = null
+
+  @state() _selectedOrderItem: OrderItem | null = null
 
   _routerController = new RouterController(this)
 
@@ -114,14 +120,14 @@ class VOrderView extends LayoutMixin(LitElement) {
             <div class="v-order-view__pill">
               <e-icon icon="truck"></e-icon> ${this._order?.delivery}€
             </div>
-            <div class="v-order-view__status v-order-view__status--${this._orderStatus?.color}">
-              ${this._orderStatus?.name}
+            <div class="v-order-view__status">
+              <e-button @click=${this._openModal} color=${this._orderStatus?.color} size="small">
+                ${this._orderStatus?.name}
+              </e-button>
             </div>
             <div class="v-order-view__add">
               <a href="${this._getOrderItemAddURL()}">
-                <e-button icon="add">
-                  <e-icon icon="add"></e-icon>
-                </e-button>
+                <e-button icon="add"><e-icon icon="add"></e-icon></e-button>
               </a>
             </div>
           `)}
@@ -148,6 +154,8 @@ class VOrderView extends LayoutMixin(LitElement) {
             )}
           </div>
         </div>
+        ${when(this._showModal && this._order && !this._orderStatus, () => this._getOrderStatusModal())}
+        ${when(this._showModal && this._order && this._orderStatus, () => this._getOrderItemStatusModal())}
       `,
       this.heading
     )
@@ -159,11 +167,13 @@ class VOrderView extends LayoutMixin(LitElement) {
 
   private async _loadStatus() {
     this._status = await statusRepository.getAll()
-    this._orderStatus = this._getStatusById(this._order?.idStatus || '')
+    this._orderStatus = this._getStatusById(this._order)
   }
 
-  private _getStatusById(idStatus: string) {
-    return this._status.find((status: Status) => status.id === idStatus)
+  private _getStatusById(order: Order | null) {
+    if (!order) return
+
+    return this._status.find((status: Status) => status.id === order.idStatus)
   }
 
   private async _loadItemStatus() {
@@ -288,16 +298,100 @@ class VOrderView extends LayoutMixin(LitElement) {
     const design = await this._getDesignById(designInOrder.idDesign)
     const version = this._getVersionItemById(designInOrder.idVersion)
 
+    if (!design || !version) return
+
     return html`
       <c-card-design
         class="v-order-view__design-item is-draggable"
-        name=${design?.name}
-        version=${version?.name}
+        name=${design.name}
+        version=${version.name}
         combination=${designInOrder.combination}
         money=${designInOrder.price}
-        poster=${design?.poster}
+        poster=${design.poster}
         .status=${this._getStatusItemById(designInOrder.idStatus)}
+        @changeStatus=${(ev: CustomEvent) => this._changeDesignStatusHandler(ev, design, designInOrder)}
       ></c-card-design>
+    `
+  }
+
+  private _openModal() {
+    this._showModal = true
+  }
+
+  private _closeModal() {
+    this._showModal = false
+    this._selectedDesign = null
+    this._selectedOrderItem = null
+  }
+
+  private _changeDesignStatusHandler(ev: CustomEvent, design: Design, designInOrder: OrderItem) {
+    ev.preventDefault()
+    ev.stopPropagation()
+
+    this._selectedDesign = design
+    this._selectedOrderItem = designInOrder
+    this._openModal()
+  }
+
+  private async _changeStatusToOrderItem(item: OrderItem | null, status: Status) {
+    if (!item) return
+
+    item.idStatus = status.id
+    await orderItemRepository.update(item.id, { idStatus: status.id })
+
+    this._closeModal()
+  }
+
+  private async _changeStatusToOrder(status: Status) {
+    if (!this._order) return
+
+    this._orderStatus = status
+    this._order.idStatus = status.id
+    await orderRepository.update(this._order?.id || '', { idStatus: status.id })
+
+    this._closeModal()
+    this.requestUpdate()
+  }
+
+  private _getOrderStatusModal() {
+    return html`
+      <c-modal @close=${this._closeModal}>
+        <div class="v-order-view__modal">
+          <div class="v-order-view__avatar v-order-view__avatar--${this._getStatusById(this._order)?.color}">
+            <e-icon icon="person-rounded" size="xxl"></e-icon>
+          </div>
+          <p class="v-order-view__text">${this._order?.name}</p>
+          ${map(this._status, (status: Status) => html`
+            <e-button
+              class="v-order-view__button-status"
+              color=${status.color}
+              size="full"
+              @click=${() => this._changeStatusToOrder(status)}
+            >${status.name}</e-button>
+          `)}
+        </div>
+      </c-modal>
+    `
+  }
+
+  private _getOrderItemStatusModal() {
+    if (!this._selectedDesign || !this._selectedOrderItem) return
+
+    return html`
+      <c-modal @close=${this._closeModal}>
+        <div class="v-order-view__modal">
+          <img class="v-order-view__image" src=${this._selectedDesign.poster} alt="${this._selectedDesign.name} poster" width="72" height="72" />
+          <p class="v-order-view__text">${this._order?.name}</p>
+          ${map(this._itemStatus, (status: Status) => html`
+            <e-button
+              class="v-order-view__button-status"
+              color=${status.color}
+              size="full"
+              @click=${() => this._changeStatusToOrderItem(this._selectedOrderItem, status)}
+            >${status.name}</e-button>
+          `)}
+        </div>
+      </c-modal>
     `
   }
 }
