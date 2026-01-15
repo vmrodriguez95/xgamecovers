@@ -4,7 +4,7 @@
 
 .e-button {
   --eIconColor: var(--eButtonColor, var(--color-light));
-  --loaderColor: var(--eButtonColor, var(--color-light));
+  --loaderColor: var(--color-light);
   --eButtonBackground: var(--backgroundColor, var(--color-primary));
 
   @include body--s(600);

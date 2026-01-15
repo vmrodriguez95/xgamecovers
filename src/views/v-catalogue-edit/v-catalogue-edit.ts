@@ -69,7 +69,7 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
         `)}
         <div class="v-catalogue-edit__actions">
           <e-button class="v-catalogue-edit__button" size="full" @click=${this._goBack}>Cancelar</e-button>
-          <e-button class="v-catalogue-edit__button" size="full" @click=${this._editHandler}>Editar</e-button>
+          <e-button class="v-catalogue-edit__button" size="full" @click=${this._editHandler}>Guardar</e-button>
         </div>
       </div>
     `, this.heading)
@@ -183,7 +183,7 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
     return await catalogueDesignRepository.create(data)
   }
 
-  private async _insertAllDesigns(designs: Design[], rawDesigns: FormScheme[]): Promise<void> {
+  private async _insertAllDesigns(designs: Design[], rawDesigns: FormScheme[], idGame: string): Promise<void> {
     for(let i = 0; i < designs.length; i++) {
       const design = designs[i]
 
@@ -191,6 +191,7 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
       if (!idDesign) throw new Error(`No se pudo crear el diseño ${design.name}`)
       
       design.id = idDesign
+      design.idGame = idGame
   
       const rawDesign = this._getRawDesignByName(rawDesigns, design.name)
       if (!rawDesign) throw new Error(`No se pudo encontrar los datos en crudo del diseño ${design.name}`)
@@ -291,7 +292,7 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
       const deletedDesigns = this._getDeletedDesigns(rawData.designs.fields)
 
       if (newDesigns.length > 0) {
-        await this._insertAllDesigns(newDesigns, rawData.designs.fields)
+        await this._insertAllDesigns(newDesigns, rawData.designs.fields, this._game.id)
       }
 
       if (modifiedDesigns.length > 0) {
