@@ -52,7 +52,7 @@ class VOrderView extends LayoutMixin(LitElement) {
 
   @state() _showModal = false
 
-  @state() _orderStatus: Status | undefined
+  @state() _orderStatus: Status | null = null
 
   @state() _selectedDesign: Design | null = null
 
@@ -154,8 +154,8 @@ class VOrderView extends LayoutMixin(LitElement) {
             )}
           </div>
         </div>
-        ${when(this._showModal && this._order && !this._orderStatus, () => this._getOrderStatusModal())}
-        ${when(this._showModal && this._order && this._orderStatus, () => this._getOrderItemStatusModal())}
+        ${when(this._showModal && this._order && !this._selectedDesign, () => this._getOrderStatusModal())}
+        ${when(this._showModal && this._order && this._selectedDesign, () => this._getOrderItemStatusModal())}
       `,
       this.heading
     )
@@ -171,9 +171,9 @@ class VOrderView extends LayoutMixin(LitElement) {
   }
 
   private _getStatusById(order: Order | null) {
-    if (!order) return
+    if (!order) return null
 
-    return this._status.find((status: Status) => status.id === order.idStatus)
+    return this._status.find((status: Status) => status.id === order.idStatus) ?? null
   }
 
   private async _loadItemStatus() {
