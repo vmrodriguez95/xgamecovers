@@ -8,14 +8,16 @@ import { classMap } from 'lit/directives/class-map.js'
 import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 
 // Types
+import { Game } from '../../domain/game/game.types.ts'
+import { Design } from '../../domain/design/design.types.ts'
 import { Console } from '../../domain/console/console.types.ts'
 import { URLParam } from '../../domain/generic/generic.types.ts'
-import { Design, Game } from '../../domain/catalogue/catalogue.types.ts'
 
 // Repository
+import { gameRepository } from '../../domain/game/game.repository.ts'
+import { designRepository } from '../../domain/design/design.repository.ts'
 import { consoleRepository } from '../../domain/console/console.repository.ts'
 import { storageRepository } from '../../domain/storage/storage.repository.ts'
-import { catalogueDesignRepository, catalogueGameRepository } from '../../domain/catalogue/catalogue.repository.ts'
 
 // Controllers
 import { ConfirmController } from '../../controllers/confirm.controller.ts'
@@ -24,9 +26,11 @@ import { RouterController } from '../../controllers/router.controller.ts'
 // Auth
 import { authStore } from '../../domain/auth/auth.store.ts'
 
+// Utils
+import { CATALOGUE_IMAGE_PATH } from '../../utils/consts.utils.ts'
+
 // Styles
 import style from './v-catalogue-game.style.scss?inline'
-import { CATALOGUE_IMAGE_PATH } from '../../utils/consts.utils.ts'
 
 @customElement('v-catalogue-game')
 class VCatalogueGame extends LayoutMixin(LitElement) {
@@ -136,7 +140,7 @@ class VCatalogueGame extends LayoutMixin(LitElement) {
   }
 
   private async _loadGame() {
-    const game = await catalogueGameRepository.getById(this.urlParams.id)
+    const game = await gameRepository.getById(this.urlParams.id)
 
     if (game) {
       this._game = game
@@ -147,7 +151,7 @@ class VCatalogueGame extends LayoutMixin(LitElement) {
   }
 
   private async _loadDesigns() {
-    const designs = await catalogueDesignRepository.getDesignsByGame(this.urlParams.id)
+    const designs = await designRepository.getByIdGame(this.urlParams.id)
 
     if (designs.length > 0) {
       this._designs = designs
@@ -160,11 +164,11 @@ class VCatalogueGame extends LayoutMixin(LitElement) {
   }
 
   private async _removeGame(idGame: string = '') {
-    await catalogueGameRepository.delete(idGame)
+    await gameRepository.delete(idGame)
   }
 
   private async _removeDesign(idDesign: string = '') {
-    await catalogueDesignRepository.delete(idDesign)
+    await designRepository.delete(idDesign)
   }
 
   private async _removeDesignFolder(idGame: string = '', idDesign: string = '') {

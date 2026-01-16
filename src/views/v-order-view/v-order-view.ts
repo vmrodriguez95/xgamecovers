@@ -6,18 +6,18 @@ import { until } from 'lit/directives/until.js'
 
 // BBDD
 import { orderRepository } from '../../domain/order/order.repository.ts'
+import { designRepository } from '../../domain/design/design.repository.ts'
 import { statusRepository } from '../../domain/status/status.repository.ts'
 import { versionRepository } from '../../domain/version/version.repository.ts'
 import { orderItemRepository } from '../../domain/order-item/order-item.repository.ts'
-import { catalogueDesignRepository } from '../../domain/catalogue/catalogue.repository.ts'
 
 // Types
 import { Order } from '../../domain/order/order.types.ts'
+import { Design } from '../../domain/design/design.types.ts'
 import { Status } from '../../domain/status/status.types.ts'
 import { Version } from '../../domain/version/version.types.ts'
 import { URLParam } from '../../domain/generic/generic.types.ts'
 import { OrderItem } from '../../domain/order-item/order-item.types.ts'
-import { Design } from '../../domain/catalogue/catalogue.types.ts'
 
 // Mixins
 import { LayoutMixin } from '../../mixins/layout.mixin.ts'
@@ -191,7 +191,7 @@ class VOrderView extends LayoutMixin(LitElement) {
   }
   
   private async _getDesignById(idDesign: string) {
-    return await catalogueDesignRepository.getById(idDesign)
+    return await designRepository.getById(idDesign)
   }
 
   private async _loadVersions() {

@@ -1,6 +1,6 @@
 import { ComplexOption, FormScheme } from "../form/form.types"
 
-export const CatalogueFormScheme: FormScheme = {
+export const GameFormScheme: FormScheme = {
   id: {
     id: 'catalogueId',
     name: 'id',
