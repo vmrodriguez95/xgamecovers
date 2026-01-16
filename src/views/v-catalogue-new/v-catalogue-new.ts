@@ -2,7 +2,7 @@ import { LitElement, html, css, unsafeCSS } from 'lit'
 import { customElement, property, state, query } from 'lit/decorators.js'
 
 // Form
-import { CatalogueFormScheme } from '../../domain/catalogue/catalogue.form.ts'
+import { GameFormScheme } from '../../domain/game/game.form.ts'
 
 // Mixins
 import { LayoutMixin } from '../../mixins/layout.mixin.ts'
@@ -11,15 +11,17 @@ import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 import { RouterController } from '../../controllers/router.controller.ts'
 
 // Repositories
+import { gameRepository } from '../../domain/game/game.repository.ts'
+import { designRepository } from '../../domain/design/design.repository.ts'
 import { storageRepository } from '../../domain/storage/storage.repository.ts'
 import { consoleRepository } from '../../domain/console/console.repository.ts'
-import { catalogueDesignRepository, catalogueGameRepository } from '../../domain/catalogue/catalogue.repository.ts'
 
 // Types
+import { Game } from '../../domain/game/game.types.ts'
+import { Design } from '../../domain/design/design.types.ts'
 import { EButton } from '../../elements/e-button/e-button.ts'
 import { FieldScheme } from '../../domain/form/form.types.ts'
 import { Console } from '../../domain/console/console.types.ts'
-import { Design, Game } from '../../domain/catalogue/catalogue.types.ts'
 
 // Styles
 import style from './v-catalogue-new.style.scss?inline'
@@ -31,7 +33,7 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
   
   @property({ type: String }) entity = ''
 
-  @state() _formscheme = CatalogueFormScheme
+  @state() _formscheme = GameFormScheme
 
   @query('c-form') form!: HTMLFormElement
 
@@ -81,11 +83,11 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
   }
 
   private async _insertGame(data: Game): Promise<string | null> {
-    return await catalogueGameRepository.create(data)
+    return await gameRepository.create(data)
   }
 
   private async _insertDesign(data: Design): Promise<string | null> {
-    return await catalogueDesignRepository.create(data)
+    return await designRepository.create(data)
   }
 
   private async _uploadImage(file: File, path: string): Promise<string | null> {
@@ -143,7 +145,7 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
       if (materialUrl) design.material = materialUrl
       
       if (posterUrl || slipcoverUrl || materialUrl) {
-        await catalogueDesignRepository.update(idDesign, design)
+        await designRepository.update(idDesign, design)
       }
     }
 
