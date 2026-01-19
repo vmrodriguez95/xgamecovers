@@ -5,7 +5,10 @@ import { when } from 'lit/directives/when.js'
 import { classMap } from 'lit/directives/class-map.js'
 
 // Types
-import { Status } from '../../domain/status/status.types'
+import type { Status } from '../../domain/status/status.types'
+
+// Utils
+import { showDateWithFormat } from '../../utils/date.utils'
 
 // Styles
 import style from './c-card-order.style.scss?inline'
@@ -68,21 +71,12 @@ class CCardOrder extends LitElement {
           <div class="c-card-order__end">
             <p class="c-card-order__price">${this.money}€</p>
             ${when(this.date, () => html`
-              <p class="c-card-order__text">${this._showDateWithFormat(this.date)}</p>
+              <p class="c-card-order__text">${showDateWithFormat(this.date)}</p>
             `)}
           </div>
         </div>
       </div>
     `
-  }
-
-  private _showDateWithFormat(date: string) {
-    const dateObj = new Date(date)
-    const day = String(dateObj.getDate()).padStart(2, '0')
-    const month = String(dateObj.getMonth() + 1).padStart(2, '0')
-    const year = dateObj.getFullYear()
-
-    return `${day}/${month}/${year}`
   }
 
   private _launchStatusChange(ev: Event) {
