@@ -174,7 +174,7 @@ class VTransaction extends LayoutMixin(LitElement) {
     }
 
     return html`
-      <a href="/transaction/${transaction.id}">
+      <a class="v-transaction__card" href="/transaction/${transaction.id}">
         <c-card-simple
           type=${category.name}
           date=${transaction.updatedAt}

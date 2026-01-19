@@ -44,8 +44,8 @@ class VTransactionNew extends LayoutMixin(LitElement) {
             .scheme=${this._formscheme}
           ></c-form>
           <div class="v-transaction-new__actions">
-            <e-button class="v-transaction-new__button" @click=${this._goBack}>cancelar</e-button>
-            <e-button class="v-transaction-new__button" @click=${this.createtransaction}>Guardar</e-button>
+            <e-button class="v-transaction-new__button" size="full" @click=${this._goBack}>Cancelar</e-button>
+            <e-button class="v-transaction-new__button" size="full" @click=${this.createTransaction}>Crear</e-button>
           </div>
         </div>
       `,
@@ -58,7 +58,6 @@ class VTransactionNew extends LayoutMixin(LitElement) {
     const newscheme = window.structuredClone(this._formscheme)
 
     const options: Option[] = allCategory
-      .filter((category: TransactionCategory) => category.type === 'expense')
       .map((category: TransactionCategory) => {
         return {
           value: category.id,
@@ -66,16 +65,19 @@ class VTransactionNew extends LayoutMixin(LitElement) {
         }
       })
 
-    newscheme.idCategory.options = options
+    if ('options' in newscheme.idCategory) {
+      newscheme.idCategory.options = options
+    }
 
     this._formscheme = newscheme
   }
 
-  private createtransaction() {
+  private createTransaction() {
     const data = this.form.getFinalData()
 
     if (data) {
       transactionRepository.create(data)
+      this._goBack()
     }
   }
 
