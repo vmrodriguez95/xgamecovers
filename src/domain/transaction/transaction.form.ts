@@ -20,7 +20,7 @@ export const TransactionFormScheme: FormScheme = {
     required: true,
     readonly: false
   },
-  idtransaction: {
+  idOrder: {
     id: 'transactionIdOrder',
     name: 'id del pedido',
     label: 'Identificador',

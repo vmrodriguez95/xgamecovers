@@ -16,6 +16,9 @@ import { orderRepository } from '../../domain/order/order.repository.ts'
 import { transactionRepository } from '../../domain/transaction/transaction.repository.ts'
 import { transactionCategoryRepository } from '../../domain/transaction-category/transaction-category.repository.ts'
 
+// Controllers
+import { RouterController } from '../../controllers/router.controller.ts'
+
 // Utils
 import { getMonthName } from '../../utils/date.utils.ts'
 
@@ -39,6 +42,8 @@ class VTransaction extends LayoutMixin(LitElement) {
 
   lastMonth: string = ''
 
+  _routerController = new RouterController(this)
+
   static styles = css`${unsafeCSS(style)}`
 
   connectedCallback(): void {
@@ -53,7 +58,7 @@ class VTransaction extends LayoutMixin(LitElement) {
       html`
         <div class="v-transaction">
           <div class="v-transaction__resume">
-            <a href="/transaction/new" class="v-transaction__create">
+            <a href="${this._getCreationRoute()}" class="v-transaction__create">
               <e-icon icon="add"></e-icon>
             </a>
             <p class="v-transaction__total">${this.total}€</p>
@@ -160,21 +165,22 @@ class VTransaction extends LayoutMixin(LitElement) {
       if (!order) return ''
 
       return html`
-        <c-card-simple
-          class="v-transaction__card"
-          type=${category.name}
-          name=${order.name}
-          platform=${order.payment}
-          date=${transaction.updatedAt}
-          money=${transaction.amount}
-          icon=${category.icon}
-          color=${category.color}
-        ></c-card-simple>
+        <a class="v-transaction__card" href="${this._getOrderViewRoute(transaction)}">
+          <c-card-simple
+            type=${category.name}
+            name=${order.name}
+            platform=${order.payment}
+            date=${transaction.updatedAt}
+            money=${transaction.amount}
+            icon=${category.icon}
+            color=${category.color}
+          ></c-card-simple>
+        </a>
       `
     }
 
     return html`
-      <a class="v-transaction__card" href="/transaction/${transaction.id}">
+      <a class="v-transaction__card" href="${this._getEditRoute(transaction)}">
         <c-card-simple
           type=${category.name}
           date=${transaction.updatedAt}
@@ -184,5 +190,17 @@ class VTransaction extends LayoutMixin(LitElement) {
         ></c-card-simple>
       </a>
     `
+  }
+
+  private _getCreationRoute() {
+    return this._routerController.getAdminRoute('transactionNew', {})
+  }
+
+  private _getEditRoute(transaction: Transaction) {
+    return this._routerController.getAdminRoute('transactionEdit', { id: transaction.id })
+  }
+
+  private _getOrderViewRoute(transaction: Transaction) {
+    return this._routerController.getAdminRoute('orderView', { id: transaction.idOrder })
   }
 }

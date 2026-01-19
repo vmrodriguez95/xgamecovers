@@ -11,9 +11,12 @@ import { TransactionFormScheme } from '../../domain/transaction/transaction.form
 // Mixins
 import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 
+// Controllers
+import { RouterController } from '../../controllers/router.controller.ts'
+
 // Types
-import { Option } from '../../domain/form/form.types.ts'
-import { TransactionCategory } from '../../domain/transaction-category/transaction-category.types.ts'
+import type { Option } from '../../domain/form/form.types.ts'
+import type { TransactionCategory } from '../../domain/transaction-category/transaction-category.types.ts'
 
 // Styles
 import style from './v-transaction-new.style.scss?inline'
@@ -26,6 +29,8 @@ class VTransactionNew extends LayoutMixin(LitElement) {
   @state() _formscheme = TransactionFormScheme
 
   @query('c-form') form!: HTMLFormElement
+
+  _routerController = new RouterController(this)
 
   static styles = css`${unsafeCSS(style)}`
 
@@ -82,6 +87,6 @@ class VTransactionNew extends LayoutMixin(LitElement) {
   }
 
   private _goBack() {
-    location.href = '/transaction'
+    location.href = this._routerController.getAdminRoute('transaction', {})
   }
 }
