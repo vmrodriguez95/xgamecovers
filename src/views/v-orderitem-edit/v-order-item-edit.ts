@@ -6,20 +6,20 @@ import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 
 // Types
 import { Option } from '../../domain/form/form.types.ts'
+import { Design } from '../../domain/design/design.types.ts'
 import { Status } from '../../domain/status/status.types.ts'
 import { EButton } from '../../elements/e-button/e-button.ts'
 import { Version } from '../../domain/version/version.types.ts'
 import { Console } from '../../domain/console/console.types.ts'
 import { URLParam } from '../../domain/generic/generic.types.ts'
-import { Design } from '../../domain/catalogue/catalogue.types.ts'
 import { OrderItem } from '../../domain/order-item/order-item.types.ts'
 
 // Repository
+import { designRepository } from '../../domain/design/design.repository.ts'
 import { statusRepository } from '../../domain/status/status.repository.ts'
 import { versionRepository } from '../../domain/version/version.repository.ts'
 import { consoleRepository } from '../../domain/console/console.repository.ts'
 import { orderItemRepository } from '../../domain/order-item/order-item.repository.ts'
-import { catalogueDesignRepository } from '../../domain/catalogue/catalogue.repository.ts'
 
 // Controllers
 import { RouterController } from '../../controllers/router.controller.ts'
@@ -86,7 +86,7 @@ class VOrderItemEdit extends LayoutMixin(LitElement) {
   private async _loadDesign() {
     if (!this._orderItem) return
 
-    this._design = await catalogueDesignRepository.getById(this._orderItem.idDesign)
+    this._design = await designRepository.getById(this._orderItem.idDesign)
   }
 
   private async _getConsolesAsOptions(): Promise<Option[]> {

@@ -2,7 +2,7 @@ import { FormScheme, Option } from "../form/form.types";
 
 export const TransactionFormScheme: FormScheme = {
   id: {
-    id: 'orderId',
+    id: 'transactionId',
     name: 'id',
     label: 'Identificador',
     type: 'hidden',
@@ -11,7 +11,7 @@ export const TransactionFormScheme: FormScheme = {
     readonly: true
   },
   idCategory: {
-    id: 'orderIdCategory',
+    id: 'transactionIdCategory',
     name: 'idCategory',
     label: 'Categoría',
     type: 'select',
@@ -20,8 +20,17 @@ export const TransactionFormScheme: FormScheme = {
     required: true,
     readonly: false
   },
+  idOrder: {
+    id: 'transactionIdOrder',
+    name: 'id del pedido',
+    label: 'Identificador',
+    type: 'hidden',
+    fillValue: 0,
+    required: false,
+    readonly: true
+  },
   amount: {
-    id: 'orderAmount',
+    id: 'transactionAmount',
     name: 'amount',
     label: 'La viruji',
     type: 'number',

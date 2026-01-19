@@ -3,7 +3,7 @@ import { customElement, property, state, query } from 'lit/decorators.js'
 import { when } from 'lit/directives/when.js'
 
 // Form
-import { CatalogueFormScheme } from '../../domain/catalogue/catalogue.form.ts'
+import { GameFormScheme } from '../../domain/game/game.form.ts'
 
 // Mixins
 import { LayoutMixin } from '../../mixins/layout.mixin.ts'
@@ -12,15 +12,17 @@ import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 import { RouterController } from '../../controllers/router.controller.ts'
 
 // Repositories
+import { gameRepository } from '../../domain/game/game.repository.ts'
+import { designRepository } from '../../domain/design/design.repository.ts'
 import { storageRepository } from '../../domain/storage/storage.repository.ts'
 import { consoleRepository } from '../../domain/console/console.repository.ts'
-import { catalogueDesignRepository, catalogueGameRepository } from '../../domain/catalogue/catalogue.repository.ts'
 
 // Types
+import { Game } from '../../domain/game/game.types.ts'
+import { Design } from '../../domain/design/design.types.ts'
 import { EButton } from '../../elements/e-button/e-button.ts'
 import { Console } from '../../domain/console/console.types.ts'
 import { URLParam } from '../../domain/generic/generic.types.ts'
-import { Design, Game } from '../../domain/catalogue/catalogue.types.ts'
 import { FieldBlock, FieldScheme, FormScheme } from '../../domain/form/form.types.ts'
 
 // Consts
@@ -38,7 +40,7 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
 
   @property({ type: Object }) urlParams!: URLParam
 
-  @state() _formscheme = CatalogueFormScheme
+  @state() _formscheme = GameFormScheme
 
   @state() _game!: Game
 
@@ -82,7 +84,7 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
   }
 
   private async _loadGame() {
-    const game = await catalogueGameRepository.getById(this.urlParams.id)
+    const game = await gameRepository.getById(this.urlParams.id)
 
     if (game) {
       this._game = game
@@ -118,7 +120,7 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
   }
 
    private async _loadDesigns() {
-    const designs = await catalogueDesignRepository.getDesignsByGame(this.urlParams.id)
+    const designs = await designRepository.getByIdGame(this.urlParams.id)
 
     if (designs.length > 0) {
       this._designs = designs
@@ -176,11 +178,11 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
   private _saveGame(idGame: string, data: Game) {
     data.id = idGame
 
-    catalogueGameRepository.update(idGame, data)
+    gameRepository.update(idGame, data)
   }
 
   private async _insertDesign(data: Design): Promise<string | null> {
-    return await catalogueDesignRepository.create(data)
+    return await designRepository.create(data)
   }
 
   private async _insertAllDesigns(designs: Design[], rawDesigns: FormScheme[], idGame: string): Promise<void> {
@@ -202,13 +204,13 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
       if (slipcoverUrl) design.slipcover = slipcoverUrl
 
       if (posterUrl || slipcoverUrl || materialUrl) {
-        await catalogueDesignRepository.update(idDesign, design)
+        await designRepository.update(idDesign, design)
       }
     }
   }
 
   private async _updateDesign(idDesign: string, data: Design): Promise<void> {
-    return await catalogueDesignRepository.update(idDesign, data)
+    return await designRepository.update(idDesign, data)
   }
 
   private async _updateAllDesigns(designs: Design[], rawDesigns: FormScheme[]) {
@@ -229,7 +231,7 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
   }
 
   private async _deleteDesign(idDesign: string): Promise<void> {
-    return await catalogueDesignRepository.delete(idDesign)
+    return await designRepository.delete(idDesign)
   }
 
   private _deleteAllDesigns(deletedDesigns: Design[]) {

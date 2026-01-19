@@ -6,7 +6,7 @@ const PATH = 'transactionsCategory'
 
 export class TransactionCategoryRepository {
   async getAll(): Promise<TransactionCategory[]> {
-    const data = await rtdbService.getAll(PATH)
+    const data = await rtdbService.getAllOrderedBy(PATH, 'order')
     return data.map(TransactionCategoryFactory.fromApi)
   }
 

@@ -11,13 +11,15 @@ import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 import { RouterController } from '../../controllers/router.controller.ts'
 
 // Types
+import { Game } from '../../domain/game/game.types.ts'
+import { Design } from '../../domain/design/design.types.ts'
 import { Console } from '../../domain/console/console.types.ts'
 import { URLParam } from '../../domain/generic/generic.types.ts'
-import { Design, Game } from '../../domain/catalogue/catalogue.types.ts'
 
 // Repository
+import { gameRepository } from '../../domain/game/game.repository.ts'
+import { designRepository } from '../../domain/design/design.repository.ts'
 import { consoleRepository } from '../../domain/console/console.repository.ts'
-import { catalogueDesignRepository, catalogueGameRepository } from '../../domain/catalogue/catalogue.repository.ts'
 
 // Styles
 import style from './v-order-item.style.scss?inline'
@@ -61,7 +63,7 @@ class VOrderItem extends LayoutMixin(LitElement) {
   }
 
   private async _loadGameList() {
-    const gameList = await catalogueGameRepository.getAllOrderedBy('name')
+    const gameList = await gameRepository.getAllOrderedBy('name')
 
     this._gameList = gameList
     this._queryGameList = gameList
@@ -84,7 +86,7 @@ class VOrderItem extends LayoutMixin(LitElement) {
   }
 
   private async _printGameCard(game: Game) {
-    const designs = await catalogueDesignRepository.getDesignsByGame(game.id)
+    const designs = await designRepository.getByIdGame(game.id)
     const favDesign = this._getFavDesign(designs)
     const design = favDesign || designs[0]
 

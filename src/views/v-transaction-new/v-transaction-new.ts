@@ -11,9 +11,12 @@ import { TransactionFormScheme } from '../../domain/transaction/transaction.form
 // Mixins
 import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 
+// Controllers
+import { RouterController } from '../../controllers/router.controller.ts'
+
 // Types
-import { Option } from '../../domain/form/form.types.ts'
-import { TransactionCategory } from '../../domain/transaction-category/transaction-category.types.ts'
+import type { Option } from '../../domain/form/form.types.ts'
+import type { TransactionCategory } from '../../domain/transaction-category/transaction-category.types.ts'
 
 // Styles
 import style from './v-transaction-new.style.scss?inline'
@@ -26,6 +29,8 @@ class VTransactionNew extends LayoutMixin(LitElement) {
   @state() _formscheme = TransactionFormScheme
 
   @query('c-form') form!: HTMLFormElement
+
+  _routerController = new RouterController(this)
 
   static styles = css`${unsafeCSS(style)}`
 
@@ -44,8 +49,8 @@ class VTransactionNew extends LayoutMixin(LitElement) {
             .scheme=${this._formscheme}
           ></c-form>
           <div class="v-transaction-new__actions">
-            <e-button class="v-transaction-new__button" @click=${this._goBack}>cancelar</e-button>
-            <e-button class="v-transaction-new__button" @click=${this.createtransaction}>Guardar</e-button>
+            <e-button class="v-transaction-new__button" size="full" @click=${this._goBack}>Cancelar</e-button>
+            <e-button class="v-transaction-new__button" size="full" @click=${this.createTransaction}>Crear</e-button>
           </div>
         </div>
       `,
@@ -58,7 +63,6 @@ class VTransactionNew extends LayoutMixin(LitElement) {
     const newscheme = window.structuredClone(this._formscheme)
 
     const options: Option[] = allCategory
-      .filter((category: TransactionCategory) => category.type === 'expense')
       .map((category: TransactionCategory) => {
         return {
           value: category.id,
@@ -66,20 +70,23 @@ class VTransactionNew extends LayoutMixin(LitElement) {
         }
       })
 
-    newscheme.idCategory.options = options
+    if ('options' in newscheme.idCategory) {
+      newscheme.idCategory.options = options
+    }
 
     this._formscheme = newscheme
   }
 
-  private createtransaction() {
+  private createTransaction() {
     const data = this.form.getFinalData()
 
     if (data) {
       transactionRepository.create(data)
+      this._goBack()
     }
   }
 
   private _goBack() {
-    location.href = '/transaction'
+    location.href = this._routerController.getAdminRoute('transaction', {})
   }
 }

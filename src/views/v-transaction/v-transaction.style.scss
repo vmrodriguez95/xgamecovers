@@ -1,21 +1,65 @@
 @use '../../styles/tools/tools' as *;
+@use '../../styles/tools/typography' as *;
 
 .v-transaction {
   display: block;
   padding: space(2) var(--grid-margin);
   box-sizing: border-box;
-
-  &__head {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
+  
+  &__resume {
+    position: relative;
+    text-align: center;
+    padding: space(2);
+    border-radius: space(1);
+    box-sizing: border-box;
+    box-shadow: 0 3px 10px 0 rgba(var(--color-dark), 0.5);
   }
 
   &__create {
-    --eIconColor: var(--color-light);
+    --eIconColor: var(--color-primary);
     display: inline-flex;
-    padding: space(1);
-    border-radius: space(1);
-    background-color: rgba(var(--color-primary), 1);
+    position: absolute;
+    top: space(1);
+    right: space(1);
+  }
+
+  &__card {
+    display: block;
+    margin-bottom: space(2);
+    position: relative;
+    text-decoration: none;
+  }
+
+  &__title {
+    @include body--l;
+    position: sticky;
+    top: 0;
+    padding: space(4) 0 space(1);
+    color: rgba(var(--color-dark), 1);
+    background-color: rgba(var(--color-light), 1);
+    text-transform: capitalize;
+    z-index: 1;
+  }
+
+  &__total {
+    @include body--xl(500);
+    color: rgba(var(--color-dark), 1);
+    margin: 0 0 space(1);
+  }
+
+  &__semitotal {
+    @include body--l(500);
+
+    &--expense {
+      color: rgba(var(--color-status--red), 1);
+    }
+
+    &--income {
+      color: rgba(var(--color-status--green), 1);
+    }
+
+    & + & {
+      margin-left: space(4);
+    }
   }
 }
