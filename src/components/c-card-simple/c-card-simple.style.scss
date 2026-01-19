@@ -1,0 +1,48 @@
+@use '../../styles/tools/tools' as *;
+@use '../../styles/tools/typography' as *;
+
+.c-card-simple {
+  --avatarBgColor: var(--avatarColor, var(--color-gray));
+  display: grid;
+  grid-template-columns: min-content 1fr min-content;
+  align-items: center;
+  padding: space(1) space(2);
+  gap: space(1);
+  box-shadow: 0 3px 10px 0 rgba(var(--color-dark), 0.5);
+  background-color: rgba(var(--color-light), 1);
+  border-radius: space(1);
+
+  &__avatar {
+    --eIconColor: var(--color-light);
+    display: flex;
+    place-content: center;
+    grid-column: 1;
+    width: space(8);
+    height: space(8);
+    border: 1px solid rgba(var(--avatarBgColor), 1);
+    background-color: rgba(var(--avatarBgColor), 0.7);
+    border-radius: 100%;
+  }
+
+  &__info {
+    grid-column: 2 / 3;
+  }
+
+  &__title {
+    @include body--m(500);
+    color: rgba(var(--color-dark), 1);
+    margin: 0;
+  }
+  
+  &__text {
+    @include body--xs(500);
+    color: rgba(var(--color-gray--dark), 1);
+    margin: 0;
+  }
+  
+  &__price {
+    @include body--xl(500);
+    margin: 0;
+    grid-column: 3;
+  }
+}

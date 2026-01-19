@@ -41,13 +41,13 @@ export class RouterController {
     transaction: {
       path: '/transaction',
       render: () => html`
-        <v-transaction></v-transaction>
+        <v-transaction heading="Transacciones"></v-transaction>
       `
     },
     transactionNew: {
       path: '/transaction/new',
       render: () => html`
-        <v-transaction-new></v-transaction-new>
+        <v-transaction-new heading="Transacciones"></v-transaction-new>
       `
     },
     transactionEdit: {
