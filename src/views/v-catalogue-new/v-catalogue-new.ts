@@ -55,8 +55,8 @@ class VCatalogueNew extends LayoutMixin(LitElement) {
           .scheme=${this._formscheme}
         ></c-form>
         <div class="v-catalogue-new__actions">
-          <e-button class="v-catalogue-new__button" @click=${this._goBack}>Cancelar</e-button>
-          <e-button class="v-catalogue-new__button" @click=${this._createHandler}>Crear</e-button>
+          <e-button class="v-catalogue-new__button" size="full" @click=${this._goBack}>Cancelar</e-button>
+          <e-button class="v-catalogue-new__button" size="full" @click=${this._createHandler}>Crear</e-button>
         </div>
       </div>
     `)

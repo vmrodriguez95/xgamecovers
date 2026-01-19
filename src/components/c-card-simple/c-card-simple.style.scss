@@ -17,8 +17,8 @@
     display: flex;
     place-content: center;
     grid-column: 1;
-    width: space(8);
-    height: space(8);
+    width: space(6);
+    height: space(6);
     border: 1px solid rgba(var(--avatarBgColor), 1);
     background-color: rgba(var(--avatarBgColor), 0.7);
     border-radius: 100%;
@@ -44,5 +44,6 @@
     @include body--xl(500);
     margin: 0;
     grid-column: 3;
+    color: rgba(var(--color-dark), 1);
   }
 }
