@@ -13,6 +13,7 @@ import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 
 // Controllers
 import { RouterController } from '../../controllers/router.controller.ts'
+import { ConfirmController } from '../../controllers/confirm.controller.ts'
 
 // Types
 import type { Option } from '../../domain/form/form.types.ts'
@@ -36,6 +37,8 @@ class VTransactionEdit extends LayoutMixin(LitElement) {
 
   _routerController = new RouterController(this)
 
+  _confirmController = new ConfirmController(this)
+
   @query('c-form') form!: HTMLFormElement
 
   static styles = css`${unsafeCSS(style)}`
@@ -52,13 +55,18 @@ class VTransactionEdit extends LayoutMixin(LitElement) {
     return this.layoutGrid(
       html`
         <div class="v-transaction-edit">
+          <div class="v-transaction-edit__head">
+            <button class="v-transaction-edit__delete" @click=${this._deleteHandler}>
+              <e-icon icon="delete"></e-icon>
+            </button>
+          </div>
           <c-form
             class="v-transaction-edit__form"
             .scheme=${this._formscheme}
           ></c-form>
           <div class="v-transaction-edit__actions">
             <e-button class="v-transaction-edit__button" size="full" @click=${this._goBack}>Cancelar</e-button>
-            <e-button class="v-transaction-edit__button" size="full" @click=${this.editTransaction}>Guardar</e-button>
+            <e-button class="v-transaction-edit__button" size="full" @click=${this._editTransaction}>Guardar</e-button>
           </div>
         </div>
       `,
@@ -100,13 +108,25 @@ class VTransactionEdit extends LayoutMixin(LitElement) {
     this._formscheme = newscheme
   }
 
-  private editTransaction() {
+  private _editTransaction() {
     const data = this.form.getFinalData()
 
     if (data) {
       transactionRepository.create(data)
       this._goBack()
     }
+  }
+
+  async _deleteHandler() {
+    if (!this._transaction) return
+
+    const userChoise = await this._confirmController.confirm('¿Realmente quieres eliminar la transacción?')
+
+    if (!userChoise) return
+
+    await transactionRepository.delete(this._transaction.id)
+
+    this._goBack()
   }
 
   private _goBack() {
