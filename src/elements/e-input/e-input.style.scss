@@ -39,7 +39,7 @@
   }
 
   &__field {
-    @include body--s;
+    @include body--m;
     display: block;
     width: 100%;
     background-color: rgba(var(--color-gray), 1);
