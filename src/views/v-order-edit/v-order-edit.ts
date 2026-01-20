@@ -4,6 +4,7 @@ import { customElement, property, query, state } from 'lit/decorators.js'
 // BBDD
 import { orderRepository } from '../../domain/order/order.repository.ts'
 import { statusRepository } from '../../domain/status/status.repository.ts'
+import { transactionRepository } from '../../domain/transaction/transaction.repository.ts'
 
 // Domain
 import { OrderFormScheme } from '../../domain/order/order.form.ts'
@@ -106,7 +107,9 @@ class VOrderNew extends LayoutMixin(LitElement) {
     const data = this.form.getFinalData()
 
     if (data && this._order) {
-      await orderRepository.update(this._order.id, data)
+      const idOrder = this._order.id
+      await orderRepository.update(idOrder, data)
+      await transactionRepository.updateByIdOrder(idOrder, { amount: data.finalPrice })
 
       this._goToOrderView()
     }

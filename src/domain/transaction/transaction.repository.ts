@@ -18,6 +18,12 @@ export class TransactionRepository {
     return data ? TransactionFactory.fromApi(data) : null
   }
 
+  async getByIdOrder(idOrder: string): Promise<Transaction | null> {
+    const data = await rtdbService.filterByChild(PATH, 'idOrder', idOrder)
+    
+    return data ? TransactionFactory.fromApi(data[0]) : null
+  }
+
   async create(data: Transaction) {
     await rtdbService.set(PATH, data)
   }
@@ -26,8 +32,24 @@ export class TransactionRepository {
     await rtdbService.update(PATH, id, partial)
   }
 
+  async updateByIdOrder(idOrder: string, partial: Partial<Transaction>) {
+    const transaction = await this.getByIdOrder(idOrder)
+
+    if (!transaction?.id) return
+
+    await rtdbService.update(PATH, transaction.id, partial)
+  }
+
   async delete(id: string) {
     await rtdbService.delete(PATH, id)
+  }
+
+  async deleteByIdOrder(idOrder: string) {
+    const transaction = await this.getByIdOrder(idOrder)
+
+    if (!transaction?.id ) return
+
+    await rtdbService.delete(PATH, transaction.id)
   }
 }
 

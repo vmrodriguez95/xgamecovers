@@ -10,14 +10,15 @@ import { designRepository } from '../../domain/design/design.repository.ts'
 import { statusRepository } from '../../domain/status/status.repository.ts'
 import { versionRepository } from '../../domain/version/version.repository.ts'
 import { orderItemRepository } from '../../domain/order-item/order-item.repository.ts'
+import { transactionRepository } from '../../domain/transaction/transaction.repository.ts'
 
 // Types
-import { Order } from '../../domain/order/order.types.ts'
-import { Design } from '../../domain/design/design.types.ts'
-import { Status } from '../../domain/status/status.types.ts'
-import { Version } from '../../domain/version/version.types.ts'
-import { URLParam } from '../../domain/generic/generic.types.ts'
-import { OrderItem } from '../../domain/order-item/order-item.types.ts'
+import type { Order } from '../../domain/order/order.types.ts'
+import type { Design } from '../../domain/design/design.types.ts'
+import type { Status } from '../../domain/status/status.types.ts'
+import type { Version } from '../../domain/version/version.types.ts'
+import type { URLParam } from '../../domain/generic/generic.types.ts'
+import type { OrderItem } from '../../domain/order-item/order-item.types.ts'
 
 // Mixins
 import { LayoutMixin } from '../../mixins/layout.mixin.ts'
@@ -248,15 +249,20 @@ class VOrderView extends LayoutMixin(LitElement) {
     this._startDeleteAnimation(designEl)
   }
 
+  private async _deleteTransaction(idOrder: string) {
+    await transactionRepository.deleteByIdOrder(idOrder)
+  }
+
   private async _deleteHandler() {
     if (!this._order) return
 
     const userChoise = await this._confirmController.confirm('¿Realmente quieres eliminar el pedido?')
     if (!userChoise) return
 
-    const idOrder = this._order.id    
+    const idOrder = this._order.id
     await this._deleteOrder(idOrder)
     await this._deleteDesignsByOrder(idOrder)
+    await this._deleteTransaction(idOrder)
 
     this._goBack()
   }
