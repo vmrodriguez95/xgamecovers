@@ -77,11 +77,11 @@ class VTransactionNew extends LayoutMixin(LitElement) {
     this._formscheme = newscheme
   }
 
-  private createTransaction() {
+  private async createTransaction() {
     const data = this.form.getFinalData()
 
     if (data) {
-      transactionRepository.create(data)
+      await transactionRepository.create(data)
       this._goBack()
     }
   }
