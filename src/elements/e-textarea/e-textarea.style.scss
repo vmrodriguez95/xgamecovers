@@ -6,7 +6,7 @@
   position: relative;
 
   &__label {
-    @include body--s;
+    @include body--m;
     display: flex;
     align-items: center;
     width: 100%;
@@ -14,7 +14,7 @@
   }
 
   &__field {
-    @include body--s;
+    @include body--m;
     display: block;
     width: 100%;
     background-color: rgba(var(--color-gray), 1);
