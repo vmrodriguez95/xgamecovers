@@ -38,6 +38,9 @@ class CHeader extends LitElement {
             <li class="c-menu__item">
               <a href="/transaction" class="c-menu__link"><e-icon icon="receipt"></e-icon>Transacciones</a>
             </li>
+            <li class="c-menu__item">
+              <a href="/client" class="c-menu__link"><e-icon icon="person"></e-icon>Clientes</a>
+            </li>
           `)}
           <li class="c-menu__item c-menu__item--last">
             ${when(!authStore.isLogged(), () => html`
