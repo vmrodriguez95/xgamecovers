@@ -78,8 +78,8 @@ class VTransaction extends LayoutMixin(LitElement) {
           </div>
           <div class="v-transaction__list">
             ${map(this._transactions, (transaction: Transaction) => html`
-              ${when(this._hasMonthChanged(transaction.updatedAt), () => html`
-                <p class="v-transaction__title">${getMonthName(transaction.updatedAt)}</p>
+              ${when(this._hasMonthChanged(transaction.createdAt), () => html`
+                <p class="v-transaction__title">${getMonthName(transaction.createdAt)}</p>
               `)}
               ${until(this._getTransactionHTML(transaction))}
             `)}
@@ -281,7 +281,7 @@ class VTransaction extends LayoutMixin(LitElement) {
     const category = this._getCategoryById(transaction.idCategory)
     if (!category || !transaction) return ''
 
-    this._lastMonth = getMonthName(transaction.updatedAt)
+    this._lastMonth = getMonthName(transaction.createdAt)
 
     if (transaction.idOrder) {
       const order = await orderRepository.getById(transaction.idOrder)
