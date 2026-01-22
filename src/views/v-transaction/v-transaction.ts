@@ -294,7 +294,7 @@ class VTransaction extends LayoutMixin(LitElement) {
             type=${category.name}
             name=${order.name}
             platform=${order.payment}
-            date=${transaction.updatedAt}
+            date=${transaction.createdAt}
             money=${transaction.amount}
             icon=${category.icon}
             color=${category.color}
@@ -307,7 +307,7 @@ class VTransaction extends LayoutMixin(LitElement) {
       <a class="v-transaction__card" href="${this._getEditRoute(transaction)}">
         <c-card-simple
           type=${category.name}
-          date=${transaction.updatedAt}
+          date=${transaction.createdAt}
           money="${category.type === 'expense' ? '-' : ''}${transaction.amount}"
           icon=${category.icon}
           color=${category.color}
