@@ -1,19 +1,21 @@
 import { storageService } from '../../firebase/storage.service'
 
-export const storageRepository = {
-  uploadImage: async (file: File, path: string) => {
+class StorageRepository {
+  async uploadImage(file: File, path: string) {
     return await storageService.uploadImage(file, path)
-  },
+  }
 
-  getImageUrl: async (path: string) => {
+  async getImageUrl(path: string) {
     return await storageService.getImageUrl(path)
-  },
+  }
 
-  deleteImage: async (path: string) => {
+  async deleteImage(path: string) {
     return await storageService.deleteImage(path)
-  },
+  }
 
-  deleteFolder: async (path: string) => {
+  async deleteFolder(path: string) {
     return await storageService.deleteFolder(path)
   }
 }
+
+export const storageRepository = new StorageRepository()

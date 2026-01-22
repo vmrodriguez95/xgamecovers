@@ -4,7 +4,7 @@ import type { TransactionCategory } from './transaction-category.types'
 
 const PATH = 'transactionsCategory'
 
-export class TransactionCategoryRepository {
+class TransactionCategoryRepository {
   async getAll(): Promise<TransactionCategory[]> {
     const data = await rtdbService.getAllOrderedBy(PATH, 'order')
     return data.map(TransactionCategoryFactory.fromApi)
