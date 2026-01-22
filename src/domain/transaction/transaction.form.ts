@@ -22,10 +22,19 @@ export const TransactionFormScheme: FormScheme = {
   },
   idOrder: {
     id: 'transactionIdOrder',
-    name: 'id del pedido',
-    label: 'Identificador',
+    name: 'idOrder',
+    label: 'Id del pedido',
     type: 'hidden',
-    fillValue: 0,
+    fillValue: '',
+    required: false,
+    readonly: true
+  },
+  idOrderStatus: {
+    id: 'transactionIdOrderStatus',
+    name: 'idOrderStatus',
+    label: 'Id del estado del pedido',
+    type: 'hidden',
+    fillValue: '',
     required: false,
     readonly: true
   },
