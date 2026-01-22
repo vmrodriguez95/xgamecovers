@@ -6,7 +6,7 @@ const PATH = 'transaction'
 
 class TransactionRepository {
   async getAll(): Promise<Transaction[]> {
-    const data = await rtdbService.getAllOrderedBy(PATH, 'updatedAt')
+    const data = await rtdbService.getAllOrderedBy(PATH, 'createdAt')
     
     data.reverse() // DESC
 
