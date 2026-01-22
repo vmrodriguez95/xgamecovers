@@ -99,7 +99,7 @@ class VOrder extends LayoutMixin(LitElement) {
   }
 
   private async _loadOrders() {
-    const orders = await orderRepository.getAllOrderedByDate()
+    const orders = await orderRepository.getAll()
 
     this._orders = orders
     this._queryOrders = orders
