@@ -163,7 +163,10 @@ class VOrderView extends LayoutMixin(LitElement) {
   }
 
   private async _loadOrderData() {
-    this._order = await orderRepository.getById(this.urlParams.id)
+    const idOrder = this.urlParams.id
+
+    this.heading = idOrder
+    this._order = await orderRepository.getById(idOrder)
   }
 
   private async _loadStatus() {
