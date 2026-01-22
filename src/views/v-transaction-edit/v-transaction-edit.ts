@@ -112,7 +112,7 @@ class VTransactionEdit extends LayoutMixin(LitElement) {
     const data = this.form.getFinalData()
 
     if (data) {
-      transactionRepository.create(data)
+      transactionRepository.update(data.id, data)
       this._goBack()
     }
   }
