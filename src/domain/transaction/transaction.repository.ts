@@ -4,7 +4,7 @@ import type { Transaction } from './transaction.types'
 
 const PATH = 'transaction'
 
-export class TransactionRepository {
+class TransactionRepository {
   async getAll(): Promise<Transaction[]> {
     const data = await rtdbService.getAllOrderedBy(PATH, 'updatedAt')
     
@@ -20,7 +20,6 @@ export class TransactionRepository {
 
   async getByIdOrder(idOrder: string): Promise<Transaction | null> {
     const data = await rtdbService.filterByChild(PATH, 'idOrder', idOrder)
-    
     return data ? TransactionFactory.fromApi(data[0]) : null
   }
 

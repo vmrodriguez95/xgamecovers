@@ -43,6 +43,7 @@
 
   &__filled {
     height: space(1);
+    max-width: 100%;
     background-color: rgba(var(--avatarBgColor), 1);
     border-radius: space(0.5);
     transition: width 0.5s ease-in-out;

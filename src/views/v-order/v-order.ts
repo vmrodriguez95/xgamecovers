@@ -10,9 +10,10 @@ import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 import { Order } from '../../domain/order/order.types.ts'
 import { Status } from '../../domain/status/status.types.ts'
 
-// Repository
+// BBDD
 import { orderRepository } from '../../domain/order/order.repository.ts'
 import { statusRepository } from '../../domain/status/status.repository.ts'
+import { transactionRepository } from '../../domain/transaction/transaction.repository.ts'
 
 // Controllers
 import { RouterController } from '../../controllers/router.controller.ts'
@@ -142,6 +143,7 @@ class VOrder extends LayoutMixin(LitElement) {
 
     order.idStatus = status.id
     await orderRepository.update(order.id, { idStatus: status.id })
+    await transactionRepository.updateByIdOrder(order.id, { idOrderStatus: status.id })
 
     this._closeModal()
   }
