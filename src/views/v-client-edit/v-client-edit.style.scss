@@ -1,0 +1,30 @@
+@use '../../styles/tools/tools' as *;
+
+.v-client-edit {
+  padding: space(2) var(--grid-margin);
+  box-sizing: border-box;
+
+  &__head {
+    text-align: right;
+  }
+
+  &__delete {
+    background: none;
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: space(1);
+    margin-top: space(2);
+  }
+
+
+  &__button {
+    flex: 1 0 auto;
+  }
+
+}
