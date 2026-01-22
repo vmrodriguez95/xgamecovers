@@ -63,7 +63,7 @@ class VOrderItem extends LayoutMixin(LitElement) {
   }
 
   private async _loadGameList() {
-    const gameList = await gameRepository.getAllOrderedBy('name')
+    const gameList = await gameRepository.getAll()
 
     this._gameList = gameList
     this._queryGameList = gameList

@@ -52,7 +52,7 @@ class VCatalogue extends LayoutMixin(LitElement) {
     return this.layoutGrid(html`
       <div class="v-catalogue">
         <div class="v-catalogue__head">
-          <c-search class="v-catalogue__search" @search=${this._searchHandler}></c-search>
+          <c-search class="v-catalogue__search" @search=${this._searchHandler} placeholder="Buscar juego"></c-search>
           ${when(authStore.isLogged(), () => html`
             <a href=${this._getCreateUrl()}>
               <e-button><e-icon icon="add"></e-icon></e-button>
@@ -70,7 +70,7 @@ class VCatalogue extends LayoutMixin(LitElement) {
   }
 
   private async _loadGameList() {
-    const gameList = await gameRepository.getAllOrderedBy('name')
+    const gameList = await gameRepository.getAll()
 
     this._gameList = gameList
     this._queryGameList = gameList

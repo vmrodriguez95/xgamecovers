@@ -2,37 +2,31 @@ import { rtdbService } from '../../firebase/rtdb.service'
 import { GameFactory } from './game.factory'
 import type { Game } from './game.types'
 
-const PATH_GAMES = 'game'
+const PATH = 'game'
 
 class GameRepository {
   async getAll(): Promise<Game[]> {
-    const data = await rtdbService.getAll<Game>(PATH_GAMES)
-
-    return data.map(GameFactory.fromApi)
-  }
-
-  async getAllOrderedBy(orderedBy: string): Promise<Game[]> {
-    const data = await rtdbService.getAllOrderedBy<Game>(PATH_GAMES, orderedBy)
+    const data = await rtdbService.getAllOrderedBy<Game>(PATH, 'name')
 
     return data.map(GameFactory.fromApi)
   }
 
   async getById(id: string): Promise<Game | null> {
-    const data = await rtdbService.getById<Game>(PATH_GAMES, id)
+    const data = await rtdbService.getById<Game>(PATH, id)
 
     return data ? GameFactory.fromApi(data) : null
   }
 
   async create(data: Game) {
-    return await rtdbService.set<Game>(PATH_GAMES, data)
+    return await rtdbService.set<Game>(PATH, data)
   }
 
   async update(id: string, partial: Partial<Game>) {
-    await rtdbService.update<Game>(PATH_GAMES, id, partial)
+    await rtdbService.update<Game>(PATH, id, partial)
   }
 
   async delete(id: string) {
-    await rtdbService.delete(PATH_GAMES, id)
+    await rtdbService.delete(PATH, id)
   }
 }
 
