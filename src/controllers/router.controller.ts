@@ -38,6 +38,24 @@ export class RouterController {
         <v-catalogue-edit .urlParams=${params}></v-catalogue-edit>
       `
     },
+    client: {
+      path: '/client',
+      render: () => html`
+        <v-client heading="Clientes"></v-client>
+      `
+    },
+    clientNew: {
+      path: '/client/new',
+      render: () => html`
+        <v-client-new heading="Nuevo Cliente"></v-client-new>
+      `
+    },
+    clientEdit: {
+      path: '/client/:id',
+      render: (params: Object) => html`
+        <v-client-edit .urlParams=${params}></v-client-edit>
+      `
+    },
     transaction: {
       path: '/transaction',
       render: () => html`
@@ -47,7 +65,7 @@ export class RouterController {
     transactionNew: {
       path: '/transaction/new',
       render: () => html`
-        <v-transaction-new heading="Transacciones"></v-transaction-new>
+        <v-transaction-new heading="Nueva transacción"></v-transaction-new>
       `
     },
     transactionEdit: {
