@@ -98,6 +98,7 @@ class VOrderNew extends LayoutMixin(LitElement) {
     const newTransaction = {} as Transaction
 
     newTransaction.idOrder = idOrder
+    newTransaction.idOrderStatus = newOrder.idStatus
     newTransaction.amount = newOrder.finalPrice
     newTransaction.idCategory = this._getIncomeCategory()!.id
 

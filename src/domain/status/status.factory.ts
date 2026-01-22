@@ -5,7 +5,8 @@ export const StatusFactory = {
     return {
       id: data.id,
       name: data.name ?? '',
-      color: data.color ?? ''
+      color: data.color ?? '',
+      incomeStatus: data.incomeStatus ?? ''
     }
   }
 }

@@ -109,7 +109,7 @@ class VOrderNew extends LayoutMixin(LitElement) {
     if (data && this._order) {
       const idOrder = this._order.id
       await orderRepository.update(idOrder, data)
-      await transactionRepository.updateByIdOrder(idOrder, { amount: data.finalPrice })
+      await transactionRepository.updateByIdOrder(idOrder, { amount: data.finalPrice, idOrderStatus: data.idStatus })
 
       this._goToOrderView()
     }
