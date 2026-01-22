@@ -6,12 +6,7 @@ const PATH = 'order'
 
 class OrderRepository {
   async getAll(): Promise<Order[]> {
-    const data = await rtdbService.getAll(PATH)
-    return data.map(OrderFactory.fromApi)
-  }
-
-  async getAllOrderedByDate(): Promise<Order[]> {
-    const data = await rtdbService.getAllOrderedBy(PATH, 'updatedAt')
+    const data = await rtdbService.getAllOrderedBy(PATH, 'createdAt')
 
     data.reverse()
 
