@@ -5,7 +5,7 @@ import type { Status } from './status.types'
 const PATH = 'orderStatus'
 const PATH_ITEM = 'orderItemStatus'
 
-export class StatusRepository {
+class StatusRepository {
   async getAll(): Promise<Status[]> {
     const data = await rtdbService.getAll(PATH)
 

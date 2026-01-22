@@ -4,7 +4,7 @@ import type { Order } from './order.types'
 
 const PATH = 'order'
 
-export class OrderRepository {
+class OrderRepository {
   async getAll(): Promise<Order[]> {
     const data = await rtdbService.getAll(PATH)
     return data.map(OrderFactory.fromApi)
