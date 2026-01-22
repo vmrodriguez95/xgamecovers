@@ -53,9 +53,13 @@ class CCardSimple extends LitElement {
           ${when(this.platform, () => html`
             <p class="c-card-simple__text">${this.platform}</p>
           `)}
-          <p class="c-card-simple__text">${showDateWithFormat(this.date)}</p>
+          ${when(this.date, () => html`
+            <p class="c-card-simple__text">${showDateWithFormat(this.date)}</p>
+          `)}
         </div>
-        <p class="c-card-simple__price">${this.money}€</p>
+        ${when(this.money, () => html`
+          <p class="c-card-simple__price">${this.money}€</p>
+        `)}
       </div>
     `
   }
