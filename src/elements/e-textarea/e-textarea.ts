@@ -6,7 +6,7 @@ import { when } from 'lit/directives/when.js'
 import style from './e-textarea.style.scss?inline'
 
 @customElement('e-textarea')
-class ETextarea extends LitElement {
+export class ETextarea extends LitElement {
 
   private _internals: ElementInternals
 

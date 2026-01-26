@@ -61,6 +61,7 @@ export interface FieldScheme {
   icon?: string
   iconChecked?: string
   files?: FileList | null
+  searchType?: string
 }
 
 export type FormScheme = Record<string, FieldScheme | FieldBlock>

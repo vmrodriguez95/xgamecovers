@@ -10,6 +10,17 @@ export const OrderFormScheme: FormScheme = {
     required: false,
     readonly: true
   },
+  idClient: {
+    id: 'orderIdClient',
+    name: 'idClient',
+    label: 'Cliente',
+    type: 'search',
+    searchType: 'client',
+    fillValue: '',
+    options: [] as Option[],
+    required: false,
+    readonly: false
+  },
   idStatus: {
     id: 'orderIdStatus',
     name: 'idStatus',
@@ -18,55 +29,6 @@ export const OrderFormScheme: FormScheme = {
     fillValue: '',
     options: [] as Option[],
     required: true,
-    readonly: false
-  },
-  name: {
-    id: 'orderName',
-    name: 'name',
-    label: 'Nombre',
-    type: 'text',
-    fillValue: '',
-    required: false,
-    readonly: false
-  },
-  whatsapp: {
-    id: 'orderWhatsapp',
-    name: 'whatsapp',
-    label: 'Nombre Whatsapp',
-    type: 'text',
-    logo: 'whatsapp', // El logo va al lado del label y se saca de los pngs de las imágenes.
-    fillValue: '',
-    required: false,
-    readonly: false
-  },
-  wallapop: {
-    id: 'orderWallapop',
-    name: 'wallapop',
-    label: 'Nombre Wallapop',
-    type: 'text',
-    logo: 'wallapop', // El logo va al lado del label y se saca de los pngs de las imágenes.
-    fillValue: '',
-    required: false,
-    readonly: false
-  },
-  instagram: {
-    id: 'orderInstagram',
-    name: 'instagram',
-    label: 'Nombre Instagram',
-    type: 'text',
-    logo: 'instagram', // El logo va al lado del label y se saca de los pngs de las imágenes.
-    fillValue: '',
-    required: false,
-    readonly: false
-  },
-  vinted: {
-    id: 'orderVinted',
-    name: 'vinted',
-    label: 'Nombre Vinted',
-    type: 'text',
-    logo: 'vinted', // El logo va al lado del label y se saca de los pngs de las imágenes.
-    fillValue: '',
-    required: false,
     readonly: false
   },
   finalPrice: {
@@ -84,15 +46,6 @@ export const OrderFormScheme: FormScheme = {
     label: 'Coste del envío',
     type: 'number',
     fillValue: 0,
-    required: false,
-    readonly: false
-  },
-  address: {
-    id: 'orderAddress',
-    name: 'address',
-    label: 'Dirección',
-    type: 'textarea',
-    fillValue: '',
     required: false,
     readonly: false
   },
@@ -125,6 +78,70 @@ export const OrderFormScheme: FormScheme = {
     label: 'Total de diseños',
     type: 'hidden',
     fillValue: 0,
+    required: false,
+    readonly: false
+  },
+  name: {
+    id: 'orderName',
+    name: 'name',
+    label: 'Nombre',
+    type: 'text',
+    fillValue: '',
+    dependsOn: ['orderIdClient'],
+    required: false,
+    readonly: false
+  },
+  whatsapp: {
+    id: 'orderWhatsapp',
+    name: 'whatsapp',
+    label: 'Nombre Whatsapp',
+    type: 'text',
+    logo: 'whatsapp', // El logo va al lado del label y se saca de los pngs de las imágenes.
+    fillValue: '',
+    dependsOn: ['orderIdClient'],
+    required: false,
+    readonly: false
+  },
+  wallapop: {
+    id: 'orderWallapop',
+    name: 'wallapop',
+    label: 'Nombre Wallapop',
+    type: 'text',
+    logo: 'wallapop', // El logo va al lado del label y se saca de los pngs de las imágenes.
+    fillValue: '',
+    dependsOn: ['orderIdClient'],
+    required: false,
+    readonly: false
+  },
+  instagram: {
+    id: 'orderInstagram',
+    name: 'instagram',
+    label: 'Nombre Instagram',
+    type: 'text',
+    logo: 'instagram', // El logo va al lado del label y se saca de los pngs de las imágenes.
+    fillValue: '',
+    dependsOn: ['orderIdClient'],
+    required: false,
+    readonly: false
+  },
+  vinted: {
+    id: 'orderVinted',
+    name: 'vinted',
+    label: 'Nombre Vinted',
+    type: 'text',
+    logo: 'vinted', // El logo va al lado del label y se saca de los pngs de las imágenes.
+    fillValue: '',
+    dependsOn: ['orderIdClient'],
+    required: false,
+    readonly: false
+  },
+  address: {
+    id: 'orderAddress',
+    name: 'address',
+    label: 'Dirección',
+    type: 'textarea',
+    fillValue: '',
+    dependsOn: ['orderIdClient'],
     required: false,
     readonly: false
   }

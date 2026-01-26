@@ -6,9 +6,11 @@ import { repeat } from 'lit/directives/repeat.js'
 import { classMap } from 'lit/directives/class-map.js'
 
 // Types
-import { EInput } from '../../elements/e-input/e-input.ts'
-import { ESelect } from '../../elements/e-select/e-select.ts'
-import { FieldScheme, FieldBlock, FormScheme, Dependency } from '../../domain/form/form.types.ts'
+import type { EInput } from '../../elements/e-input/e-input.ts'
+import type { ESelect } from '../../elements/e-select/e-select.ts'
+import type { ETextarea } from '../../elements/e-textarea/e-textarea.ts'
+import type { EInputSearch } from '../../elements/e-input-search/e-input-search.ts'
+import type { FieldScheme, FieldBlock, FormScheme, Dependency } from '../../domain/form/form.types.ts'
 
 // Styles
 import style from './c-form.style.scss?inline'
@@ -110,6 +112,24 @@ export class CForm extends LitElement {
             @change=${(ev: Event) => this._updateSchemeValue(field, ev)}
           ></e-input>
         `
+      case 'search':
+        return html`
+          <e-input-search
+            id=${field.id}
+            class=${this._getInputClasses(field)}
+            name=${field.name}
+            label=${field.label}
+            type=${field.type}
+            ?required=${field.required}
+            ?readonly=${field.readonly}
+            helpmsg=${field.helpmsg}
+            value=${field.fillValue}
+            placeholder=${field.placeholder}
+            .options=${field.options}
+            tabindex="0"
+            @change=${(ev: Event) => this._updateSchemeValue(field, ev)}
+          ></e-input-search>
+        `
       case 'textarea':
         return html`
           <e-textarea
@@ -208,7 +228,7 @@ export class CForm extends LitElement {
     this.requestUpdate()
   }
 
-  private _getFieldBlock(block: FieldBlock) {
+  private async _getFieldBlock(block: FieldBlock) {
     return html`
       <div class="c-form__block">
         ${when(block.fields.length === 0, () => html`
@@ -283,6 +303,28 @@ export class CForm extends LitElement {
     ev.stopPropagation()
   }
 
+  private _dependencyActionTextToSearch(mainField: EInput, input: EInputSearch) {
+    if (input.value) {
+      mainField.value = ''
+      mainField.classList.add('c-form__field--hidden')
+    } else {
+      mainField.classList.remove('c-form__field--hidden')
+    }
+  }
+
+  private _attachDependencyActionTextToSearch(mainField: EInput, input: EInputSearch, dependency: Dependency) {
+    if (!dependency.cb) {
+      dependency.cb = () => {
+        this._dependencyActionTextToSearch(mainField, input)
+      }
+    }
+
+    if (!dependency.attached) {
+      input.addEventListener('change', dependency.cb)
+      dependency.attached = true
+    }
+  }
+
   private concatValueDynamically(field: EInput, concatValue: string = '') {
     return field.value && concatValue ? `${field.value}${concatValue}` : field.value
   }
@@ -292,7 +334,7 @@ export class CForm extends LitElement {
     mainField.dispatchEvent(new Event('input'))
   }
 
-  private _inputHandler(mainField: EInput, input: EInput, dependency: Dependency) {
+  private _inputTextToTextHandler(mainField: EInput, input: EInput, dependency: Dependency) {
     mainField.value = this.concatValueDynamically(input, dependency.field.finalConcatValue)
     mainField.dispatchEvent(new Event('input'))
   }
@@ -300,7 +342,7 @@ export class CForm extends LitElement {
   private _attachDependencyActionTextToText(mainField: EInput, input: EInput, dependency: Dependency) {
     if (!dependency.cb) {
       dependency.cb = () => {
-        this._inputHandler(mainField, input, dependency)
+        this._inputTextToTextHandler(mainField, input, dependency)
       }
     }
 
@@ -344,7 +386,7 @@ export class CForm extends LitElement {
     if (!mainField || !dependencyFields) return
     
     dependencyFields.forEach((field) => {
-      const input = field as EInput | ESelect
+      const input = field as EInput | ESelect | EInputSearch | ETextarea
 
       if (mainField.tagName === 'E-INPUT' && input.tagName === 'E-INPUT') {
         this._dependencyActionTextToText(mainField as EInput, input as EInput, dependency)
@@ -352,6 +394,9 @@ export class CForm extends LitElement {
       } else if (mainField.tagName === 'E-SELECT' && input.tagName === 'E-SELECT') {
         this._dependencyActionSelectToSelect(mainField as ESelect, input as ESelect, dependency)
         this._attachDependencyActionSelectToSelect(mainField as ESelect, input as ESelect, dependency)
+      } else if((mainField.tagName === 'E-INPUT' || mainField.tagName === 'E-TEXTAREA') && input.tagName === 'E-INPUT-SEARCH') {
+        this._dependencyActionTextToSearch(mainField as EInput, input as EInputSearch)
+        this._attachDependencyActionTextToSearch(mainField as EInput, input as EInputSearch, dependency)
       }
     })
   }

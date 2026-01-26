@@ -6,14 +6,12 @@ const PATH = 'client'
 
 class ClientRepository {
   async getAll(): Promise<Client[]> {
-    const data = await rtdbService.getAll<Client>(PATH)
-
+    const data = await rtdbService.getAllOrderedBy(PATH, 'name')
     return data.map(ClientFactory.fromApi)
   }
 
   async getById(id: string): Promise<Client | null> {
     const data = await rtdbService.getById<Client>(PATH, id)
-
     return data ? ClientFactory.fromApi(data) : null
   }
 

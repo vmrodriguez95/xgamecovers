@@ -7,12 +7,14 @@ import { when } from 'lit/directives/when.js'
 import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 
 // Types
-import { Order } from '../../domain/order/order.types.ts'
-import { Status } from '../../domain/status/status.types.ts'
+import type { Order } from '../../domain/order/order.types.ts'
+import type { Status } from '../../domain/status/status.types.ts'
+import type { Client } from '../../domain/client/client.types.ts'
 
 // BBDD
 import { orderRepository } from '../../domain/order/order.repository.ts'
 import { statusRepository } from '../../domain/status/status.repository.ts'
+import { clientRepository } from '../../domain/client/client.repository.ts'
 import { transactionRepository } from '../../domain/transaction/transaction.repository.ts'
 
 // Controllers
@@ -27,6 +29,8 @@ class VOrder extends LayoutMixin(LitElement) {
   @property({ type: String }) heading = ''
 
   @state() _orders: Order[] = []
+
+  @state() _clients: Client[] = []
 
   @state() _queryOrders: Order[] = []
 
@@ -44,6 +48,7 @@ class VOrder extends LayoutMixin(LitElement) {
     super.connectedCallback()
 
     this._loadStatus()
+    this._loadClients()
     this._loadOrders()
   }
 
@@ -59,15 +64,7 @@ class VOrder extends LayoutMixin(LitElement) {
           </div>
           ${map(this._queryOrders, (order: Order) => html`
             <a href=${this._getEditUrl(order.id)} class="v-order__card">
-              <c-card-order
-                .status=${this._getStatusById(order)}
-                name=${order.name}
-                date=${order.createdAt}
-                money=${order.finalPrice}
-                .rrss=${this._getRRSS(order)}
-                totalItems=${order.totalItems}
-                @changeStatus=${(ev: Event) => this._changeStatusHandler(ev, order)}
-              ></c-card-order>
+              ${this._printOrder(order)}
             </a>
           `)}
         </div>
@@ -77,7 +74,7 @@ class VOrder extends LayoutMixin(LitElement) {
               <div class="v-order__avatar v-order__avatar--${this._getStatusById(this._selectedOrder)?.color}">
                 <e-icon icon="person-rounded" size="xxl"></e-icon>
               </div>
-              <p class="v-order__text">${this._selectedOrder?.name}</p>
+              <p class="v-order__text">${this._getClientById(this._selectedOrder?.idClient || '')?.name}</p>
               ${map(this._status, (status: Status) => html`
                 <e-button
                   class="v-order__button"
@@ -105,6 +102,12 @@ class VOrder extends LayoutMixin(LitElement) {
     this._queryOrders = orders
   }
 
+  private async _loadClients() {
+    const clients = await clientRepository.getAll()
+
+    this._clients = clients
+  }
+
   private async _loadStatus() {
     this._status = await statusRepository.getAll()
   }
@@ -115,12 +118,16 @@ class VOrder extends LayoutMixin(LitElement) {
     return this._status.find((status: Status) => status.id === order.idStatus)
   }
 
-  private _getRRSS(order: Order) {
+  private _getClientById(idClient: string) {
+    return this._clients.find((client: Client) => client.id === idClient)
+  }
+
+  private _getRRSS(client: Client) {
     return [
-      { logo: 'whatsapp', name: order.whatsapp },
-      { logo: 'instagram', name: order.instagram },
-      { logo: 'vinted', name: order.vinted },
-      { logo: 'wallapop', name: order.wallapop }
+      { logo: 'whatsapp', name: client.whatsapp },
+      { logo: 'instagram', name: client.instagram },
+      { logo: 'vinted', name: client.vinted },
+      { logo: 'wallapop', name: client.wallapop }
     ]
   }
 
@@ -135,7 +142,13 @@ class VOrder extends LayoutMixin(LitElement) {
   private _searchHandler(e: CustomEvent) {
     const query = e.detail
 
-    this._queryOrders = this._orders.filter((order) => order.name.toLowerCase().includes(query.toLowerCase()))
+    this._queryOrders = this._orders.filter((order) => {
+      const client = this._getClientById(order.idClient)
+
+      if (!client) return false
+
+      return client.name.toLowerCase().includes(query.toLowerCase())
+    })
   }
 
   private async _changeStatusToOrder(order: Order | null, status: Status) {
@@ -163,5 +176,23 @@ class VOrder extends LayoutMixin(LitElement) {
   private _closeModal() {
     this._showModal = false
     this._setSelectedOrder(null)
+  }
+
+  private _printOrder(order: Order) {
+    const client = this._getClientById(order.idClient)
+
+    if (!client) return ''
+
+    return html`
+    <c-card-order
+      .status=${this._getStatusById(order)}
+      name=${client.name}
+      date=${order.createdAt}
+      money=${order.finalPrice}
+      .rrss=${this._getRRSS(client)}
+      totalItems=${order.totalItems}
+      @changeStatus=${(ev: Event) => this._changeStatusHandler(ev, order)}
+    ></c-card-order>
+    `
   }
 }
