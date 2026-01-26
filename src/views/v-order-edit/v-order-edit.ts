@@ -47,11 +47,11 @@ class VOrderNew extends LayoutMixin(LitElement) {
   static styles = css`${unsafeCSS(style)}`
 
   async connectedCallback() {
-    super.connectedCallback()
-    
     await this._loadOrderData()
     await this._fillClientOptions()
     await this._fillStatusOptions()
+    
+    super.connectedCallback()
   }
 
   render() {
@@ -119,12 +119,12 @@ class VOrderNew extends LayoutMixin(LitElement) {
   }
 
   private async _fillStatusOptions() {
-    const newscheme = window.structuredClone(this._formScheme)
-    const idStatus = newscheme.idStatus as FieldScheme
+    const newScheme = window.structuredClone(this._formScheme)
+    const idStatus = newScheme.idStatus as FieldScheme
 
     idStatus.options = await this._getStatusOptions()
 
-    this._formScheme = newscheme
+    this._formScheme = newScheme
   }
 
   private _getNewClientValues(data: Client) {
