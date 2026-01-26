@@ -8,6 +8,7 @@ import { until } from 'lit/directives/until.js'
 import { orderRepository } from '../../domain/order/order.repository.ts'
 import { designRepository } from '../../domain/design/design.repository.ts'
 import { statusRepository } from '../../domain/status/status.repository.ts'
+import { clientRepository } from '../../domain/client/client.repository.ts'
 import { versionRepository } from '../../domain/version/version.repository.ts'
 import { orderItemRepository } from '../../domain/order-item/order-item.repository.ts'
 import { transactionRepository } from '../../domain/transaction/transaction.repository.ts'
@@ -16,6 +17,7 @@ import { transactionRepository } from '../../domain/transaction/transaction.repo
 import type { Order } from '../../domain/order/order.types.ts'
 import type { Design } from '../../domain/design/design.types.ts'
 import type { Status } from '../../domain/status/status.types.ts'
+import type { Client } from '../../domain/client/client.types.ts'
 import type { Version } from '../../domain/version/version.types.ts'
 import type { URLParam } from '../../domain/generic/generic.types.ts'
 import type { OrderItem } from '../../domain/order-item/order-item.types.ts'
@@ -43,6 +45,8 @@ class VOrderView extends LayoutMixin(LitElement) {
 
   @state() _order: Order | null = null
 
+  @state() _client: Client | null = null
+
   @state() _designs: OrderItem[] = []
 
   @state() _versions: Version[] = []
@@ -67,10 +71,11 @@ class VOrderView extends LayoutMixin(LitElement) {
 
   static styles = css`${unsafeCSS(style)}`
 
-  connectedCallback() {
+  async connectedCallback() {
     super.connectedCallback()
     
-    this._loadOrderData()
+    await this._loadOrderData()
+    await this._loadClient()
     this._loadStatus()
     this._loadItemStatus()
     this._loadDesigns()
@@ -98,18 +103,18 @@ class VOrderView extends LayoutMixin(LitElement) {
             <a class="v-order-view__head" href=${this._getOrderEditURL()}>
               <c-card-order
                 .status=${this._orderStatus}
-                name=${this._order?.name}
+                name=${this._client?.name}
                 money=${this._order?.finalPrice}
                 hideStatus=${true}
                 hideDesigns=${true}
                 date=${this._order?.createdAt}
-                .rrss=${this._getRRSS(this._order)}
+                .rrss=${this._getRRSS(this._client)}
                 totalItems=${this._order?.totalItems}
               ></c-card-order>
             </a>
-            ${when(this._order?.address, () => html`
+            ${when(this._client?.address, () => html`
               <div class="v-order-view__address">
-                <e-icon icon="location"></e-icon> ${this._order?.address}
+                <e-icon icon="location"></e-icon> ${this._client?.address}
               </div>
             `)}
             <div class="v-order-view__pill">
@@ -163,10 +168,11 @@ class VOrderView extends LayoutMixin(LitElement) {
   }
 
   private async _loadOrderData() {
-    const idOrder = this.urlParams.id
+    this._order = await orderRepository.getById(this.urlParams.id)
+  }
 
-    this.heading = idOrder
-    this._order = await orderRepository.getById(idOrder)
+  private async _loadClient() {
+    this._client = await clientRepository.getById(this._order?.idClient || '')
   }
 
   private async _loadStatus() {
@@ -270,12 +276,12 @@ class VOrderView extends LayoutMixin(LitElement) {
     this._goBack()
   }
 
-  private _getRRSS(order: Order | null) {
+  private _getRRSS(client: Client | null) {
     return [
-      { logo: 'whatsapp', name: order?.whatsapp },
-      { logo: 'instagram', name: order?.instagram },
-      { logo: 'vinted', name: order?.vinted },
-      { logo: 'wallapop', name: order?.wallapop }
+      { logo: 'whatsapp', name: client?.whatsapp },
+      { logo: 'instagram', name: client?.instagram },
+      { logo: 'vinted', name: client?.vinted },
+      { logo: 'wallapop', name: client?.wallapop }
     ]
   }
 
@@ -371,7 +377,7 @@ class VOrderView extends LayoutMixin(LitElement) {
           <div class="v-order-view__avatar v-order-view__avatar--${this._getStatusById(this._order)?.color}">
             <e-icon icon="person-rounded" size="xxl"></e-icon>
           </div>
-          <p class="v-order-view__text">${this._order?.name}</p>
+          <p class="v-order-view__text">${this._client?.name}</p>
           ${map(this._status, (status: Status) => html`
             <e-button
               class="v-order-view__button-status"
@@ -392,7 +398,7 @@ class VOrderView extends LayoutMixin(LitElement) {
       <c-modal @close=${this._closeModal}>
         <div class="v-order-view__modal">
           <img class="v-order-view__image" src=${this._selectedDesign.poster} alt="${this._selectedDesign.name} poster" width="72" height="72" />
-          <p class="v-order-view__text">${this._order?.name}</p>
+          <p class="v-order-view__text">${this._client?.name}</p>
           ${map(this._itemStatus, (status: Status) => html`
             <e-button
               class="v-order-view__button-status"
