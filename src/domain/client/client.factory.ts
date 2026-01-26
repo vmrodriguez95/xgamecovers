@@ -13,5 +13,18 @@ export const ClientFactory = {
       createdAt: data.createdAt ?? '',
       updatedAt: data.updatedAt ?? ''
     }
+  },
+  createEmpty(): Client {
+    return {
+      id: '',
+      name: '',
+      whatsapp: '',
+      wallapop: '',
+      instagram: '',
+      vinted: '',
+      address: '',
+      createdAt: '',
+      updatedAt: ''
+    }
   }
 }

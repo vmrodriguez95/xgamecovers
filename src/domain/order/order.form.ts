@@ -14,7 +14,8 @@ export const OrderFormScheme: FormScheme = {
     id: 'orderIdClient',
     name: 'idClient',
     label: 'Cliente',
-    type: 'select-search',
+    type: 'search',
+    searchType: 'client',
     fillValue: '',
     options: [] as Option[],
     required: false,
@@ -86,6 +87,7 @@ export const OrderFormScheme: FormScheme = {
     label: 'Nombre',
     type: 'text',
     fillValue: '',
+    dependsOn: ['orderIdClient'],
     required: false,
     readonly: false
   },
@@ -96,6 +98,7 @@ export const OrderFormScheme: FormScheme = {
     type: 'text',
     logo: 'whatsapp', // El logo va al lado del label y se saca de los pngs de las imágenes.
     fillValue: '',
+    dependsOn: ['orderIdClient'],
     required: false,
     readonly: false
   },
@@ -106,6 +109,7 @@ export const OrderFormScheme: FormScheme = {
     type: 'text',
     logo: 'wallapop', // El logo va al lado del label y se saca de los pngs de las imágenes.
     fillValue: '',
+    dependsOn: ['orderIdClient'],
     required: false,
     readonly: false
   },
@@ -116,6 +120,7 @@ export const OrderFormScheme: FormScheme = {
     type: 'text',
     logo: 'instagram', // El logo va al lado del label y se saca de los pngs de las imágenes.
     fillValue: '',
+    dependsOn: ['orderIdClient'],
     required: false,
     readonly: false
   },
@@ -126,6 +131,7 @@ export const OrderFormScheme: FormScheme = {
     type: 'text',
     logo: 'vinted', // El logo va al lado del label y se saca de los pngs de las imágenes.
     fillValue: '',
+    dependsOn: ['orderIdClient'],
     required: false,
     readonly: false
   },
@@ -135,6 +141,7 @@ export const OrderFormScheme: FormScheme = {
     label: 'Dirección',
     type: 'textarea',
     fillValue: '',
+    dependsOn: ['orderIdClient'],
     required: false,
     readonly: false
   }

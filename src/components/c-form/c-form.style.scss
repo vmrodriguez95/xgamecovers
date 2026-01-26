@@ -85,7 +85,8 @@
       grid-column: 1 / 13;
     }
 
-    &[type="hidden"] {
+    &[type="hidden"],
+    &--hidden {
       display: none;
     }
   }

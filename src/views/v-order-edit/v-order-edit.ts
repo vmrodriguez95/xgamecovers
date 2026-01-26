@@ -4,15 +4,21 @@ import { customElement, property, query, state } from 'lit/decorators.js'
 // BBDD
 import { orderRepository } from '../../domain/order/order.repository.ts'
 import { statusRepository } from '../../domain/status/status.repository.ts'
+import { clientRepository } from '../../domain/client/client.repository.ts'
 import { transactionRepository } from '../../domain/transaction/transaction.repository.ts'
 
 // Domain
 import { OrderFormScheme } from '../../domain/order/order.form.ts'
 
 // Types
-import { Status } from '../../domain/status/status.types.ts'
-import { FieldScheme } from '../../domain/form/form.types.ts'
-import { URLParam } from '../../domain/generic/generic.types.ts'
+import type { Order } from '../../domain/order/order.types.ts'
+import type { Status } from '../../domain/status/status.types.ts'
+import type { Client } from '../../domain/client/client.types.ts'
+import type { FieldScheme } from '../../domain/form/form.types.ts'
+import type { URLParam } from '../../domain/generic/generic.types.ts'
+
+// Factory
+import { ClientFactory } from '../../domain/client/client.factory.ts'
 
 // Mixins
 import { LayoutMixin } from '../../mixins/layout.mixin.ts'
@@ -22,7 +28,6 @@ import { RouterController } from '../../controllers/router.controller.ts'
 
 // Styles
 import style from './v-order-edit.style.scss?inline'
-import { Order } from '../../domain/order/order.types.ts'
 
 @customElement('v-order-edit')
 class VOrderNew extends LayoutMixin(LitElement) {
@@ -45,6 +50,7 @@ class VOrderNew extends LayoutMixin(LitElement) {
     super.connectedCallback()
     
     await this._loadOrderData()
+    await this._fillClientOptions()
     await this._fillStatusOptions()
   }
 
@@ -67,6 +73,24 @@ class VOrderNew extends LayoutMixin(LitElement) {
       this.heading
     )
   }
+
+  private async _getClientsAsOptions() {
+      const allClients = await clientRepository.getAll()
+  
+      return allClients.map((client: Client) => ({
+        value: client.id,
+        name: client.name
+      }))
+    }
+  
+    private async _fillClientOptions() {
+      const newscheme = window.structuredClone(this._formScheme)
+      const idClient = newscheme.idClient as FieldScheme
+  
+      idClient.options = await this._getClientsAsOptions()
+  
+      this._formScheme = newscheme
+    }
 
   private _setFormData(order: Order) {
     (Object.keys(order) as Array<keyof Order>).forEach((key) => {
@@ -103,16 +127,45 @@ class VOrderNew extends LayoutMixin(LitElement) {
     this._formScheme = newscheme
   }
 
+  private _getNewClientValues(data: Client) {
+    const newClient = ClientFactory.createEmpty()
+    const clientKeys = Object.keys(newClient) as (keyof Client)[]
+
+    clientKeys.forEach((key) => {
+      newClient[key] = data[key]
+    })
+
+    return newClient
+  }
+
+  private _removeClientFields(data: Client) {
+    const clientExample = ClientFactory.createEmpty()
+    const clientKeys = Object.keys(clientExample) as (keyof Client)[]
+
+    clientKeys.forEach((key) => {
+      delete data[key]
+    })
+  }
+
   private async _editOrder() {
     const data = this.form.getFinalData()
 
-    if (data && this._order) {
-      const idOrder = this._order.id
-      await orderRepository.update(idOrder, data)
-      await transactionRepository.updateByIdOrder(idOrder, { amount: data.finalPrice, idOrderStatus: data.idStatus })
+    if (!data || !this._order) return
 
-      this._goToOrderView()
+    if (data.idClient === '' && data.name !== '') {
+      const client = this._getNewClientValues(data)
+      const newIdClient = await clientRepository.create(client)
+
+      data.idClient = newIdClient
     }
+
+    this._removeClientFields(data)
+
+    const idOrder = this._order.id
+    await orderRepository.update(idOrder, data)
+    await transactionRepository.updateByIdOrder(idOrder, { amount: data.finalPrice, idOrderStatus: data.idStatus })
+
+    this._goToOrderView()
   }
 
   private _getOrderViewUrl() {
