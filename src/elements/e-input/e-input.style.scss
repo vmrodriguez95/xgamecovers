@@ -43,10 +43,20 @@
     display: block;
     width: 100%;
     background-color: rgba(var(--color-gray), 1);
-    padding: space(1) space(2);
+    padding: space(1) space(5) space(1) space(2);
     box-sizing: border-box;
     border: 0;
     border-radius: space(1);
+  }
+
+  &__clear {
+    position: absolute;
+    top: 50%;
+    right: space(2);
+    transform: translateY(-50%);
+    cursor: pointer;
+    background: none;
+    border: 0;
   }
 
   &__helpmsg {

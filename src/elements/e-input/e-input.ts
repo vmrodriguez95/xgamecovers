@@ -90,6 +90,11 @@ export class EInput extends LitElement {
             @input=${this._onInput}
             @blur=${this._onBlur}
           />
+          ${when(this.value, () => html`
+            <button class="e-input__clear" @click=${this._onClean}>
+              <e-icon icon="close" size="s"></e-icon>
+            </button>
+          `)}
         </div>
         ${when(this._internals.validationMessage, () => html`
           <p class="e-input__error">${this._internals.validationMessage}</p>
@@ -111,6 +116,15 @@ export class EInput extends LitElement {
 
   private _onBlur() {
     this._validate()
+  }
+
+  private _onClean() {
+    this.value = ''
+
+    this._validate()
+    this._internals.setFormValue(this.value)
+
+    this.dispatchEvent(new Event('input'))
   }
 
   private _validate() {

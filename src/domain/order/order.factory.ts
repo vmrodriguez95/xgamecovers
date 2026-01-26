@@ -13,5 +13,19 @@ export const OrderFactory = {
       createdAt: data.createdAt ?? '',
       updatedAt: data.updatedAt ?? ''
     }
+  },
+
+  createEmpty(): Order {
+    return {
+      id: '',
+      idClient: '',
+      idStatus: '',
+      finalPrice: 0,
+      payment: '',
+      delivery: 0,
+      totalItems: 0,
+      createdAt: '',
+      updatedAt: ''
+    }
   }
 }
