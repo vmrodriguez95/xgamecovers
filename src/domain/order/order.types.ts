@@ -1,13 +1,8 @@
 export interface Order {
   id: string
+  idClient: string
   idStatus: string
-  name: string
-  whatsapp: string
-  wallapop: string
-  instagram: string
-  vinted: string
   finalPrice: number
-  address: string
   payment: string
   delivery: number
   totalItems: number

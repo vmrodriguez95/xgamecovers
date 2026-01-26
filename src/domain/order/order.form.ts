@@ -10,6 +10,16 @@ export const OrderFormScheme: FormScheme = {
     required: false,
     readonly: true
   },
+  idClient: {
+    id: 'orderIdClient',
+    name: 'idClient',
+    label: 'Cliente',
+    type: 'select-search',
+    fillValue: '',
+    options: [] as Option[],
+    required: false,
+    readonly: false
+  },
   idStatus: {
     id: 'orderIdStatus',
     name: 'idStatus',
@@ -18,6 +28,56 @@ export const OrderFormScheme: FormScheme = {
     fillValue: '',
     options: [] as Option[],
     required: true,
+    readonly: false
+  },
+  finalPrice: {
+    id: 'orderFinalPrice',
+    name: 'finalPrice',
+    label: 'Precio total acordado',
+    type: 'number',
+    fillValue: 0,
+    required: false,
+    readonly: false
+  },
+  delivery: {
+    id: 'orderDelivery',
+    name: 'delivery',
+    label: 'Coste del envío',
+    type: 'number',
+    fillValue: 0,
+    required: false,
+    readonly: false
+  },
+  payment: {
+    id: 'orderPayment',
+    name: 'payment',
+    label: 'Método de pago',
+    type: 'select',
+    fillValue: '',
+    options: [
+      {
+        name: 'Wallapop',
+        value: 'Wallapop'
+      },
+      {
+        name: 'Vinted',
+        value: 'Vinted'
+      },
+      {
+        name: 'Bizum',
+        value: 'Bizum'
+      }
+    ] as Option[],
+    required: false,
+    readonly: false
+  },
+  totalItems: {
+    id: 'orderTotalItems',
+    name: 'totalItems',
+    label: 'Total de diseños',
+    type: 'hidden',
+    fillValue: 0,
+    required: false,
     readonly: false
   },
   name: {
@@ -69,62 +129,12 @@ export const OrderFormScheme: FormScheme = {
     required: false,
     readonly: false
   },
-  finalPrice: {
-    id: 'orderFinalPrice',
-    name: 'finalPrice',
-    label: 'Precio total acordado',
-    type: 'number',
-    fillValue: 0,
-    required: false,
-    readonly: false
-  },
-  delivery: {
-    id: 'orderDelivery',
-    name: 'delivery',
-    label: 'Coste del envío',
-    type: 'number',
-    fillValue: 0,
-    required: false,
-    readonly: false
-  },
   address: {
     id: 'orderAddress',
     name: 'address',
     label: 'Dirección',
     type: 'textarea',
     fillValue: '',
-    required: false,
-    readonly: false
-  },
-  payment: {
-    id: 'orderPayment',
-    name: 'payment',
-    label: 'Método de pago',
-    type: 'select',
-    fillValue: '',
-    options: [
-      {
-        name: 'Wallapop',
-        value: 'Wallapop'
-      },
-      {
-        name: 'Vinted',
-        value: 'Vinted'
-      },
-      {
-        name: 'Bizum',
-        value: 'Bizum'
-      }
-    ] as Option[],
-    required: false,
-    readonly: false
-  },
-  totalItems: {
-    id: 'orderTotalItems',
-    name: 'totalItems',
-    label: 'Total de diseños',
-    type: 'hidden',
-    fillValue: 0,
     required: false,
     readonly: false
   }
