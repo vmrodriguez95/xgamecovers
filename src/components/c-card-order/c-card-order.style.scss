@@ -2,6 +2,7 @@
 @use '../../styles/tools/typography' as *;
 
 .c-card-order {
+  $block: &;
   --statusBgColor: var(--color-gray);
   display: flex;
   box-shadow: 0 3px 10px 0 rgba(var(--color-dark), 0.5);
@@ -54,8 +55,8 @@
 
   &__info {
     display: flex;
-    padding: space(1) space(2);
-    gap: space(2);
+    padding: space(1);
+    gap: space(1);
     box-sizing: border-box;
     width: 100%;
     border-radius: space(1);
@@ -89,6 +90,11 @@
   &__text {
     @include body--s;
     margin: 0;
+    color: rgba(var(--color-dark), 1);
+    display: flex;
+    align-items: center;
+    gap: space(0.5);
+    word-break: break-word;
   }
 
   &__logo {
@@ -110,6 +116,10 @@
 
     *:not(:only-child) {
       margin-top: auto;
+    }
+
+    #{$block}__text {
+      word-break: normal;
     }
   }
 }
