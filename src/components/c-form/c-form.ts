@@ -228,7 +228,7 @@ export class CForm extends LitElement {
     this.requestUpdate()
   }
 
-  private async _getFieldBlock(block: FieldBlock) {
+  private _getFieldBlock(block: FieldBlock) {
     return html`
       <div class="c-form__block">
         ${when(block.fields.length === 0, () => html`
