@@ -59,9 +59,6 @@ class VCatalogue extends LayoutMixin(LitElement) {
             </a>
           `)}
         </div>
-        <div class="v-catalogue__actions">
-          <c-filters class="v-catalogue__filters"></c-filters>
-        </div>
         ${when(this._consoleList.length > 0 && this._queryGameList.length > 0, () => 
           map(this._queryGameList, (game: Game) => until(this._printGameCard(game)))
         )}
