@@ -2,16 +2,16 @@ import { LitElement, html, css, unsafeCSS } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { map } from 'lit/directives/map.js'
 import { when } from 'lit/directives/when.js'
-import { classMap } from 'lit/directives/class-map.js'
 
 // Mixins
 import { LayoutMixin } from '../../mixins/layout.mixin.ts'
 
 // Types
-import { Game } from '../../domain/game/game.types.ts'
-import { Design } from '../../domain/design/design.types.ts'
-import { Console } from '../../domain/console/console.types.ts'
-import { URLParam } from '../../domain/generic/generic.types.ts'
+import type { Game } from '../../domain/game/game.types.ts'
+import type { Design } from '../../domain/design/design.types.ts'
+import type { Console } from '../../domain/console/console.types.ts'
+import type { URLParam } from '../../domain/generic/generic.types.ts'
+import type { Slide } from '../../components/c-slider/c-slider.types.ts'
 
 // Repository
 import { gameRepository } from '../../domain/game/game.repository.ts'
@@ -45,7 +45,7 @@ class VCatalogueGame extends LayoutMixin(LitElement) {
 
   @state() _consoles: Console[] = []
 
-  @state() _lastDesignChoosen: Design | null = null
+  @state() _lastDesignChoosenName: string = ''
 
   _routerController = new RouterController(this)
 
@@ -65,45 +65,29 @@ class VCatalogueGame extends LayoutMixin(LitElement) {
     return this.layoutGrid(html`
       <div class="v-catalogue-game">
         <div class="v-catalogue-game__actions">
-          <a class="v-catalogue-game__button" href=${this._routerController.getAdminRoute('catalogue', {})}>
-            <e-icon icon="arrow-left"></e-icon>
+          <a class="v-catalogue-game__action" href=${this._routerController.getAdminRoute('catalogue', {})}>
+            <e-icon icon="arrow-left" size="m"></e-icon>
           </a>
           ${when(authStore.isLogged() && this._game, () => html`
-            <a class="v-catalogue-game__button" href=${this._routerController.getAdminRoute('catalogueEdit', { id: this._game?.id })}>
-              <e-icon icon="edit"></e-icon>
+            <a class="v-catalogue-game__action" href=${this._routerController.getAdminRoute('catalogueEdit', { id: this._game?.id })}>
+              <e-icon icon="edit" size="m"></e-icon>
             </a>
-            <button class="v-catalogue-game__button" @click=${this._deleteHandler}>
-              <e-icon icon="delete"></e-icon>
+            <button class="v-catalogue-game__action" @click=${this._deleteHandler}>
+              <e-icon icon="delete" size="m"></e-icon>
             </button>
           `)}
         </div>
-        ${when(this._lastDesignChoosen, () => html`
-          <div class="v-catalogue-game__head">
-            <img class="v-catalogue-game__image" src=${this._lastDesignChoosen?.slipcover} alt=${this._lastDesignChoosen?.name} width="398" height="480" />
-          </div>
-          <div class="v-catalogue-game__designs">
-            ${map(this._designs, (design: Design) => html`
-              <button
-                class=${classMap({
-                  'v-catalogue-game__button': true,
-                  'v-catalogue-game__design': true,
-                  'v-catalogue-game__design--active': design.id === this._lastDesignChoosen?.id
-                })}
-                @click=${() => this.changeDesign(design)}
-              >
-                <img class="v-catalogue-game__preview" src=${design.slipcover} alt=${design.name} width="128" height="72" />
-              </button>
-            `)}
-          </div>
-        `, () => html`
-          <div class="v-catalogue-game__empty">
-            <p class="v-catalogue-game__empty__message">Aún no se han asociado diseños a este juego</p>
-          </div>
+        ${when(this._designs.length > 0, () => html`
+          <c-slider
+            class="v-catalogue-game__slider"
+            .options=${this._transformIntoSlides(this._designs)}
+            @change=${this._changeDesign}
+          ></c-slider>
         `)}
         <div class="v-catalogue-game__info">
-          ${when(this._lastDesignChoosen, () => html`
+          ${when(this._lastDesignChoosenName, () => html`
             <p class="v-catalogue-game__title">Nombre del diseño</p>
-            <h1 class="v-catalogue-game__name">${this._lastDesignChoosen?.name}</h1>
+            <h1 class="v-catalogue-game__name">${this._lastDesignChoosenName}</h1>
           `)}
           <p class="v-catalogue-game__title">Plataformas</p>
           <div class="v-catalogue-game__logos">
@@ -155,12 +139,22 @@ class VCatalogueGame extends LayoutMixin(LitElement) {
 
     if (designs.length > 0) {
       this._designs = designs
-      this._lastDesignChoosen = designs[0]
+      this._lastDesignChoosenName = designs[0].name
     }
   }
 
-  private changeDesign(design: Design) {
-    this._lastDesignChoosen = design
+  private _transformIntoSlides(designs: Design[]): Slide[] {
+    const slides = designs.map((design: Design): Slide => ({
+      id: design.id,
+      name: design.name,
+      image: design.slipcover
+    }))
+
+    return slides
+  }
+
+  private _changeDesign(event: CustomEvent) {
+    this._lastDesignChoosenName = event.detail
   }
 
   private async _removeGame(idGame: string = '') {

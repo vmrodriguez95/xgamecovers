@@ -3,75 +3,41 @@
 
 .v-catalogue-game {
   display: block;
-  padding: space(2) var(--grid-margin);
+  position: relative;
   box-sizing: border-box;
-
+  
   &__actions {
+    --eIconColor: var(--color-light);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: space(2) var(--grid-margin);
     display: flex;
     align-items: center;
     gap: space(1);
     margin-bottom: space(2);
+    z-index: 1;
 
     *:first-child {
       margin-right: auto;
     }
   }
 
-  &__empty {
-    text-align: center;
-
-    &__message {
-      @include body--s(600);
-      color: rgba(var(--color-dark), 1);
-    }
-  }
-
-  &__head {
-    display: flex;
-    border-radius: space(1);
-    overflow: hidden;
-    max-height: space(60);
-  }
-
-  &__image {
-    height: auto;
-    max-width: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
-
-  &__designs,
-  &__logos {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: space(2);
-    margin-top: space(2);
-  }
-
-  &__button {
+  &__action {
+    --eIconColor: var(--color-dark);
     display: inline-flex;
-    padding: 0;
-    border: 0;
-    background-color: transparent;
-    cursor: pointer;
+    place-content: center;
+    padding: space(0.5);
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(var(--color-gray), 1);
+    box-shadow: 0 3px 10px 0 rgba(var(--color-dark), 0.5);
   }
 
-  &__design {
-    border-radius: space(1);
-    max-height: space(9);
-    overflow: hidden;
-
-    &--active {
-      outline: 2px solid rgba(var(--color-primary), 1);
-    }
-  }
-
-  &__preview {
-    max-width: 100%;
-    height: auto;
-    object-fit: cover;
-    object-position: 0 72%;
+  &__info {
+    padding: 0 var(--grid-margin);
+    margin-bottom: space(4);
   }
 
   &__title {
