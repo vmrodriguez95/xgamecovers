@@ -54,7 +54,11 @@ class VOrderItem extends LayoutMixin(LitElement) {
             <e-icon icon="arrow-left"></e-icon>
           </a>
         </div>
-        <c-search class="v-order-item__search" @search=${this._searchHandler}></c-search>
+        <c-search
+          class="v-order-item__search"
+          placeholder="Buscar juego"
+          @search=${this._searchHandler}
+        ></c-search>
         ${when(this._consoleList.length > 0 && this._queryGameList.length > 0, () => 
           map(this._queryGameList, (game: Game) => until(this._printGameCard(game)))
         )}

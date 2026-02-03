@@ -41,7 +41,11 @@ class VClient extends LayoutMixin(LitElement) {
       html`
         <div class="v-client">
           <div class="v-client__head">
-            <c-search class="v-client__search" @search=${this._searchHandler} placeholder="Buscar cliente"></c-search>
+            <c-search
+              class="v-client__search"
+              placeholder="Buscar cliente"
+              @search=${this._searchHandler}
+            ></c-search>
             <a href=${this._getCreationRoute()}>
               <e-button><e-icon icon="add"></e-icon></e-button>
             </a>
