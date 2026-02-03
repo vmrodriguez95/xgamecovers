@@ -1,0 +1,55 @@
+@use '../../styles/tools/tools' as *;
+@use '../../styles/tools/typography' as *;
+
+.c-slider {
+  &__head {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    max-height: space(66);
+  }
+
+  &__slide {
+    height: 100%;
+    width: 100dvw;
+    flex: 1 0 100dvw;
+    overflow: hidden;
+  }
+
+  &__image {
+    height: auto;
+    width: 100%;
+    transform: scale(1.08);
+  }
+
+  &__bullets {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: space(2);
+    margin-top: space(2);
+    padding: 0 var(--grid-margin);
+  }
+  
+  &__bullet {
+    display: inline-flex;
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    cursor: pointer;
+    border-radius: space(1);
+    max-height: space(9);
+    overflow: hidden;
+
+    &--active {
+      outline: 2px solid rgba(var(--color-primary), 1);
+    }
+  }
+
+  &__preview {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+    object-position: 0 72%;
+  }
+}

@@ -14,7 +14,9 @@ import style from './c-search.style.scss?inline'
 @customElement('c-search')
 class CSearch extends LitElement {
 
-  @property({ type: String }) loading = false
+  @property({ type: String }) placeholder = ''
+
+  @property({ type: Boolean }) loading = false
 
   @query('e-input') _input!: EInput
 
@@ -27,7 +29,7 @@ class CSearch extends LitElement {
           icon="search"
           id="search"
           type="text"
-          placeholder="Buscar juego"
+          placeholder=${this.placeholder}
           name="search"
           value=""
           @input=${this._onInput}

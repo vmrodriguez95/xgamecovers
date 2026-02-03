@@ -10,7 +10,7 @@ import { authStore } from '../../domain/auth/auth.store'
 import style from './c-menu.style.scss?inline'
 
 @customElement('c-menu')
-class CHeader extends LitElement {
+class CMenu extends LitElement {
 
   @property({ type: Boolean }) opened = false
 

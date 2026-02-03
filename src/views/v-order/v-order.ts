@@ -57,7 +57,11 @@ class VOrder extends LayoutMixin(LitElement) {
       html`
         <div class="v-order">
           <div class="v-order__head">
-            <c-search class="v-order__search" @search=${this._searchHandler}></c-search>
+            <c-search
+              class="v-order__search"
+              placeholder="Buscar pedido"
+              @search=${this._searchHandler}
+            ></c-search>
             <a href=${this._getCreatetUrl()}>
               <e-button><e-icon icon="add"></e-icon></e-button>
             </a>

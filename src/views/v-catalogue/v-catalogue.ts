@@ -52,15 +52,16 @@ class VCatalogue extends LayoutMixin(LitElement) {
     return this.layoutGrid(html`
       <div class="v-catalogue">
         <div class="v-catalogue__head">
-          <c-search class="v-catalogue__search" @search=${this._searchHandler} placeholder="Buscar juego"></c-search>
+          <c-search
+            class="v-catalogue__search"
+            placeholder="Buscar juego"
+            @search=${this._searchHandler}
+          ></c-search>
           ${when(authStore.isLogged(), () => html`
             <a href=${this._getCreateUrl()}>
               <e-button><e-icon icon="add"></e-icon></e-button>
             </a>
           `)}
-        </div>
-        <div class="v-catalogue__actions">
-          <c-filters class="v-catalogue__filters"></c-filters>
         </div>
         ${when(this._consoleList.length > 0 && this._queryGameList.length > 0, () => 
           map(this._queryGameList, (game: Game) => until(this._printGameCard(game)))
