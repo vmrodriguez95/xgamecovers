@@ -1,0 +1,7 @@
+@use '../../styles/tools/tools' as *;
+
+.e-layout {
+  &__main {
+    padding-bottom: space(10);
+  }
+}
