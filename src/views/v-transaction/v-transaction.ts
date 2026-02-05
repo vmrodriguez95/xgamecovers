@@ -13,8 +13,9 @@ import type { Transaction } from '../../domain/transaction/transaction.types.ts'
 import type { TransactionCategory } from '../../domain/transaction-category/transaction-category.types.ts'
 
 // BBDD
-import { statusRepository } from '../../domain/status/status.repository.ts'
 import { orderRepository } from '../../domain/order/order.repository.ts'
+import { statusRepository } from '../../domain/status/status.repository.ts'
+import { clientRepository } from '../../domain/client/client.repository.ts'
 import { transactionRepository } from '../../domain/transaction/transaction.repository.ts'
 import { transactionCategoryRepository } from '../../domain/transaction-category/transaction-category.repository.ts'
 
@@ -79,7 +80,7 @@ class VTransaction extends LayoutMixin(LitElement) {
           <div class="v-transaction__list">
             ${map(this._transactions, (transaction: Transaction) => html`
               ${when(this._hasMonthChanged(transaction.createdAt), () => html`
-                <p class="v-transaction__title">${getMonthName(transaction.createdAt)}</p>
+                <p class="v-transaction__title"><span class="v-transaction__month">${getMonthName(transaction.createdAt)}</span></p>
               `)}
               ${until(this._getTransactionHTML(transaction))}
             `)}
@@ -285,14 +286,16 @@ class VTransaction extends LayoutMixin(LitElement) {
 
     if (transaction.idOrder) {
       const order = await orderRepository.getById(transaction.idOrder)
-
       if (!order) return ''
+
+      const client = await clientRepository.getById(order.idClient)
+      if (!client) return ''
 
       return html`
         <a class="v-transaction__card" href="${this._getOrderViewRoute(transaction)}">
           <c-card-simple
             type=${category.name}
-            name=${order.name}
+            name=${client.name}
             platform=${order.payment}
             date=${transaction.createdAt}
             money=${transaction.amount}

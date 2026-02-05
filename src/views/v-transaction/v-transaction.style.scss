@@ -36,9 +36,19 @@
     top: 0;
     padding: space(4) 0 space(1);
     color: rgba(var(--color-dark), 1);
-    background-color: rgba(var(--color-light), 1);
+    text-align: center;
     text-transform: capitalize;
     z-index: 1;
+  }
+  
+  &__month {
+    display: inline-block;
+    width: 100%;
+    max-width: space(16);
+    border-radius: space(1);
+    padding: 0 space(2);
+    box-shadow: 0 3px 10px 0 rgba(var(--color-dark), 0.5);
+    background-color: rgba(var(--color-light), 1);
   }
 
   &__total {

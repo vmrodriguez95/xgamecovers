@@ -1,7 +1,5 @@
 import { html } from 'lit'
 import { StrictRouteConfig } from '../domain/router/router.types'
-import { authService } from '../firebase/auth.service'
-import { auth } from '../firebase'
 import { authStore } from '../domain/auth/auth.store'
 
 export class RouterController {
@@ -175,7 +173,7 @@ export class RouterController {
     return Object.values(this.routes)
   }
 
-  getAdminRoute(key: string, params: object): string {
+  getAdminRoute(key: string, params: object = {}): string {
     const { path } = this.routes[key]
 
     return this._replaceParams(path, params)

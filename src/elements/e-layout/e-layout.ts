@@ -17,6 +17,7 @@ class ELayout extends LitElement {
         <c-header heading=${this.heading}></c-header>
         <div class="e-layout__main">
           <slot></slot>
+          <c-menu></c-menu>
         </div>
       </div>
     `
