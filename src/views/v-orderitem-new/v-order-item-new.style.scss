@@ -3,17 +3,13 @@
 
 .v-order-item-new {
   display: block;
-  padding: space(2) var(--grid-margin) space(10);
+  padding: space(2) var(--grid-margin) 0;
   box-sizing: border-box;
 
   &__actions {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
     display: flex;
     gap: space(1);
-    padding: space(2);
+    padding: space(2) 0;
     box-sizing: border-box;
 
     > * {
