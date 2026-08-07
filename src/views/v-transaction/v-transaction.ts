@@ -1,7 +1,6 @@
 import { LitElement, html, css, unsafeCSS, PropertyValues } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { map } from 'lit/directives/map.js'
-import { when } from 'lit/directives/when.js'
 import { until } from 'lit/directives/until.js'
 
 // Mixins
@@ -23,7 +22,7 @@ import { transactionCategoryRepository } from '../../domain/transaction-category
 import { RouterController } from '../../controllers/router.controller.ts'
 
 // Utils
-import { getMonthName } from '../../utils/date.utils.ts'
+import { getMonthName, getYear } from '../../utils/date.utils.ts'
 import { STATUS_INCOME, TRANSACTION_CATEGORY_TYPE } from '../../utils/consts.utils.ts'
 
 // Styles
@@ -47,8 +46,6 @@ class VTransaction extends LayoutMixin(LitElement) {
   _totalExpense: number = 0
 
   _totalIncome: number = 0
-
-  _lastMonth: string = ''
 
   _listOrderStatus: Status[] = []
 
@@ -78,11 +75,11 @@ class VTransaction extends LayoutMixin(LitElement) {
             ${map(this._transactionCategories, (transactionCategory: TransactionCategory) => this._printCategories(transactionCategory))}
           </div>
           <div class="v-transaction__list">
-            ${map(this._transactions, (transaction: Transaction) => html`
-              ${when(this._hasMonthChanged(transaction.createdAt), () => html`
-                <p class="v-transaction__title"><span class="v-transaction__month">${getMonthName(transaction.createdAt)}</span></p>
-              `)}
-              ${until(this._getTransactionHTML(transaction))}
+            ${map(this._groupTransactionsByMonth(this._transactions), (group) => html`
+              <section class="v-transaction__group">
+                <p class="v-transaction__title"><span class="v-transaction__month">${group.label}</span></p>
+                ${map(group.transactions, (transaction: Transaction) => until(this._getTransactionHTML(transaction)))}
+              </section>
             `)}
           </div>
         </div>
@@ -112,8 +109,21 @@ class VTransaction extends LayoutMixin(LitElement) {
   /********************************/
   /************ UTILS *************/
   /********************************/
-  _hasMonthChanged(transactionDate: string) {
-    return getMonthName(transactionDate) !== this._lastMonth
+  _groupTransactionsByMonth(transactions: Transaction[]) {
+    const groups: { label: string; transactions: Transaction[] }[] = []
+
+    transactions.forEach((transaction: Transaction) => {
+      const label = `${getMonthName(transaction.createdAt)} ${getYear(transaction.createdAt)}`
+      const lastGroup = groups[groups.length - 1]
+
+      if (lastGroup && lastGroup.label === label) {
+        lastGroup.transactions.push(transaction)
+      } else {
+        groups.push({ label, transactions: [transaction] })
+      }
+    })
+
+    return groups
   }
 
   _isCategoryExpense(category: TransactionCategory) {
@@ -281,8 +291,6 @@ class VTransaction extends LayoutMixin(LitElement) {
   async _getTransactionHTML(transaction: Transaction) {
     const category = this._getCategoryById(transaction.idCategory)
     if (!category || !transaction) return ''
-
-    this._lastMonth = getMonthName(transaction.createdAt)
 
     if (transaction.idOrder) {
       const order = await orderRepository.getById(transaction.idOrder)
