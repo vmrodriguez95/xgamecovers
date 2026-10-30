@@ -1,3 +1,4 @@
+@use '../../styles/variables/breakpoints' as *;
 @use '../../styles/tools/tools' as *;
 @use '../../styles/tools/typography' as *;
 
@@ -6,12 +7,30 @@
   padding: space(2) var(--grid-margin);
   box-sizing: border-box;
 
+  @media (min-width: $breakpoint-xl) {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: space(4);
+    row-gap: space(2);
+  }
+
+  @media (min-width: $breakpoint-xxl) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
   &__head {
     display: flex;
     align-items: center;
-    grid-column: 1 / 4;
     margin-bottom: space(2);
     gap: space(2);
+
+    @media (min-width: $breakpoint-xl) {
+      grid-column: 1 / 3;
+    }
+
+    @media (min-width: $breakpoint-xxl) {
+      grid-column: 1 / 4;
+    }
   }
 
   &__search {
@@ -22,6 +41,17 @@
     display: block;
     text-decoration: none;
     margin-top: space(2);
+    transition: transform 0.2s ease-in-out;
+
+    @media (min-width: $breakpoint-xl) {
+      margin: 0;
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        transform: scale(1.02);
+      }
+    }
   }
 
   &__modal {

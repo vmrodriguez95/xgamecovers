@@ -1,3 +1,4 @@
+@use '../../styles/variables/breakpoints' as *;
 @use '../../styles/tools/tools' as *;
 @use '../../styles/tools/typography' as *;
 
@@ -11,6 +12,10 @@
   min-height: space(25);
   padding: space(0.5);
   box-sizing: border-box;
+  
+  @media (min-width: $breakpoint-xl) {
+    min-height: space(50);
+  }
   
   &__background {
     display: block;
@@ -34,6 +39,10 @@
     background: rgba(var(--color-light), 0.9);
     border-radius: space(0.5);
     padding: space(0.5);
+    
+    @media (min-width: $breakpoint-xl) {
+      gap: space(1);
+    }
   }
 
   &__platforms {
