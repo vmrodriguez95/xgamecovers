@@ -1,3 +1,4 @@
+@use '../../styles/variables/breakpoints' as *;
 @use '../../styles/tools/tools' as *;
 
 .v-catalogue {
@@ -7,6 +8,15 @@
   padding: space(2) var(--grid-margin);
   box-sizing: border-box;
   align-items: stretch;
+  
+  @media (min-width: $breakpoint-xl) {
+    grid-template-columns: repeat(5, 1fr);
+    gap: space(4);
+  }
+
+  @media (min-width: $breakpoint-xxl) {
+    grid-template-columns: repeat(7, 1fr);
+  }
 
   &__head {
     display: flex;
@@ -14,6 +24,14 @@
     grid-column: 1 / 4;
     margin-bottom: space(2);
     gap: space(2);
+
+    @media (min-width: $breakpoint-xl) {
+      grid-column: 1 / 6;
+    }
+
+    @media (min-width: $breakpoint-xxl) {
+      grid-column: 1 / 8;
+    }
   }
 
   &__search {
@@ -27,9 +45,25 @@
     grid-column: 1 / 4;
     margin-bottom: space(2);
     gap: space(2);
+    
+    @media (min-width: $breakpoint-xl) {
+      grid-column: 1 / 6;
+    }
+
+    @media (min-width: $breakpoint-xxl) {
+      grid-column: 1 / 8;
+    }
   }
 
   &__link {
+    cursor: pointer;
     text-decoration: none;
+    transition: transform 0.2s ease-in-out;
+
+    @media (hover: hover) {
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
   }
 }
