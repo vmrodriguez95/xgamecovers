@@ -23,11 +23,13 @@ class CCard extends LitElement {
     return html`
       <div class="c-card">
         <img class="c-card__background" src=${this.image} alt=${this.name} loading="lazy" />
-        <div class="c-card__consoles">
-          ${map(this.consoles, (console: string) => html`
-            <e-icon icon=${console} size="xs"></e-icon>
-          `)}
-        </div>
+        ${when(this.consoles.length > 0, () => html`
+          <div class="c-card__consoles">
+            ${map(this.consoles, (console: string) => html`
+              <e-icon icon=${console} size="xs"></e-icon>
+            `)}
+          </div>
+        `)}
         ${when(this.platforms.length > 0, () => html`
           <div class="c-card__platforms">
             ${map(this.platforms, (platform: string) => html`

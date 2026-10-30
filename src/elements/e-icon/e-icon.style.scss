@@ -1,3 +1,4 @@
+@use '../../styles/variables/breakpoints' as *;
 @use '../../styles/tools/tools' as *;
 
 :host,
@@ -44,6 +45,11 @@
   &--xs {
     width: space(1);
     height: space(1);
+
+    @media (min-width: $breakpoint-xl) {
+      width: space(2);
+      height: space(2);
+    }
   }
 
   svg {
