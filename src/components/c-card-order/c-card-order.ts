@@ -59,7 +59,7 @@ class CCardOrder extends LitElement {
           <div class="c-card-order__middle">
             <p class="c-card-order__text">${this.name}</p>
             ${map(this.rrss, (rs: any) => when(rs.name !== '', () => html`
-              <p class="c-card-order__text">
+              <p class="c-card-order__text c-card-order__text--logo">
                 <img class="c-card-order__logo" src="/images/logos/${rs.logo}.png" alt="Logo ${rs.name}" width="16" height="16" />
                 ${rs.name}
               </p>
