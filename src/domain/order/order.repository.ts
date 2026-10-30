@@ -6,7 +6,7 @@ const PATH = 'order'
 
 class OrderRepository {
   async getAll(): Promise<Order[]> {
-    const data = await rtdbService.getAllOrderedBy(PATH, 'createdAt')
+    const data = await rtdbService.getAllOrderedBy(PATH, 'updatedAt')
 
     data.reverse()
 
