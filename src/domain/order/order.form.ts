@@ -67,6 +67,10 @@ export const OrderFormScheme: FormScheme = {
       {
         name: 'Bizum',
         value: 'Bizum'
+      },
+      {
+        name: 'Paypal',
+        value: 'Paypal'
       }
     ] as Option[],
     required: false,
