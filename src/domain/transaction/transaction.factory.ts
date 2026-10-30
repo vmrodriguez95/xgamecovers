@@ -11,5 +11,17 @@ export const TransactionFactory = {
       createdAt: data.createdAt ?? '',
       updatedAt: data.updatedAt ?? ''
     }
+  },
+
+  createEmpty(): Transaction {
+    return {
+      id: '',
+      idCategory: '',
+      idOrder: '',
+      idOrderStatus: '',
+      amount: 0,
+      createdAt: '',
+      updatedAt: ''
+    }
   }
 }

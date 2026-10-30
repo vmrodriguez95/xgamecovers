@@ -160,7 +160,7 @@ class VOrder extends LayoutMixin(LitElement) {
 
     order.idStatus = status.id
     await orderRepository.update(order.id, { idStatus: status.id })
-    await transactionRepository.updateByIdOrder(order.id, { idOrderStatus: status.id })
+    await transactionRepository.saveByIdOrder(order.id, { idOrderStatus: status.id, amount: order.finalPrice })
 
     this._closeModal()
   }

@@ -364,7 +364,7 @@ class VOrderView extends LayoutMixin(LitElement) {
     this._orderStatus = status
     this._order.idStatus = status.id
     await orderRepository.update(idOrder, { idStatus: status.id })
-    await transactionRepository.updateByIdOrder(idOrder, { idOrderStatus: status.id })
+    await transactionRepository.saveByIdOrder(idOrder, { idOrderStatus: status.id, amount: this._order.finalPrice })
 
     this._closeModal()
     this.requestUpdate()
