@@ -53,11 +53,12 @@ class VTransaction extends LayoutMixin(LitElement) {
 
   static styles = css`${unsafeCSS(style)}`
 
-  connectedCallback(): void {
+  async connectedCallback() {
     super.connectedCallback()
 
-    this._loadOrderStatus()
-    this._loadTransactionCategories()
+    // Los totales necesitan los estados y las categorías ya cargados.
+    await this._loadOrderStatus()
+    await this._loadTransactionCategories()
     this._loadTransactions()
   }
 
@@ -160,6 +161,8 @@ class VTransaction extends LayoutMixin(LitElement) {
   }
 
   _calculateProgress(amount: number, total: number) {
+    if (!total) return 0
+
     return amount * 100 / total
   }
 
@@ -221,7 +224,7 @@ class VTransaction extends LayoutMixin(LitElement) {
       let results = {} as any
 
       if (transaction.idOrder) {
-        results = this._calculateOrderTotals(transaction, total, totalIncome, totalPending)
+        results = this._calculateOrderTotals(transaction, total, totalIncome, totalPending, totalCanceled)
       } else {
         const category = this._getCategoryById(transaction.idCategory)
         results = this._calculateCategoryTotals(category, transaction, total, totalExpense, totalIncome)

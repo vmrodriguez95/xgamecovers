@@ -1,4 +1,5 @@
 import { rtdbService } from '../../firebase/rtdb.service'
+import { transactionCategoryRepository } from '../transaction-category/transaction-category.repository'
 import { TransactionFactory } from './transaction.factory'
 import type { Transaction } from './transaction.types'
 
@@ -20,7 +21,7 @@ class TransactionRepository {
 
   async getByIdOrder(idOrder: string): Promise<Transaction | null> {
     const data = await rtdbService.filterByChild(PATH, 'idOrder', idOrder)
-    return data ? TransactionFactory.fromApi(data[0]) : null
+    return data.length ? TransactionFactory.fromApi(data[0]) : null
   }
 
   async create(data: Transaction) {
@@ -31,12 +32,25 @@ class TransactionRepository {
     await rtdbService.update(PATH, id, partial)
   }
 
-  async updateByIdOrder(idOrder: string, partial: Partial<Transaction>) {
+  // Los pedidos sin transacción (creados antes de ligarlas a los pedidos) la reciben aquí.
+  async saveByIdOrder(idOrder: string, partial: Partial<Transaction>) {
     const transaction = await this.getByIdOrder(idOrder)
 
-    if (!transaction?.id) return
+    if (transaction?.id) {
+      await rtdbService.update(PATH, transaction.id, partial)
+      return
+    }
 
-    await rtdbService.update(PATH, transaction.id, partial)
+    const incomeCategory = await transactionCategoryRepository.getIncome()
+
+    if (!incomeCategory) return
+
+    await this.create({
+      ...TransactionFactory.createEmpty(),
+      ...partial,
+      idOrder,
+      idCategory: incomeCategory.id
+    })
   }
 
   async delete(id: string) {
