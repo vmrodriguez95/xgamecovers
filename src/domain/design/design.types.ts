@@ -6,6 +6,8 @@ export interface Design {
   slipcover: string
   material: string
   isFavorite: boolean
+  isOnVinted: boolean
+  isOnWallapop: boolean
   createdAt: string
   updatedAt: string
 }

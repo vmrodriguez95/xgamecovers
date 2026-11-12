@@ -10,6 +10,8 @@ export const DesignFactory = {
       slipcover: data.slipcover ?? '',
       material: data.material ?? '',
       isFavorite: data.isFavorite ?? false,
+      isOnVinted: data.isOnVinted ?? false,
+      isOnWallapop: data.isOnWallapop ?? false,
       createdAt: data.createdAt ?? '',
       updatedAt: data.updatedAt ?? ''
     }
