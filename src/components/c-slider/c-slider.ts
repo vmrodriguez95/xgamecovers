@@ -1,6 +1,7 @@
 import { LitElement, html, css, unsafeCSS } from 'lit'
 import { customElement, property, query, state } from 'lit/decorators.js'
 import { map } from 'lit/directives/map.js'
+import { when } from 'lit/directives/when.js'
 import { classMap } from 'lit/directives/class-map.js'
 
 // Types
@@ -48,6 +49,13 @@ class CSlider extends LitElement {
             @click=${() => this._changeSlideActive(option, index)}
           >
             <img class="c-slider__preview" src=${option.image} alt=${option.name} width="128" height="72" />
+            ${when(option.platforms && option.platforms.length > 0, () => html`
+              <div class="c-slider__platforms">
+                ${map(option.platforms!, (platform: string) => html`
+                  <img class="c-slider__platform" src="/images/logos/${platform}.png" alt="Logo ${platform}" width="12" height="12" />
+                `)}
+              </div>
+            `)}
           </button>
         `)}
       </div>

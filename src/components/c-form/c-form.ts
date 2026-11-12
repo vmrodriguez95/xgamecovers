@@ -204,6 +204,7 @@ export class CForm extends LitElement {
             label=${field.label}
             icon=${field.icon}
             iconChecked=${field.iconChecked}
+            logo=${field.logo}
             ?checked=${field.fillValue}
             ?required=${field.required}
             ?readonly=${field.readonly}

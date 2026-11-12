@@ -21,6 +21,8 @@ class ECheckbox extends LitElement {
   
   @property({ type: String }) iconChecked = ''
 
+  @property({ type: String }) logo = ''
+
   @property({ type: String }) type = ''
 
   @property({ type: Boolean, reflect: true }) checked = false
@@ -51,7 +53,11 @@ class ECheckbox extends LitElement {
           ${when(this.label, () => html`
             ${this.label} ${when(this.required, () => html`*`)}
           `)}
-          <e-icon class="e-checkbox__icon" icon=${this.checked ? this.iconChecked : this.icon}></e-icon>
+          ${when(this.logo, () => html`
+            <img class="e-checkbox__logo" src="/images/logos/${this.logo}.png" width="32" height="32" alt="Logo ${this.logo}" />
+          `, () => html`
+            <e-icon class="e-checkbox__icon" icon=${this.checked ? this.iconChecked : this.icon}></e-icon>
+          `)}
           <input
             id=${this.id}
             name=${this.name}
