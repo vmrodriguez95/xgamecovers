@@ -20,6 +20,18 @@
     cursor: pointer;
   }
 
+  &__logo {
+    display: block;
+    opacity: .35;
+    filter: grayscale(1);
+    transition: opacity .2s, filter .2s;
+  }
+
+  &--checked &__logo {
+    opacity: 1;
+    filter: none;
+  }
+
   &__field {
     display: none;
   }

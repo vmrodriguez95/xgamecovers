@@ -147,10 +147,20 @@ class VCatalogueGame extends LayoutMixin(LitElement) {
     const slides = designs.map((design: Design): Slide => ({
       id: design.id,
       name: design.name,
-      image: design.slipcover
+      image: design.slipcover,
+      platforms: authStore.isLogged() ? this._getDesignPlatforms(design) : []
     }))
 
     return slides
+  }
+
+  private _getDesignPlatforms(design: Design): string[] {
+    const platforms = []
+
+    if (design.isOnVinted) platforms.push('vinted')
+    if (design.isOnWallapop) platforms.push('wallapop')
+
+    return platforms
   }
 
   private _changeDesign(event: CustomEvent) {
